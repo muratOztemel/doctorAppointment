@@ -1,7 +1,7 @@
 {
   "patients": [
     {
-      "id": "1",
+      "id": 10,
       "name": "Murat",
       "surname": "Öztemel",
       "nationality": "Türkiye",
@@ -10,14 +10,15 @@
       "country": "Türkiye",
       "language": "Türkçe, English",
       "birthDate": "01.01.1980",
-      "gender": "Erkek",
+      "gender": 0,
       "email": "cegerxwin@gmail.com",
       "phoneNumber": "+905327118792",
+      "photos": "https://t4.ftcdn.net/jpg/06/08/55/73/360_F_608557356_ELcD2pwQO9pduTRL30umabzgJoQn5fnd.jpg",
       "createdAt": "03.13.2024",
       "updatedAt": "03.13.2024"
     },
     {
-      "id": "2",
+      "id": 9,
       "name": "Meryem",
       "surname": "Kurt",
       "nationality": "Türkiye",
@@ -26,14 +27,15 @@
       "country": "Türkiye",
       "language": "Türkçe, English",
       "birthDate": "01.01.1990",
-      "gender": "Kadın",
+      "gender": 1,
       "email": "meryemkurt@gmail.com",
       "phoneNumber": "+905052502526",
+      "photos": "https://media.istockphoto.com/id/1437816897/photo/business-woman-manager-or-human-resources-portrait-for-career-success-company-we-are-hiring.webp?b=1&s=170667a&w=0&k=20&c=YQ_j83pg9fB-HWOd1Qur3_kBmG_ot_hZty8pvoFkr6A=",
       "createdAt": "13.03.2024",
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "3",
+      "id": 8,
       "name": "Emin",
       "surname": "Başbayan",
       "nationality": "Türkiye",
@@ -42,17 +44,137 @@
       "country": "Türkiye",
       "language": "Türkçe, English",
       "birthDate": "01.01.1985",
-      "gender": "Erkek",
+      "gender": 0,
       "email": "eminbasbayan@gmail.com",
       "phoneNumber": "+905052502527",
+      "photos": "https://image.shutterstock.com/image-photo/head-shot-portrait-close-smiling-260nw-1714666150.jpg",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 7,
+      "name": "Erkan",
+      "surname": "Yıldırım",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345628903",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1984",
+      "gender": 0,
+      "email": "erkanyildirim@gmail.com",
+      "phoneNumber": "+905452502527",
+      "photos": "https://thumbs.wbm.im/pw/medium/6ee9298a0daeccde4df0d2df499bda96.jpg",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 6,
+      "name": "Hamza",
+      "surname": "Bilgin",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345678913",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1986",
+      "gender": 0,
+      "email": "hamzabilgin@gmail.com",
+      "phoneNumber": "+905052502528",
+      "photos": "https://media.istockphoto.com/id/1406197730/photo/portrait-of-a-young-handsome-indian-man.webp?b=1&s=170667a&w=0&k=20&c=KtmKHyOE6MJV0w2DiGX8P4399KHNbZ3p8lCjTEabGcY=",
+      "createdAt": "15.03.2024",
+      "updatedAt": "17.03.2024"
+    },
+    {
+      "id": 5,
+      "name": "Umut",
+      "surname": "Atamış",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345678103",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1984",
+      "gender": 0,
+      "email": "umutatamis@gmail.com",
+      "phoneNumber": "+905054852527",
+      "photos": "https://thumbs.wbm.im/pw/medium/a51c01072fcc50538e188f324e980d08.avif",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 4,
+      "name": "Hüseyin",
+      "surname": "Topgül",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345658103",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1989",
+      "gender": 0,
+      "email": "huseyintopgul@gmail.com",
+      "phoneNumber": "+905354847527",
+      "photos": "https://thumbs.wbm.im/pw/medium/75a32465b8895bdcd79b4bd3a6a3a72e.avif",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 3,
+      "name": "Franz",
+      "surname": "Kafka",
+      "nationality": "Türkiye",
+      "identyType": "Pasaport",
+      "identyNo": "7584527",
+      "country": "İspaya",
+      "language": "Spanish, English",
+      "birthDate": "01.01.1980",
+      "gender": 0,
+      "email": "franzkafka@gmail.com",
+      "phoneNumber": "+34715842361",
+      "photos": "https://thumbs.wbm.im/pw/medium/1c08cff6d19c3a43ae853fb79fbfd5c3.avif",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 2,
+      "name": "Mahmut",
+      "surname": "Abbas",
+      "nationality": "Filistin",
+      "identyType": "Pasaport",
+      "identyNo": "9872345",
+      "country": "Filistin",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1984",
+      "gender": 0,
+      "email": "mahmutabbas@gmail.com",
+      "phoneNumber": "+905054852527",
+      "photos": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Mahmoud_Abbas_May_2018.jpg",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 1,
+      "name": "Leyla",
+      "surname": "Kasım",
+      "nationality": "Irak",
+      "identyType": "Pasaport",
+      "identyNo": "4875210",
+      "country": "Irak",
+      "language": "Arapça, English",
+      "birthDate": "01.01.1984",
+      "gender": 1,
+      "email": "leylakasim@gmail.com",
+      "phoneNumber": "+9641054852527",
+      "photos": "https://kurdistantribune.com/wp-content/uploads/2014/03/Leyla-Qasim.jpg",
       "createdAt": "14.03.2024",
       "updatedAt": "14.03.2024"
     }
   ],
   "doctors": [
     {
-      "id": "1",
-      "branchId": "1",
+      "id": 3,
+      "branchId": 1,
       "slotDuration": "15",
       "name": "Ahmet",
       "surname": "Yılmaz",
@@ -63,7 +185,7 @@
       "country": "Türkiye",
       "language": "Türkçe",
       "birthDate": "01.01.1981",
-      "gender": "Erkek",
+      "gender": 0,
       "email": "ahmetyilmaz@gmail.com",
       "phoneNumber": "+905372512525",
       "education": "Hacettepe Üniversitesi Tıp Fakültesi, Oxford University Yüksek Lisans",
@@ -76,8 +198,8 @@
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "2",
-      "branchId": "2",
+      "id": 2,
+      "branchId": 2,
       "slotDuration": "30",
       "name": "Dilek",
       "surname": "Abul",
@@ -88,7 +210,7 @@
       "country": "Türkiye",
       "language": "Türkçe, English",
       "birthDate": "01.01.1982",
-      "gender": "Kadın",
+      "gender": 1,
       "email": "dilekabul@gmail.com",
       "phoneNumber": "+905372512527",
       "education": "ODTÜ Üniversitesi Tıp Fakültesi, Cambridge University Yüksek Lisans",
@@ -101,8 +223,8 @@
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "3",
-      "branchId": "2",
+      "id": 1,
+      "branchId": 2,
       "slotDuration": "30",
       "name": "Cihan",
       "surname": "Yağız",
@@ -113,7 +235,7 @@
       "country": "Türkiye",
       "language": "Türkçe, English",
       "birthDate": "01.01.1983",
-      "gender": "Erkek",
+      "gender": 0,
       "email": "cihanyagiz@gmail.com",
       "phoneNumber": "+905372512528",
       "education": "Ankara Üniversitesi Tıp Fakültesi",
@@ -128,9 +250,9 @@
   ],
   "appointments": [
     {
-      "id": "1",
-      "doctorId": "1",
-      "patientId": "1",
+      "id": 3,
+      "doctorId": 1,
+      "patientId": 1,
       "date": "21.03.2024",
       "time": "09:00",
       "status": "Pending",
@@ -138,9 +260,9 @@
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "2",
-      "doctorId": "1",
-      "patientId": "2",
+      "id": 2,
+      "doctorId": 1,
+      "patientId": 2,
       "date": "21.03.2024",
       "time": "10:00",
       "status": "Pending",
@@ -148,9 +270,9 @@
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "3",
-      "doctorId": "2",
-      "patientId": "3",
+      "id": 1,
+      "doctorId": 2,
+      "patientId": 3,
       "date": "21.03.2024",
       "time": "11:00",
       "status": "Pending",
@@ -160,19 +282,19 @@
   ],
   "branchs": [
     {
-      "id": "1",
+      "id": 3,
       "name": "Göz Doktoru",
       "createdAt": "14.03.2024",
       "updatedAt": "14.03.2024"
     },
     {
-      "id": "2",
+      "id": 2,
       "name": "Cilt Doktoru",
       "createdAt": "14.03.2024",
       "updatedAt": "14.03.2024"
     },
     {
-      "id": "3",
+      "id": 1,
       "name": "KBB Doktoru",
       "createdAt": "14.03.2024",
       "updatedAt": "14.03.2024"
@@ -180,28 +302,28 @@
   ],
   "roles": [
     {
-      "id": "1",
+      "id": 4,
       "name": "Doktor",
       "title": "Op. Dr.",
       "createdAt": "14.03.2024",
       "updatedAt": "14.03.2024"
     },
     {
-      "id": "2",
+      "id": 3,
       "name": "Yönetici",
       "title": "",
       "createdAt": "14.03.2024",
       "updatedAt": "14.03.2024"
     },
     {
-      "id": "3",
+      "id": 2,
       "name": "Receptionist",
       "title": "",
       "createdAt": "14.03.2024",
       "updatedAt": "14.03.2024"
     },
     {
-      "id": "4",
+      "id": 1,
       "name": "güvenlik",
       "title": "",
       "createdAt": "14.03.2024",
@@ -210,8 +332,8 @@
   ],
   "doctorWorkingDays": [
     {
-      "id": "1",
-      "doctorId": "1",
+      "id": 3,
+      "doctorId": 1,
       "day": "Pazartesi, Salı, Çarşamba, Perşembe",
       "startTime": "15.03.2024",
       "endTime": "15.03.2025",
@@ -219,8 +341,8 @@
       "updatedAt": "14.03.2024"
     },
     {
-      "id": "2",
-      "doctorId": "2",
+      "id": 2,
+      "doctorId": 2,
       "day": "Salı, Çarşamba, Perşembe, Cuma",
       "startTime": "15.03.2024",
       "endTime": "15.03.2025",
@@ -228,8 +350,8 @@
       "updatedAt": "14.03.2024"
     },
     {
-      "id": "3",
-      "doctorId": "3",
+      "id": 1,
+      "doctorId": 3,
       "day": "Pazartesi,Salı, Çarşamba, Perşembe, Cuma",
       "startTime": "15.03.2024",
       "endTime": "15.03.2025",
@@ -239,44 +361,44 @@
   ],
   "usersRoles": [
     {
-      "id": "1",
-      "userId": "1",
-      "roleId": "1",
+      "id": 3,
+      "userId": 1,
+      "roleId": 1,
       "createdAt": "14.03.2024",
       "updatedAt": "14.03.2024"
     },
     {
-      "id": "2",
-      "userId": "2",
-      "roleId": "2",
+      "id": 2,
+      "userId": 2,
+      "roleId": 2,
       "createdAt": "14.03.2024",
       "updatedAt": "14.03.2024"
     },
     {
-      "id": "3",
-      "userId": "3",
-      "roleId": "3",
+      "id": 1,
+      "userId": 3,
+      "roleId": 3,
       "createdAt": "14.03.2024",
       "updatedAt": "14.03.2024"
     }
   ],
   "users": [
     {
-      "id": "1",
+      "id": 3,
       "username": "ahmetyilmaz",
       "password": "1234",
       "createdAt": "13.03.2024",
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "2",
+      "id": 2,
       "username": "dilekabul",
       "password": "1234",
       "createdAt": "13.03.2024",
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "3",
+      "id": 1,
       "username": "muratoztemel",
       "password": "1234",
       "createdAt": "13.03.2024",
@@ -285,10 +407,10 @@
   ],
   "examinations": [
     {
-      "id": "1",
-      "patientId": "1",
-      "doctorId": "1",
-      "medicineId": "1",
+      "id": 3,
+      "patientId": 1,
+      "doctorId": 1,
+      "medicineId": 1,
       "complaint": "Kulak ağrısı",
       "treatment": "Kulak damlası kullanılmalı",
       "diagnosis": "Kulak enfeksiyonu",
@@ -296,10 +418,10 @@
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "2",
-      "patientId": "2",
-      "doctorId": "2",
-      "medicineId": "2",
+      "id": 2,
+      "patientId": 2,
+      "doctorId": 2,
+      "medicineId": 2,
       "complaint": "Göz ağrısı",
       "treatment": "Göz damlası kullanılmalı",
       "diagnosis": "Göz enfeksiyonu",
@@ -307,10 +429,10 @@
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "3",
-      "patientId": "3",
-      "doctorId": "3",
-      "medicineId": "3",
+      "id": 1,
+      "patientId": 3,
+      "doctorId": 3,
+      "medicineId": 3,
       "complaint": "Karın ağrısı",
       "treatment": "Verilen ilaçların 15 gün süreyle kullanması gerekiyor.",
       "diagnosis": "Mide ülseri",
@@ -320,44 +442,44 @@
   ],
   "examMedicines": [
     {
-      "id": "1",
-      "examId": "1",
-      "medicineId": "1",
+      "id": 3,
+      "examId": 1,
+      "medicineId": 1,
       "createdAt": "13.03.2024",
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "2",
-      "examId": "2",
-      "medicineId": "2",
+      "id": 2,
+      "examId": 2,
+      "medicineId": 2,
       "createdAt": "13.03.2024",
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "3",
-      "examId": "3",
-      "medicineId": "3",
+      "id": 1,
+      "examId": 3,
+      "medicineId": 3,
       "createdAt": "13.03.2024",
       "updatedAt": "13.03.2024"
     }
   ],
   "medicines": [
     {
-      "id": "1",
+      "id": 3,
       "medicineName": "Anxiont",
       "treatment": "Göz damlası",
       "createdAt": "13.03.2024",
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "2",
+      "id": 2,
       "medicineName": "Apatrix",
       "treatment": "Kulak damlası",
       "createdAt": "13.03.2024",
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "3",
+      "id": 1,
       "medicineName": "Mercint",
       "treatment": "Ülser",
       "createdAt": "13.03.2024",
@@ -366,8 +488,8 @@
   ],
   "Authority": [
     {
-      "id": "1",
-      "userId": "1",
+      "id": 3,
+      "userId": 1,
       "Read": "Yes",
       "Edit": "Yes",
       "Create": "Yes",
@@ -376,8 +498,8 @@
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "2",
-      "userId": "2",
+      "id": 2,
+      "userId": 2,
       "Read": "Yes",
       "Edit": "Yes",
       "Create": "No",
@@ -386,8 +508,8 @@
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "3",
-      "userId": "3",
+      "id": 1,
+      "userId": 3,
       "Read": "Yes",
       "Edit": "Yes",
       "Create": "Yes",
@@ -398,24 +520,24 @@
   ],
   "holidays": [
     {
-      "id": "1",
-      "userId": "1",
+      "id": 3,
+      "userId": 1,
       "startDate": "25.04.2024",
       "endDate": "31.05.2024",
       "createdAt": "13.03.2024",
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "2",
-      "userId": "2",
+      "id": 2,
+      "userId": 2,
       "startDate": "25.05.2024",
       "endDate": "31.05.2024",
       "createdAt": "13.03.2024",
       "updatedAt": "13.03.2024"
     },
     {
-      "id": "3",
-      "userId": "3",
+      "id": 1,
+      "userId": 3,
       "startDate": "25.05.2024",
       "endDate": "31.05.2024",
       "createdAt": "13.03.2024",

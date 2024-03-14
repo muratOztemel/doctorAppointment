@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { IoHomeOutline } from "react-icons/io5";
 import { PiUsers } from "react-icons/pi";
 import { RiCustomerService2Fill } from "react-icons/ri";
@@ -17,14 +18,14 @@ const LeftSide = () => {
         />
       </a>
       <div className="flex-col gap-2 mt-12">
-        <a
-          className="bg-teal-50-green-500 flex gap-4 transitions group items-center w-full p-4 rounded-lg bg-cyan-50"
-          href="/">
+        <Link
+          to="/"
+          className="bg-teal-50-green-500 flex gap-4 transitions group items-center w-full p-4 rounded-lg bg-cyan-50">
           <IoHomeOutline className="text-xl text-cyan-500" />
           <p className="text-sm font-medium  text-cyan-500 group-hover:text-text-teal-100">
             Dashboard
           </p>
-        </a>
+        </Link>
         <a
           className="flex gap-4 transitions group items-center w-full p-4 rounded-lg hover:bg-cyan-50"
           href="/patients">
