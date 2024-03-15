@@ -6,7 +6,7 @@ const Card = ({ icon, title, children, className, color }) => {
       className={`bg-white rounded-xl border-[1px] border-border p-5 ${className}`}>
       <div className="flex gap-4 items-center">
         <div
-          className={`w-10 h-10 flex justify-center items-center bg-opacity-10 rounded-md bg-${color}-500 text-${color}-500`}>
+          className={`bg-${color}-500 text-${color}-500 w-10 h-10 flex justify-center items-center bg-opacity-10 rounded-md`}>
           {icon}
         </div>
         <h2 className="text-sm font-medium">{title}</h2>

@@ -1,6 +1,6 @@
 import { FaCheckCircle } from "react-icons/fa";
 
-const AppointmentList = () => {
+const AppointmentList = ({ props, name, surname }) => {
   return (
     <div className="grid grid-cols-12 gap-2 items-center">
       <p className="text-gray-500 text-[12px] col-span-3 font-light">
@@ -13,7 +13,9 @@ const AppointmentList = () => {
         </div>
       </div>
       <a className="flex flex-col gap-1 col-span-6" href="/appointments">
-        <h2 className="text-xs font-medium">Meryem Kurt</h2>
+        <h2 className="text-xs font-medium">
+          {name} {surname}
+        </h2>
         <p className="text-[12px] font-light text-gray-500">10:00 - 12:00</p>
       </a>
     </div>

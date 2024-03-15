@@ -100,7 +100,19 @@ const DashboardHome = () => {
                     title={"Today Appointments"}
                     icon={<IoDocumentTextOutline />}
                     color={"yellow"}>
-                    <AppointmentList />
+                    {appointments.map((appointment) => {
+                      const whoPatients = patients.find(
+                        (patient) => patient.id === appointment.id
+                      );
+                      return (
+                        <AppointmentList
+                          key={appointment.id}
+                          {...appointment}
+                          name={whoPatients.name}
+                          surname={whoPatients.surname}
+                        />
+                      );
+                    })}
                   </Card>
                   <Card
                     title={"Recent Patients"}
