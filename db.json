@@ -543,5 +543,56 @@
       "createdAt": "13.03.2024",
       "updatedAt": "13.03.2024"
     }
+  ],
+  "links": [
+    {
+      "id": 1,
+      "name": "Dashboard",
+      "pageName": "DashboardHome",
+      "link": "/",
+      "iconName": "IoHomeOutline"
+    },
+    {
+      "id": 2,
+      "name": "Patients",
+      "pageName": "PatientsHome",
+      "link": "/patients",
+      "iconName": "PiUsers"
+    },
+    {
+      "id": 3,
+      "name": "Receptions",
+      "pageName": "ReceptionsHome",
+      "link": "/receptions",
+      "iconName": "RiCustomerService2Fill"
+    },
+    {
+      "id": 4,
+      "name": "Doctors",
+      "pageName": "DoctorsHome",
+      "link": "/doctors",
+      "iconName": "FaUserDoctor"
+    },
+    {
+      "id": 5,
+      "name": "Appointments",
+      "pageName": "AppointmentsHome",
+      "link": "/appointments",
+      "iconName": "IoDocumentTextOutline"
+    },
+    {
+      "id": 6,
+      "name": "Medicine",
+      "pageName": "MedicineHome",
+      "link": "/medicine",
+      "iconName": "RiMedicineBottleLine"
+    },
+    {
+      "id": 7,
+      "name": "Settings",
+      "pageName": "SettingsHome",
+      "link": "/settings",
+      "iconName": "IoSettingsOutline"
+    }
   ]
 }

@@ -6,6 +6,7 @@ import AppointmentList from "../../Dasboards/Appointments/AppointmentList";
 import LeftSide from "../../Layout/Dashboard/LeftSide";
 import MainHeader from "../../Layout/Dashboard/MainHeader";
 import axios from "axios";
+import { IoDocumentTextOutline } from "react-icons/io5";
 
 import { PiUsers } from "react-icons/pi";
 import LinkDashboardBar from "../../Layout/Dashboard/LinkDashboardBar";
@@ -54,7 +55,10 @@ const DashboardHome = () => {
               <LinkDashboardBar />
               <div className="w-full my-6 grid xl:grid-cols-8 grid-cols-1 gap-6">
                 <div className="xl:col-span-6  w-full">
-                  <Card title={"Patient List"} icon={<PiUsers />}>
+                  <Card
+                    title={"Patient List"}
+                    icon={<PiUsers />}
+                    color={"cyan"}>
                     <div className="mt-4">
                       <table className="table-auto w-full">
                         <thead className="bg-cyan-50 rounded-md overflow-hidden">
@@ -92,16 +96,18 @@ const DashboardHome = () => {
                   </Card>
                 </div>
                 <div className="xl:col-span-2 xl:block grid sm:grid-cols-2 gap-6 aos-init aos-animate">
-                  <Card title={"Recent Patients"} icon={"icon"}>
-                    <RecentPatientList />
-                    <RecentPatientList />
-                  </Card>
                   <Card
                     title={"Today Appointments"}
+                    icon={<IoDocumentTextOutline />}
+                    color={"yellow"}>
+                    <AppointmentList />
+                  </Card>
+                  <Card
+                    title={"Recent Patients"}
                     icon={"icon"}
                     className="mt-4">
-                    <AppointmentList />
-                    <AppointmentList />
+                    <RecentPatientList />
+                    <RecentPatientList />
                   </Card>
                 </div>
               </div>
