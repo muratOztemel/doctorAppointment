@@ -22,7 +22,7 @@ const LeftSide = () => {
 
   if (links === "") {
     return (
-      <div className="flex items-center justify-center align-middle">
+      <div className="flex items-center justify-center place-content-center">
         <img
           className="w-20 h-20 animate-spin"
           src="/loading.png"

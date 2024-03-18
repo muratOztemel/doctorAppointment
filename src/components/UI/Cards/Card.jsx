@@ -1,4 +1,4 @@
-import { string, object } from "prop-types";
+import { string, object, node } from "prop-types";
 
 const Card = ({ icon, title, children, className, color }) => {
   return (
@@ -6,10 +6,12 @@ const Card = ({ icon, title, children, className, color }) => {
       className={`bg-white rounded-xl border-[1px] border-border p-5 ${className}`}>
       <div className="flex gap-4 items-center">
         <div
-          className={`bg-${color}-500 text-${color}-500 w-10 h-10 flex justify-center items-center bg-opacity-10 rounded-md`}>
+          className={`w-10 h-10 flex flex-col justify-center items-center bg-opacity-10 rounded-md bg-${color}-500 text-${color}-500`}>
           {icon}
         </div>
-        <h2 className="text-sm font-medium">{title}</h2>
+        <div>
+          <h2 className="text-sm font-medium">{title}</h2>
+        </div>
       </div>
       {children}
     </div>
@@ -18,9 +20,9 @@ const Card = ({ icon, title, children, className, color }) => {
 export default Card;
 
 Card.propTypes = {
-  icon: string,
+  icon: object,
   title: string,
-  children: object,
+  children: node,
   className: string,
   color: string,
 };

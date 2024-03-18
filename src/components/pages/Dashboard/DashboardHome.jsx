@@ -14,27 +14,54 @@ import LinkDashboardBar from "../../Layout/Dashboard/LinkDashboardBar";
 const DashboardHome = () => {
   const [appointments, setAppointments] = useState(null);
   const [patients, setPatients] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3004/appointments")
-      .then((resAppointments) => {
-        setAppointments(resAppointments.data);
-        axios
-          .get("http://localhost:3004/patients")
-          .then((resPatients) => {
-            setPatients(resPatients.data);
-          })
-          .catch((err) => console.log("Patients data is mistake!", err));
-      })
-      .catch((err) => console.log("Appointments data is mistake!", err));
+    (async () => {
+      try {
+        await axios
+          .get("http://localhost:3004/appointments")
+          .then(async (resAppointments) => {
+            setAppointments(resAppointments.data);
+            // Sort data by date (most recent date at the top)
+            const sortedAppointments = resAppointments.data.sort((a, b) => {
+              const dateA = new Date(a.date);
+              const dateB = new Date(b.date);
+              return dateB - dateA;
+            });
+
+            // Get the last 30 days
+            const lastTenDaysAppointments = sortedAppointments.slice(0, 10);
+            setAppointments(lastTenDaysAppointments);
+            await axios
+              .get("http://localhost:3004/patients")
+              .then((resPatients) => {
+                setIsLoading(false);
+                setPatients(resPatients.data);
+                // Sort data by date (most recent date at the top)
+                const sortedPatients = resPatients.data.sort((a, b) => {
+                  const dateA = new Date(a.createdAt);
+                  const dateB = new Date(b.createdAt);
+                  return dateB - dateA;
+                });
+
+                // Get the last 30 Patients
+                const lastTenPatients = sortedPatients.slice(0, 10);
+                setPatients(lastTenPatients);
+              })
+              .catch((err) => console.log("Patients data is mistake!", err));
+          });
+      } catch (err) {
+        console.log("Appointments data is mistake!", err);
+      }
+    })();
   }, []);
 
-  if (appointments === null || patients === null) {
+  if (isLoading) {
     return (
-      <div className="flex items-center justify-center align-middle">
+      <div className="relative flex justify-center">
         <img
-          className="w-20 h-20 animate-spin"
+          className="w-20 h-20 animate-spin block m-auto"
           src="/loading.png"
           alt="Loading icon"
         />
@@ -97,13 +124,20 @@ const DashboardHome = () => {
                 </div>
                 <div className="xl:col-span-2 xl:block grid sm:grid-cols-2 gap-6 aos-init aos-animate">
                   <Card
-                    title={"Today Appointments"}
+                    title={"Last Appointments"}
                     icon={<IoDocumentTextOutline />}
                     color={"yellow"}>
                     {appointments.map((appointment) => {
                       const whoPatients = patients.find(
-                        (patient) => patient.id === appointment.id
+                        (patient) =>
+                          Number(patient.id) === Number(appointment.patientId)
                       );
+
+                      // If the patient cannot be found, check
+                      if (!whoPatients) {
+                        return null; // or an appropriate error message or action.
+                      }
+
                       return (
                         <AppointmentList
                           key={appointment.id}
@@ -116,9 +150,8 @@ const DashboardHome = () => {
                   </Card>
                   <Card
                     title={"Recent Patients"}
-                    icon={"icon"}
+                    icon={<PiUsers />}
                     className="mt-4">
-                    <RecentPatientList />
                     <RecentPatientList />
                   </Card>
                 </div>

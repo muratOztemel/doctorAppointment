@@ -1,4 +1,5 @@
 import { number, string } from "prop-types";
+import Flags from "../Flags/Flags";
 
 const PatientList = (props) => {
   const {
@@ -40,7 +41,7 @@ const PatientList = (props) => {
         </div>
       </td>
       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-        {language}
+        <Flags language={language} />
       </td>
       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
         {createdAt}
@@ -72,7 +73,7 @@ const PatientList = (props) => {
 export default PatientList;
 
 PatientList.propTypes = {
-  id: number,
+  id: string,
   photos: string,
   name: string,
   surname: string,

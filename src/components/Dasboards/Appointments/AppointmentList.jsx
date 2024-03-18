@@ -1,4 +1,6 @@
 import { FaCheckCircle } from "react-icons/fa";
+import { MdCancel } from "react-icons/md";
+import { IoTime } from "react-icons/io5";
 
 const AppointmentList = ({ props, name, surname }) => {
   return (
