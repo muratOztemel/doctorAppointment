@@ -10,6 +10,7 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 
 import { PiUsers } from "react-icons/pi";
 import LinkDashboardBar from "../../Layout/Dashboard/LinkDashboardBar";
+import Chart1 from "../../Dasboards/Charts/ChartPie";
 
 const DashboardHome = () => {
   const [appointments, setAppointments] = useState(null);
