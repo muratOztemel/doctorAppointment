@@ -1,0 +1,1210 @@
+{
+  "patients": [
+    {
+      "id": 10,
+      "name": "Murat",
+      "surname": "Öztemel",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345678901",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1980",
+      "gender": 0,
+      "email": "cegerxwin@gmail.com",
+      "phoneNumber": "+905327118792",
+      "photos": "https://t4.ftcdn.net/jpg/06/08/55/73/360_F_608557356_ELcD2pwQO9pduTRL30umabzgJoQn5fnd.jpg",
+      "createdAt": "03.13.2024",
+      "updatedAt": "03.13.2024"
+    },
+    {
+      "id": 9,
+      "name": "Meryem",
+      "surname": "Kurt",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345678902",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1990",
+      "gender": 1,
+      "email": "meryemkurt@gmail.com",
+      "phoneNumber": "+905052502526",
+      "photos": "https://media.istockphoto.com/id/1437816897/photo/business-woman-manager-or-human-resources-portrait-for-career-success-company-we-are-hiring.webp?b=1&s=170667a&w=0&k=20&c=YQ_j83pg9fB-HWOd1Qur3_kBmG_ot_hZty8pvoFkr6A=",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 8,
+      "name": "Emin",
+      "surname": "Başbayan",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345678903",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1985",
+      "gender": 0,
+      "email": "eminbasbayan@gmail.com",
+      "phoneNumber": "+905052502527",
+      "photos": "https://image.shutterstock.com/image-photo/head-shot-portrait-close-smiling-260nw-1714666150.jpg",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 7,
+      "name": "Erkan",
+      "surname": "Yıldırım",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345628903",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1984",
+      "gender": 0,
+      "email": "erkanyildirim@gmail.com",
+      "phoneNumber": "+905452502527",
+      "photos": "https://thumbs.wbm.im/pw/medium/6ee9298a0daeccde4df0d2df499bda96.jpg",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 6,
+      "name": "Hamza",
+      "surname": "Bilgin",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345678913",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1986",
+      "gender": 0,
+      "email": "hamzabilgin@gmail.com",
+      "phoneNumber": "+905052502528",
+      "photos": "https://media.istockphoto.com/id/1406197730/photo/portrait-of-a-young-handsome-indian-man.webp?b=1&s=170667a&w=0&k=20&c=KtmKHyOE6MJV0w2DiGX8P4399KHNbZ3p8lCjTEabGcY=",
+      "createdAt": "15.03.2024",
+      "updatedAt": "17.03.2024"
+    },
+    {
+      "id": 5,
+      "name": "Umut",
+      "surname": "Atamış",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345678103",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1984",
+      "gender": 0,
+      "email": "umutatamis@gmail.com",
+      "phoneNumber": "+905054852527",
+      "photos": "https://thumbs.wbm.im/pw/medium/a51c01072fcc50538e188f324e980d08.avif",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 4,
+      "name": "Hüseyin",
+      "surname": "Topgül",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345658103",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1989",
+      "gender": 0,
+      "email": "huseyintopgul@gmail.com",
+      "phoneNumber": "+905354847527",
+      "photos": "https://thumbs.wbm.im/pw/medium/75a32465b8895bdcd79b4bd3a6a3a72e.avif",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 3,
+      "name": "Franz",
+      "surname": "Kafka",
+      "nationality": "Türkiye",
+      "identyType": "Pasaport",
+      "identyNo": "7584527",
+      "country": "İspaya",
+      "language": "Spanish, English",
+      "birthDate": "01.01.1980",
+      "gender": 0,
+      "email": "franzkafka@gmail.com",
+      "phoneNumber": "+34715842361",
+      "photos": "https://thumbs.wbm.im/pw/medium/1c08cff6d19c3a43ae853fb79fbfd5c3.avif",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 2,
+      "name": "Yasser",
+      "surname": "Arafat",
+      "nationality": "Filistin",
+      "identyType": "Pasaport",
+      "identyNo": "9872345",
+      "country": "Filistin",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1984",
+      "gender": 0,
+      "email": "yasserarafat@gmail.com",
+      "phoneNumber": "+905054852527",
+      "photos": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Arafat_by_Yaakov_Saar.jpg/220px-Arafat_by_Yaakov_Saar.jpg",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 1,
+      "name": "Leyla",
+      "surname": "Kasım",
+      "nationality": "Irak",
+      "identyType": "Pasaport",
+      "identyNo": "4875210",
+      "country": "Irak",
+      "language": "Arabic, English",
+      "birthDate": "01.01.1984",
+      "gender": 1,
+      "email": "leylakasim@gmail.com",
+      "phoneNumber": "+9641054852527",
+      "photos": "https://kurdistantribune.com/wp-content/uploads/2014/03/Leyla-Qasim.jpg",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    }
+  ],
+  "doctors": [
+    {
+      "id": 7,
+      "branchId": 7,
+      "slotDuration": "20",
+      "name": "Taner",
+      "surname": "Usta",
+      "title": "Prof. Dr.",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "10261238904",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1969",
+      "gender": 0,
+      "email": "tanerusta@gmail.com",
+      "phoneNumber": "+905054264325",
+      "education": "Ege Üniversitesi Tıp Fakültesi , Université Paris VI Pierre et Marie Curie, Paris-Fransa",
+      "experience": "2017 - 2020 Yeditepe Üniversitesi Tıp Fakültesi Enfeksiyon Hastalıkları Anabilim Dalı Öğretim Üyesi, Hacettepe Tıp Fakültesi",
+      "photo": "https://www.acibadem.com.tr/assets/images/doctors/a-sibel-erdamar-cetin-banner.png",
+      "about": "Tıp Fakültesinden mezun oldum. 2004 yılında ise Türkiye’de ilk olarak Dokuz Eylül Üniversitesi’nde pilot uygulaması başlanan ERASMUS öğrenci değişim programıyla Türkiye’den ilk giden öğrencilerden olup 3 ay süreyle Hollanda-Maastricht Üniversitesi Tıp Fakültesinde İmmünoloji araştırma bölümünde multiple skleroz üzerine araştırmaya katıldım. 2010 yılında Uludağ Üniversitesi Tıp Fakültesi Çocuk ve Ergen Ruh Sağlığı ve Hastalıkları Anabilim Dalında uzmanlık eğitimimi tamamladım. 2006 yılında İstanbul Psikanaliz derneği altında bireysel psikanalizime başladım ve 2012 yılında tamamladım.2007-2008 yılları arasında Çocuk ve Gençlik Ruh Sağlığı Derneği Asistan Komisyonu başkanlığı görevinde bulundum.Akabinde 2008-2009 yıllarında da Çocuk ve Gençlik Ruh Sağlığı Derneği Asistan Komisyonu Sekreterliği görevini yürüttüm. Daha sonra Bakırköy Ruh ve Sinir Hastalıkları E. A. Hastanesinde uzman olarak çalışmaya başladım.  2012 yılından itibaren Psikanalitik terapi için teorik eğitime  ve grup süpervizyonlarına başladım. 2016 yılı itibariyle bu eğitimleri tamamlamış bulunmaktayım. 2015 Kasım ayından itibaren Başasistan olarak Bakırköy Ruh ve Sinir Hastalıkları E. A. Hastanesinde görevime devam ettim. Yaklaşık 3 yıl kadar erkek kapalı psikiyatri servisini yönettim ve 2018 Mayıs-Ağustos ayları arasında Bakırköy Prof. Dr. Mazhar Osman RSHH Çocuk Psikiyatri kliniğinin idari sorumluluğunu üstlendim. Ardından Bezmialem Vakıf Üniversitesi Tıp Fakültesi Çocuk Psikiyatri Anabilim Dalı’nda çalışmaya başladım. Ağustos 2019’dan Kasım 2021 e kadar ise Anabilim Dalı Başkanlığı görevi üstlendim. Tamamlanmış olarak  6 adet Tıpta Uzmanlık tez danışmalığım mevcuttur.",
+      "members": "Türkiye Tabipler Birliği",
+      "article": "Tıp Dünyası: Sağlıklı yaşamın sırları",
+      "createdAt": "06.13.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 6,
+      "branchId": 4,
+      "slotDuration": "30",
+      "name": "Sibel Erdamar",
+      "surname": "Çetin",
+      "title": "Prof. Dr.",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12461238904",
+      "country": "Türkiye",
+      "language": "Türkçe",
+      "birthDate": "01.01.1967",
+      "gender": 0,
+      "email": "sibelerdamar@gmail.com",
+      "phoneNumber": "+905304264325",
+      "education": "Ege Üniversitesi Tıp Fakültesi , Université Paris VI Pierre et Marie Curie, Paris-Fransa",
+      "experience": "2017 - 2020 Yeditepe Üniversitesi Tıp Fakültesi Enfeksiyon Hastalıkları Anabilim Dalı Öğretim Üyesi, Hacettepe Tıp Fakültesi",
+      "photo": "https://www.acibadem.com.tr/assets/images/doctors/a-sibel-erdamar-cetin-banner.png",
+      "about": "Tıp Fakültesinden mezun oldum. 2004 yılında ise Türkiye’de ilk olarak Dokuz Eylül Üniversitesi’nde pilot uygulaması başlanan ERASMUS öğrenci değişim programıyla Türkiye’den ilk giden öğrencilerden olup 3 ay süreyle Hollanda-Maastricht Üniversitesi Tıp Fakültesinde İmmünoloji araştırma bölümünde multiple skleroz üzerine araştırmaya katıldım. 2010 yılında Uludağ Üniversitesi Tıp Fakültesi Çocuk ve Ergen Ruh Sağlığı ve Hastalıkları Anabilim Dalında uzmanlık eğitimimi tamamladım. 2006 yılında İstanbul Psikanaliz derneği altında bireysel psikanalizime başladım ve 2012 yılında tamamladım.2007-2008 yılları arasında Çocuk ve Gençlik Ruh Sağlığı Derneği Asistan Komisyonu başkanlığı görevinde bulundum.Akabinde 2008-2009 yıllarında da Çocuk ve Gençlik Ruh Sağlığı Derneği Asistan Komisyonu Sekreterliği görevini yürüttüm. Daha sonra Bakırköy Ruh ve Sinir Hastalıkları E. A. Hastanesinde uzman olarak çalışmaya başladım.  2012 yılından itibaren Psikanalitik terapi için teorik eğitime  ve grup süpervizyonlarına başladım. 2016 yılı itibariyle bu eğitimleri tamamlamış bulunmaktayım. 2015 Kasım ayından itibaren Başasistan olarak Bakırköy Ruh ve Sinir Hastalıkları E. A. Hastanesinde görevime devam ettim. Yaklaşık 3 yıl kadar erkek kapalı psikiyatri servisini yönettim ve 2018 Mayıs-Ağustos ayları arasında Bakırköy Prof. Dr. Mazhar Osman RSHH Çocuk Psikiyatri kliniğinin idari sorumluluğunu üstlendim. Ardından Bezmialem Vakıf Üniversitesi Tıp Fakültesi Çocuk Psikiyatri Anabilim Dalı’nda çalışmaya başladım. Ağustos 2019’dan Kasım 2021 e kadar ise Anabilim Dalı Başkanlığı görevi üstlendim. Tamamlanmış olarak  6 adet Tıpta Uzmanlık tez danışmalığım mevcuttur.",
+      "members": "Türkiye Tabipler Birliği",
+      "article": "Tıp Dünyası: Sağlıklı yaşamın sırları",
+      "createdAt": "06.13.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 5,
+      "branchId": 5,
+      "slotDuration": "15",
+      "name": "Bülent",
+      "surname": "Oktay",
+      "title": "Prof. Dr.",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12464178904",
+      "country": "Türkiye",
+      "language": "Türkçe",
+      "birthDate": "01.01.1966",
+      "gender": 0,
+      "email": "bulentoktay@gmail.com",
+      "phoneNumber": "+905304262525",
+      "education": "Ege Üniversitesi Tıp Fakültesi , Université Paris VI Pierre et Marie Curie, Paris-Fransa",
+      "experience": "2017 - 2020 Yeditepe Üniversitesi Tıp Fakültesi Enfeksiyon Hastalıkları Anabilim Dalı Öğretim Üyesi, Hacettepe Tıp Fakültesi",
+      "photo": "https://www.acibadem.com.tr/assets/images/doctors/abulent-oktay-banner.png",
+      "about": "Tıp Fakültesinden mezun oldum. 2004 yılında ise Türkiye’de ilk olarak Dokuz Eylül Üniversitesi’nde pilot uygulaması başlanan ERASMUS öğrenci değişim programıyla Türkiye’den ilk giden öğrencilerden olup 3 ay süreyle Hollanda-Maastricht Üniversitesi Tıp Fakültesinde İmmünoloji araştırma bölümünde multiple skleroz üzerine araştırmaya katıldım. 2010 yılında Uludağ Üniversitesi Tıp Fakültesi Çocuk ve Ergen Ruh Sağlığı ve Hastalıkları Anabilim Dalında uzmanlık eğitimimi tamamladım. 2006 yılında İstanbul Psikanaliz derneği altında bireysel psikanalizime başladım ve 2012 yılında tamamladım.2007-2008 yılları arasında Çocuk ve Gençlik Ruh Sağlığı Derneği Asistan Komisyonu başkanlığı görevinde bulundum.Akabinde 2008-2009 yıllarında da Çocuk ve Gençlik Ruh Sağlığı Derneği Asistan Komisyonu Sekreterliği görevini yürüttüm. Daha sonra Bakırköy Ruh ve Sinir Hastalıkları E. A. Hastanesinde uzman olarak çalışmaya başladım.  2012 yılından itibaren Psikanalitik terapi için teorik eğitime  ve grup süpervizyonlarına başladım. 2016 yılı itibariyle bu eğitimleri tamamlamış bulunmaktayım. 2015 Kasım ayından itibaren Başasistan olarak Bakırköy Ruh ve Sinir Hastalıkları E. A. Hastanesinde görevime devam ettim. Yaklaşık 3 yıl kadar erkek kapalı psikiyatri servisini yönettim ve 2018 Mayıs-Ağustos ayları arasında Bakırköy Prof. Dr. Mazhar Osman RSHH Çocuk Psikiyatri kliniğinin idari sorumluluğunu üstlendim. Ardından Bezmialem Vakıf Üniversitesi Tıp Fakültesi Çocuk Psikiyatri Anabilim Dalı’nda çalışmaya başladım. Ağustos 2019’dan Kasım 2021 e kadar ise Anabilim Dalı Başkanlığı görevi üstlendim. Tamamlanmış olarak  6 adet Tıpta Uzmanlık tez danışmalığım mevcuttur.",
+      "members": "Türkiye Tabipler Birliği",
+      "article": "Tıp Dünyası: Sağlıklı yaşamın sırları",
+      "createdAt": "06.13.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 4,
+      "branchId": 6,
+      "slotDuration": "15",
+      "name": "Çağrı",
+      "surname": "Büke",
+      "title": "Prof. Dr.",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12344178904",
+      "country": "Türkiye",
+      "language": "Türkçe",
+      "birthDate": "01.01.1965",
+      "gender": 0,
+      "email": "cagribuke@gmail.com",
+      "phoneNumber": "+905302512525",
+      "education": "Ege Üniversitesi Tıp Fakültesi , Université Paris VI Pierre et Marie Curie, Paris-Fransa",
+      "experience": "2017 - 2020 Yeditepe Üniversitesi Tıp Fakültesi Enfeksiyon Hastalıkları Anabilim Dalı Öğretim Üyesi, Hacettepe Tıp Fakültesi",
+      "photo": "https://www.acibadem.com.tr/assets/images/doctors/cagri-buke-banner.png",
+      "about": "Tıp Fakültesinden mezun oldum. 2004 yılında ise Türkiye’de ilk olarak Dokuz Eylül Üniversitesi’nde pilot uygulaması başlanan ERASMUS öğrenci değişim programıyla Türkiye’den ilk giden öğrencilerden olup 3 ay süreyle Hollanda-Maastricht Üniversitesi Tıp Fakültesinde İmmünoloji araştırma bölümünde multiple skleroz üzerine araştırmaya katıldım. 2010 yılında Uludağ Üniversitesi Tıp Fakültesi Çocuk ve Ergen Ruh Sağlığı ve Hastalıkları Anabilim Dalında uzmanlık eğitimimi tamamladım. 2006 yılında İstanbul Psikanaliz derneği altında bireysel psikanalizime başladım ve 2012 yılında tamamladım.2007-2008 yılları arasında Çocuk ve Gençlik Ruh Sağlığı Derneği Asistan Komisyonu başkanlığı görevinde bulundum.Akabinde 2008-2009 yıllarında da Çocuk ve Gençlik Ruh Sağlığı Derneği Asistan Komisyonu Sekreterliği görevini yürüttüm. Daha sonra Bakırköy Ruh ve Sinir Hastalıkları E. A. Hastanesinde uzman olarak çalışmaya başladım.  2012 yılından itibaren Psikanalitik terapi için teorik eğitime  ve grup süpervizyonlarına başladım. 2016 yılı itibariyle bu eğitimleri tamamlamış bulunmaktayım. 2015 Kasım ayından itibaren Başasistan olarak Bakırköy Ruh ve Sinir Hastalıkları E. A. Hastanesinde görevime devam ettim. Yaklaşık 3 yıl kadar erkek kapalı psikiyatri servisini yönettim ve 2018 Mayıs-Ağustos ayları arasında Bakırköy Prof. Dr. Mazhar Osman RSHH Çocuk Psikiyatri kliniğinin idari sorumluluğunu üstlendim. Ardından Bezmialem Vakıf Üniversitesi Tıp Fakültesi Çocuk Psikiyatri Anabilim Dalı’nda çalışmaya başladım. Ağustos 2019’dan Kasım 2021 e kadar ise Anabilim Dalı Başkanlığı görevi üstlendim. Tamamlanmış olarak  6 adet Tıpta Uzmanlık tez danışmalığım mevcuttur.",
+      "members": "Türkiye Tabipler Birliği",
+      "article": "Tıp Dünyası: Sağlıklı yaşamın sırları",
+      "createdAt": "05.13.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 3,
+      "branchId": 1,
+      "slotDuration": "15",
+      "name": "Ahmet",
+      "surname": "Yılmaz",
+      "title": "Prof. Dr.",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345678904",
+      "country": "Türkiye",
+      "language": "Türkçe",
+      "birthDate": "01.01.1981",
+      "gender": 0,
+      "email": "ahmetyilmaz@gmail.com",
+      "phoneNumber": "+905372512525",
+      "education": "Hacettepe Üniversitesi Tıp Fakültesi, Oxford University Yüksek Lisans",
+      "experience": "Memorial Hastanesi, Hacettepe Tıp Fakültesi",
+      "photo": "https://www.acibadem.com.tr/assets/images/doctors/abdullah-buyukcelik-banner.png",
+      "about": "Tıp Fakültesinden mezun oldum. 2004 yılında ise Türkiye’de ilk olarak Dokuz Eylül Üniversitesi’nde pilot uygulaması başlanan ERASMUS öğrenci değişim programıyla Türkiye’den ilk giden öğrencilerden olup 3 ay süreyle Hollanda-Maastricht Üniversitesi Tıp Fakültesinde İmmünoloji araştırma bölümünde multiple skleroz üzerine araştırmaya katıldım. 2010 yılında Uludağ Üniversitesi Tıp Fakültesi Çocuk ve Ergen Ruh Sağlığı ve Hastalıkları Anabilim Dalında uzmanlık eğitimimi tamamladım. 2006 yılında İstanbul Psikanaliz derneği altında bireysel psikanalizime başladım ve 2012 yılında tamamladım.2007-2008 yılları arasında Çocuk ve Gençlik Ruh Sağlığı Derneği Asistan Komisyonu başkanlığı görevinde bulundum.Akabinde 2008-2009 yıllarında da Çocuk ve Gençlik Ruh Sağlığı Derneği Asistan Komisyonu Sekreterliği görevini yürüttüm. Daha sonra Bakırköy Ruh ve Sinir Hastalıkları E. A. Hastanesinde uzman olarak çalışmaya başladım.  2012 yılından itibaren Psikanalitik terapi için teorik eğitime  ve grup süpervizyonlarına başladım. 2016 yılı itibariyle bu eğitimleri tamamlamış bulunmaktayım. 2015 Kasım ayından itibaren Başasistan olarak Bakırköy Ruh ve Sinir Hastalıkları E. A. Hastanesinde görevime devam ettim. Yaklaşık 3 yıl kadar erkek kapalı psikiyatri servisini yönettim ve 2018 Mayıs-Ağustos ayları arasında Bakırköy Prof. Dr. Mazhar Osman RSHH Çocuk Psikiyatri kliniğinin idari sorumluluğunu üstlendim. Ardından Bezmialem Vakıf Üniversitesi Tıp Fakültesi Çocuk Psikiyatri Anabilim Dalı’nda çalışmaya başladım. Ağustos 2019’dan Kasım 2021 e kadar ise Anabilim Dalı Başkanlığı görevi üstlendim. Tamamlanmış olarak  6 adet Tıpta Uzmanlık tez danışmalığım mevcuttur.",
+      "members": "Türkiye Tabipler Birliği",
+      "article": "Tıp Dünyası: Sağlıklı yaşamın sırları",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 2,
+      "branchId": 2,
+      "slotDuration": "30",
+      "name": "Dilek",
+      "surname": "Abul",
+      "title": "Dr.",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345678905",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1982",
+      "gender": 1,
+      "email": "dilekabul@gmail.com",
+      "phoneNumber": "+905372512527",
+      "education": "ODTÜ Üniversitesi Tıp Fakültesi, Cambridge University Yüksek Lisans",
+      "experience": "Acıbadem Hastanesi, Memorial Hastanesi, Hacettepe Tıp Fakültesi",
+      "photo": "https://www.acibadem.com.tr/assets/images/doctors/dilek-abul-banner.png",
+      "about": "Lisans öncesi öğrenimlerinin ardından Üsküdar Üniversitesi Siyaset Bilimi ve Uluslararası İlişkiler bölümünü tamamlamış aynı üniversitede Psikoloji üzerine çift ana dal yapmış ve onur derecesiyle Psikolog unvanının sahibi olmuştur. Uzm. Psk. Nursel Kaba, mesleki çalışmalarına şu an İstanbulda özel kliniğinde devam etmektedir.",
+      "members": "Türkiye Tabipler Birliği, Sağlık Vakfı",
+      "article": "Tıp Dünyası: Sağlıklı yaşamın sırları",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 1,
+      "branchId": 2,
+      "slotDuration": "30",
+      "name": "Cihan",
+      "surname": "Yağız",
+      "title": "Op. Dr.",
+      "nationality": "Türkiye",
+      "identyType": "Kimlik",
+      "identyNo": "12345678906",
+      "country": "Türkiye",
+      "language": "Türkçe, English",
+      "birthDate": "01.01.1983",
+      "gender": 0,
+      "email": "cihanyagiz@gmail.com",
+      "phoneNumber": "+905372512528",
+      "education": "Ankara Üniversitesi Tıp Fakültesi",
+      "experience": "Ege Üniversitesi Hastanesi, Memorial Hastanesi, Hacettepe Tıp Fakültesi",
+      "photo": "https://www.acibadem.com.tr/assets/images/doctors/sinan-dagdelen-banner.png",
+      "about": "2015 yılında başladığım İstanbul Medipol Üniversitesinde Dil ve Konuşma Terapisi bölümünü 2019 yılında birincilikle tamamladım. 2023 yılında İstanbul Medipol Üniversitesinde Dil ve Konuşma Terapisi Alanında Tezli Yüksek Lisans eğitimimi tamamladım. Eğitim hayatımda birçok rehabilitasyon, klinik ve hastanede gözlem stajları yapıp uygulamalı stajımı Mega Medipol Üniversite Hastanesi ve İstanbul Medipol Üniversitesi Dil, Konuşma ve Yutma Terapisi ve Yenilikçi Teknolojiler Araştırma ve Uygulama Merkezi (MEDKOM)nde tamamladım. Uyguladığım testler: TEDİL (Türkçe Erken Dil Gelişim Testi), SST (Sesletim Sesbilgisi Testi), ADD (Afazi Dil Değerlendirme Testi), GAT-2 (Gülhane Afazi Testi)",
+      "members": "Türkiye Tabipler Birliği, Sağlık Vakfı",
+      "article": "Tıp Dünyası: Sağlıklı yaşamın sırları",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    }
+  ],
+  "appointments": [
+    {
+      "id": 50,
+      "doctorId": 1,
+      "patientId": 1,
+      "date": "21.04.2024",
+      "time": "09:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 49,
+      "doctorId": 1,
+      "patientId": 2,
+      "date": "21.04.2024",
+      "time": "10:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 48,
+      "doctorId": 2,
+      "patientId": 3,
+      "date": "20.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 47,
+      "doctorId": 2,
+      "patientId": 4,
+      "date": "20.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 46,
+      "doctorId": 1,
+      "patientId": 5,
+      "date": "20.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 45,
+      "doctorId": 3,
+      "patientId": 6,
+      "date": "19.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 44,
+      "doctorId": 2,
+      "patientId": 7,
+      "date": "18.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 43,
+      "doctorId": 1,
+      "patientId": 8,
+      "date": "18.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 42,
+      "doctorId": 2,
+      "patientId": 9,
+      "date": "18.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 41,
+      "doctorId": 3,
+      "patientId": 10,
+      "date": "18.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 40,
+      "doctorId": 3,
+      "patientId": 1,
+      "date": "18.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 39,
+      "doctorId": 2,
+      "patientId": 2,
+      "date": "17.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 38,
+      "doctorId": 1,
+      "patientId": 3,
+      "date": "17.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "03.13.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 37,
+      "doctorId": 7,
+      "patientId": 4,
+      "date": "17.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 36,
+      "doctorId": 6,
+      "patientId": 5,
+      "date": "16.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 35,
+      "doctorId": 5,
+      "patientId": 6,
+      "date": "16.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 34,
+      "doctorId": 4,
+      "patientId": 7,
+      "date": "16.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 33,
+      "doctorId": 3,
+      "patientId": 8,
+      "date": "16.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 32,
+      "doctorId": 2,
+      "patientId": 9,
+      "date": "15.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 31,
+      "doctorId": 2,
+      "patientId": 9,
+      "date": "15.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 30,
+      "doctorId": 1,
+      "patientId": 10,
+      "date": "15.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 29,
+      "doctorId": 7,
+      "patientId": 10,
+      "date": "14.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 28,
+      "doctorId": 6,
+      "patientId": 1,
+      "date": "14.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 27,
+      "doctorId": 5,
+      "patientId": 2,
+      "date": "14.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 26,
+      "doctorId": 4,
+      "patientId": 3,
+      "date": "13.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 25,
+      "doctorId": 3,
+      "patientId": 4,
+      "date": "13.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 24,
+      "doctorId": 3,
+      "patientId": 4,
+      "date": "13.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 23,
+      "doctorId": 3,
+      "patientId": 4,
+      "date": "12.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 22,
+      "doctorId": 3,
+      "patientId": 4,
+      "date": "12.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 21,
+      "doctorId": 2,
+      "patientId": 5,
+      "date": "12.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 20,
+      "doctorId": 1,
+      "patientId": 6,
+      "date": "11.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 19,
+      "doctorId": 7,
+      "patientId": 7,
+      "date": "11.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 18,
+      "doctorId": 6,
+      "patientId": 8,
+      "date": "11.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 17,
+      "doctorId": 5,
+      "patientId": 9,
+      "date": "10.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 16,
+      "doctorId": 4,
+      "patientId": 10,
+      "date": "10.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 15,
+      "doctorId": 3,
+      "patientId": 1,
+      "date": "10.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 14,
+      "doctorId": 2,
+      "patientId": 2,
+      "date": "10.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 13,
+      "doctorId": 1,
+      "patientId": 3,
+      "date": "09.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 12,
+      "doctorId": 7,
+      "patientId": 7,
+      "date": "08.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 11,
+      "doctorId": 6,
+      "patientId": 8,
+      "date": "08.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 10,
+      "doctorId": 5,
+      "patientId": 9,
+      "date": "07.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 9,
+      "doctorId": 4,
+      "patientId": 10,
+      "date": "06.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 8,
+      "doctorId": 3,
+      "patientId": 1,
+      "date": "05.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 7,
+      "doctorId": 2,
+      "patientId": 2,
+      "date": "04.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 6,
+      "doctorId": 1,
+      "patientId": 3,
+      "date": "03.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 5,
+      "doctorId": 7,
+      "patientId": 4,
+      "date": "02.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 4,
+      "doctorId": 6,
+      "patientId": 5,
+      "date": "01.04.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 3,
+      "doctorId": 5,
+      "patientId": 4,
+      "date": "30.03.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 2,
+      "doctorId": 4,
+      "patientId": 5,
+      "date": "30.03.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 1,
+      "doctorId": 3,
+      "patientId": 6,
+      "date": "29.03.2024",
+      "time": "11:00",
+      "status": "Pending",
+      "createdAt": "16.03.2024",
+      "updatedAt": "13.03.2024"
+    }
+  ],
+  "branchs": [
+    {
+      "id": 10,
+      "name": "Onkolojik Cerrahi",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 9,
+      "name": "İç Hastalıkları",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 8,
+      "name": "Göğüs Hastalıkları",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 7,
+      "name": "Genel Cerrahi",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 6,
+      "name": "Çocuk Hastalıkları",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 5,
+      "name": "Beyin ve Sinir Cerrahisi",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 4,
+      "name": "Ağız ve Diş Sağlığı",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 3,
+      "name": "Göz Doktoru",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 2,
+      "name": "Cilt Doktoru",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 1,
+      "name": "KBB Doktoru",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    }
+  ],
+  "roles": [
+    {
+      "id": 4,
+      "name": "Doktor",
+      "title": "Op. Dr.",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 3,
+      "name": "Yönetici",
+      "title": "",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 2,
+      "name": "Receptionist",
+      "title": "",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 1,
+      "name": "güvenlik",
+      "title": "",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    }
+  ],
+  "doctorWorkingDays": [
+    {
+      "id": 3,
+      "doctorId": 1,
+      "day": "Pazartesi, Salı, Çarşamba, Perşembe",
+      "startTime": "15.03.2024",
+      "endTime": "15.03.2025",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 2,
+      "doctorId": 2,
+      "day": "Salı, Çarşamba, Perşembe, Cuma",
+      "startTime": "15.03.2024",
+      "endTime": "15.03.2025",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 1,
+      "doctorId": 3,
+      "day": "Pazartesi,Salı, Çarşamba, Perşembe, Cuma",
+      "startTime": "15.03.2024",
+      "endTime": "15.03.2025",
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    }
+  ],
+  "usersRoles": [
+    {
+      "id": 3,
+      "userId": 1,
+      "roleId": 1,
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "roleId": 2,
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    },
+    {
+      "id": 1,
+      "userId": 3,
+      "roleId": 3,
+      "createdAt": "14.03.2024",
+      "updatedAt": "14.03.2024"
+    }
+  ],
+  "users": [
+    {
+      "id": 3,
+      "username": "ahmetyilmaz",
+      "password": "1234",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 2,
+      "username": "dilekabul",
+      "password": "1234",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 1,
+      "username": "muratoztemel",
+      "password": "1234",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    }
+  ],
+  "examinations": [
+    {
+      "id": 3,
+      "patientId": 1,
+      "doctorId": 1,
+      "medicineId": 1,
+      "complaint": "Kulak ağrısı",
+      "treatment": "Kulak damlası kullanılmalı",
+      "diagnosis": "Kulak enfeksiyonu",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 2,
+      "patientId": 2,
+      "doctorId": 2,
+      "medicineId": 2,
+      "complaint": "Göz ağrısı",
+      "treatment": "Göz damlası kullanılmalı",
+      "diagnosis": "Göz enfeksiyonu",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 1,
+      "patientId": 3,
+      "doctorId": 3,
+      "medicineId": 3,
+      "complaint": "Karın ağrısı",
+      "treatment": "Verilen ilaçların 15 gün süreyle kullanması gerekiyor.",
+      "diagnosis": "Mide ülseri",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    }
+  ],
+  "examMedicines": [
+    {
+      "id": 3,
+      "examId": 1,
+      "medicineId": 1,
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 2,
+      "examId": 2,
+      "medicineId": 2,
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 1,
+      "examId": 3,
+      "medicineId": 3,
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    }
+  ],
+  "medicines": [
+    {
+      "id": 3,
+      "medicineName": "Anxiont",
+      "treatment": "Göz damlası",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 2,
+      "medicineName": "Apatrix",
+      "treatment": "Kulak damlası",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 1,
+      "medicineName": "Mercint",
+      "treatment": "Ülser",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    }
+  ],
+  "Authority": [
+    {
+      "id": 3,
+      "userId": 1,
+      "Read": "Yes",
+      "Edit": "Yes",
+      "Create": "Yes",
+      "Delete": "Yes",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "Read": "Yes",
+      "Edit": "Yes",
+      "Create": "No",
+      "Delete": "No",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 1,
+      "userId": 3,
+      "Read": "Yes",
+      "Edit": "Yes",
+      "Create": "Yes",
+      "Delete": "No",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    }
+  ],
+  "holidays": [
+    {
+      "id": 3,
+      "userId": 1,
+      "startDate": "25.04.2024",
+      "endDate": "31.05.2024",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "startDate": "25.05.2024",
+      "endDate": "31.05.2024",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    },
+    {
+      "id": 1,
+      "userId": 3,
+      "startDate": "25.05.2024",
+      "endDate": "31.05.2024",
+      "createdAt": "13.03.2024",
+      "updatedAt": "13.03.2024"
+    }
+  ],
+  "links": [
+    {
+      "id": 1,
+      "name": "Dashboard",
+      "pageName": "DashboardHome",
+      "link": "/",
+      "iconName": "IoHomeOutline"
+    },
+    {
+      "id": 2,
+      "name": "Patients",
+      "pageName": "PatientsHome",
+      "link": "/patients",
+      "iconName": "PiUsers"
+    },
+    {
+      "id": 3,
+      "name": "Receptions",
+      "pageName": "ReceptionsHome",
+      "link": "/receptions",
+      "iconName": "RiCustomerService2Fill"
+    },
+    {
+      "id": 4,
+      "name": "Doctors",
+      "pageName": "DoctorsHome",
+      "link": "/doctors",
+      "iconName": "FaUserDoctor"
+    },
+    {
+      "id": 5,
+      "name": "Appointments",
+      "pageName": "AppointmentsHome",
+      "link": "/appointments",
+      "iconName": "IoDocumentTextOutline"
+    },
+    {
+      "id": 6,
+      "name": "Medicine",
+      "pageName": "MedicineHome",
+      "link": "/medicine",
+      "iconName": "RiMedicineBottleLine"
+    },
+    {
+      "id": 7,
+      "name": "Settings",
+      "pageName": "SettingsHome",
+      "link": "/settings",
+      "iconName": "IoSettingsOutline"
+    }
+  ]
+}
