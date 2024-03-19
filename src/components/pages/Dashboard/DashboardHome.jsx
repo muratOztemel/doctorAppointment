@@ -7,10 +7,9 @@ import LeftSide from "../../Layout/Dashboard/LeftSide";
 import MainHeader from "../../Layout/Dashboard/MainHeader";
 import axios from "axios";
 import { IoDocumentTextOutline } from "react-icons/io5";
-
 import { PiUsers } from "react-icons/pi";
 import LinkDashboardBar from "../../Layout/Dashboard/LinkDashboardBar";
-import Chart1 from "../../Dasboards/Charts/ChartPie";
+import ChartDoctor from "../../Dasboards/Charts/ChartDoctor";
 
 const DashboardHome = () => {
   const [appointments, setAppointments] = useState(null);
@@ -84,9 +83,16 @@ const DashboardHome = () => {
               <div className="w-full my-6 grid xl:grid-cols-8 grid-cols-1 gap-6">
                 <div className="xl:col-span-6  w-full">
                   <Card
-                    title={"Patient List"}
+                    title={"Appointments with Doctor Graphic"}
                     icon={<PiUsers />}
                     color={"cyan"}>
+                    <ChartDoctor />
+                  </Card>
+                  {/*                   <Card
+                    title={"Patient List"}
+                    icon={<PiUsers />}
+                    color={"cyan"}
+                    className="mt-6">
                     <div className="mt-4">
                       <table className="table-auto w-full">
                         <thead className="bg-cyan-50 rounded-md overflow-hidden">
@@ -110,6 +116,9 @@ const DashboardHome = () => {
                               Age
                             </th>
                             <th className="text-start text-sm font-medium py-3 px-2 whitespace-nowrap">
+                              Blood Group
+                            </th>
+                            <th className="text-center text-sm font-medium py-3 px-2 whitespace-nowrap">
                               Actions
                             </th>
                           </tr>
@@ -121,7 +130,7 @@ const DashboardHome = () => {
                         </tbody>
                       </table>
                     </div>
-                  </Card>
+                  </Card> */}
                 </div>
                 <div className="xl:col-span-2 xl:block grid sm:grid-cols-2 gap-6 aos-init aos-animate">
                   <Card
@@ -130,8 +139,7 @@ const DashboardHome = () => {
                     color={"yellow"}>
                     {appointments.map((appointment) => {
                       const whoPatients = patients.find(
-                        (patient) =>
-                          Number(patient.id) === Number(appointment.patientId)
+                        (patient) => patient.id === appointment.patientId
                       );
 
                       // If the patient cannot be found, check

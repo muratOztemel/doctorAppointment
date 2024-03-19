@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { string, array } from "prop-types";
+import { string, number, array } from "prop-types";
 import ReactApexChart from "react-apexcharts";
 import axios from "axios";
 
-const ChartPie = ({ dataName, color }) => {
+const ChartPie = ({ dataName, color, widthChart }) => {
   const [labels, setLabels] = useState({});
-  const [totalDataCounts, setTotalDataCounts] = useState("");
+  const [totalDataCounts, setTotalDataCounts] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -18,15 +18,14 @@ const ChartPie = ({ dataName, color }) => {
             let groupedData = {};
             let months = [];
             let totalDataCounts = [];
-
+            let dateParts;
             data.map((item) => {
-              // if (dataName === "appointments") {
-              const dateParts = item.createdAt.split(".");
-              // console.log("appointments");
-              // } else {
-              //   const dateParts = item.createdAt.split(".");
-              //   console.log("patients");
-              // }
+              if (dataName === "appointments") {
+                dateParts = item.date.split(".");
+              } else {
+                dateParts = item.createdAt.split(".");
+              }
+
               let [day, month, year] = dateParts;
 
               let key = `${year}-${month}`;
@@ -68,7 +67,7 @@ const ChartPie = ({ dataName, color }) => {
       }}
       series={totalDataCounts}
       type="pie"
-      width={250}
+      width={widthChart}
     />
   );
 };
@@ -77,6 +76,7 @@ export default ChartPie;
 
 ChartPie.propTypes = {
   dataName: string,
+  widthChart: number,
   color: array,
   series: array.isRequired,
 };
