@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { number, string } from "prop-types";
 import Flags from "../Flags/Flags";
+import Modal from "../../UI/Modal";
 
 const PatientList = (props) => {
+  const [isShowError, setIsShowError] = useState(false);
   const {
     id,
     photo,
@@ -36,6 +39,8 @@ const PatientList = (props) => {
     age--;
   }
 
+  const nameUser = `${name} ${surname}`;
+
   return (
     <tr className="border-b border-cyan-100 hover:bg-cyan-50 transition">
       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">{id}</td>
@@ -54,9 +59,7 @@ const PatientList = (props) => {
             />
           </span>
           <div>
-            <h4 className="text-sm font-medium">
-              {name} {surname}
-            </h4>
+            <h4 className="text-sm font-medium">{nameUser}</h4>
             <p className="text-xs mt-1 text-textGray">{phoneNumber}</p>
           </div>
         </div>
@@ -104,7 +107,9 @@ const PatientList = (props) => {
           </svg>
           Detail
         </button>
-        <button className="items-end w-24 inline-flex px-4 py-2 bg-red-300 hover:bg-red-500 text-white text-sm font-medium rounded-md">
+        <button
+          onClick={() => setIsShowError(true)}
+          className="items-end w-24 inline-flex px-4 py-2 bg-red-300 hover:bg-red-500 text-white text-sm font-medium rounded-md">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 mr-2"
@@ -119,6 +124,11 @@ const PatientList = (props) => {
           </svg>
           Delete
         </button>
+        <Modal
+          setIsShowError={setIsShowError}
+          isShowError={isShowError}
+          message={`Are you sure you want to delete ${nameUser}`}
+        />
       </td>
     </tr>
   );
