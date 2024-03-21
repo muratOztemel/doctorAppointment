@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Card from "../../UI/Cards/Card";
-import PatientList from "../../Dasboards/Patients/PatientList";
 import LeftSide from "../../Layout/Dashboard/LeftSide";
 import MainHeader from "../../Layout/Dashboard/MainHeader";
 import axios from "axios";
@@ -8,6 +7,7 @@ import axios from "axios";
 import { PiUsers } from "react-icons/pi";
 import PatientsDashboard from "../../Layout/Dashboard/PatientsDashboard";
 import SearchPatients from "../../Dasboards/Patients/SearchPatients";
+import TablePage from "./Table/TablePage";
 
 const PatientsHome = () => {
   const [appointments, setAppointments] = useState(null);
@@ -34,9 +34,6 @@ const PatientsHome = () => {
         const lastTenDaysAppointments = sortedAppointments.slice(0, 10);
         setAppointments(lastTenDaysAppointments);
 
-        console.log("patients", patientsData);
-        console.log("appointments", lastTenDaysAppointments);
-
         // Update patients state
         setPatients(patientsData);
 
@@ -58,7 +55,6 @@ const PatientsHome = () => {
   }, [query]);
 
   const keys = ["name", "surname", "identyNo", "email", "birthDate", "phone"];
-  console.log(query);
 
   const search = (data, query) => {
     return data.filter((item) => {
@@ -183,41 +179,7 @@ const PatientsHome = () => {
                   </button>
                 </div>
                 <div className="mt-8 w-full overflow-x-scroll">
-                  <table className="table-auto w-full">
-                    <thead className="bg-cyan-50 rounded-md overflow-hidden">
-                      <tr>
-                        <th className="text-start text-sm font-medium py-3 px-2 whitespace-nowrap">
-                          #
-                        </th>
-                        <th className="text-start text-sm font-medium py-3 px-2 whitespace-nowrap">
-                          Patient
-                        </th>
-                        <th className="text-start text-sm font-medium py-3 px-2 whitespace-nowrap">
-                          Language
-                        </th>
-                        <th className="text-start text-sm font-medium py-3 px-2 whitespace-nowrap">
-                          Created At
-                        </th>
-                        <th className="text-start text-sm font-medium py-3 px-2 whitespace-nowrap">
-                          Gender
-                        </th>
-                        <th className="text-start text-sm font-medium py-3 px-2 whitespace-nowrap">
-                          Age
-                        </th>
-                        <th className="text-start text-sm font-medium py-3 px-2 whitespace-nowrap">
-                          Blood Group
-                        </th>
-                        <th className="text-center text-sm font-medium py-3 px-2 whitespace-nowrap">
-                          Actions
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {search(patients, query).map((patient) => (
-                        <PatientList key={patient.id} {...patient} />
-                      ))}
-                    </tbody>
-                  </table>
+                  <TablePage patients={patients} />
                 </div>
               </Card>
             </div>

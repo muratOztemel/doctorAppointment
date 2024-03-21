@@ -8,55 +8,57 @@ const ChartPie = ({ dataName, color, widthChart }) => {
   const [totalDataCounts, setTotalDataCounts] = useState([]);
 
   useEffect(() => {
-    (async () => {
-      try {
-        await axios.get("http://localhost:3004/" + dataName).then((res) => {
-          let jsonData = res.data;
+    getData();
+  }, []);
 
-          // Verileri aylara göre gruplamak için bir fonksiyon
-          function groupDataByMonth(data) {
-            let groupedData = {};
-            let months = [];
-            let totalDataCounts = [];
-            let dateParts;
-            data.map((item) => {
-              if (dataName === "appointments") {
-                dateParts = item.date.split(".");
-              } else {
-                dateParts = item.createdAt.split(".");
-              }
+  const getData = async () => {
+    try {
+      await axios.get("http://localhost:3004/" + dataName).then((res) => {
+        let jsonData = res.data;
 
-              let [day, month, year] = dateParts;
+        // Verileri aylara göre gruplamak için bir fonksiyon
+        function groupDataByMonth(data) {
+          let groupedData = {};
+          let months = [];
+          let totalDataCounts = [];
+          let dateParts;
+          data.map((item) => {
+            if (dataName === "appointments") {
+              dateParts = item.date.split(".");
+            } else {
+              dateParts = item.createdAt.split(".");
+            }
 
-              let key = `${year}-${month}`;
+            let [day, month, year] = dateParts;
 
-              groupedData[key] = [...(groupedData[key] || []), item];
-            });
+            let key = `${year}-${month}`;
 
-            // Her ay için toplam veriyi hesapla
-            Object.keys(groupedData).forEach((key) => {
-              months = [...months, key]; // Ayı diziyi ekle
-              totalDataCounts = [...totalDataCounts, groupedData[key].length]; // Toplam veri sayısını diziyi ekle
-            });
+            groupedData[key] = [...(groupedData[key] || []), item];
+          });
 
-            return { months, totalDataCounts };
-          }
+          // Her ay için toplam veriyi hesapla
+          Object.keys(groupedData).forEach((key) => {
+            months = [...months, key]; // Ayı diziyi ekle
+            totalDataCounts = [...totalDataCounts, groupedData[key].length]; // Toplam veri sayısını diziyi ekle
+          });
 
-          // Gruplanmış veriyi al
-          const { months, totalDataCounts } = groupDataByMonth(jsonData);
-          setLabels(months);
-          setTotalDataCounts(totalDataCounts);
-          /*           if (Array.isArray(totalDataCounts)) {
+          return { months, totalDataCounts };
+        }
+
+        // Gruplanmış veriyi al
+        const { months, totalDataCounts } = groupDataByMonth(jsonData);
+        setLabels(months);
+        setTotalDataCounts(totalDataCounts);
+        /*           if (Array.isArray(totalDataCounts)) {
             console.log("Bu bir dizi!");
           } else {
             console.log("Bu bir dizi değil!");
           } */
-        });
-      } catch (err) {
-        console.log(`${dataName} data is connection mistake!`, err);
-      }
-    })();
-  }, []);
+      });
+    } catch (err) {
+      console.log(`${dataName} data is connection mistake!`, err);
+    }
+  };
 
   return (
     <ReactApexChart
