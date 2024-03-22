@@ -18,8 +18,8 @@ const PatientsHome = () => {
     const getData = async () => {
       try {
         const [resAppointments, resPatients] = await Promise.all([
-          axios.get("http://localhost:3004/appointments"),
-          axios.get(`http://localhost:3004/patients?q=${query}`),
+          axios.get("http://localhost:3001/appointments"),
+          axios.get(`http://localhost:3001/patients?q=${query}`),
         ]);
         const appointmentsData = resAppointments.data;
         const patientsData = resPatients.data.splice(0, 10);
@@ -67,17 +67,6 @@ const PatientsHome = () => {
     });
   };
 
-  if (appointments === null || patients === null) {
-    return (
-      <div className="flex items-center justify-center align-middle">
-        <img
-          className="w-20 h-20 animate-spin"
-          src="/loading.png"
-          alt="Loading icon"
-        />
-      </div>
-    );
-  }
   return (
     <div>
       <div className="fixed z-50 inset-4 pointer-events-none" />

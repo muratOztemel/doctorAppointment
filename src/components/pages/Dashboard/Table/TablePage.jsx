@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { array } from "prop-types";
 import Flags from "../../../Dasboards/Flags/Flags";
-// import Table from "../../../Table/Table";
 import Modal from "../../../UI/Modal";
 import SortableTable from "../../../Table/SortableTable";
 
@@ -35,7 +34,7 @@ const TablePage = ({ patients }) => {
           <h4 className="text-sm font-medium">
             {patient.name} {patient.surname}
           </h4>
-          <p className="text-xs mt-1 text-textGray">{patient.phoneNumber}</p>
+          <p className="text-xs mt-1 text-gray-500">{patient.phoneNumber}</p>
         </div>
       ),
       sortValue: (patient) => patient.name,
@@ -140,7 +139,11 @@ const TablePage = ({ patients }) => {
 
   return (
     <div>
-      <SortableTable config={config} patients={patients} keyFn={keyFn} />
+      {patients.length !== 0 ? (
+        <SortableTable config={config} patients={patients} keyFn={keyFn} />
+      ) : (
+        "No Data Found"
+      )}
     </div>
   );
 };

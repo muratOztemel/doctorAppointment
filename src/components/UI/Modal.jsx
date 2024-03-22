@@ -9,9 +9,9 @@ const Modal = (props) => {
   return createPortal(
     <div className="error-modal">
       <div className="flex justify-center items-center h-screen absolute">
-        <div className="fixed inset-0 px-2 z-10 overflow-hidden flex items-center justify-center">
+        <div className="fixed inset-0 px-2 z-50 overflow-hidden flex items-center justify-center">
           <div
-            className="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+            className="absolute inset-0 bg-gray-500 transition-opacity"
             onClick={() => props.setIsShowError(false)}></div>
           <div className="bg-white rounded-md shadow-xl overflow-hidden max-w-md w-full sm:w-96 md:w-1/2 lg:w-2/3 xl:w-1/3 z-50">
             <div className="bg-red-500 text-white px-4 py-2">
@@ -37,16 +37,13 @@ const Modal = (props) => {
             <div className="border-t px-4 py-2 flex justify-center">
               <a
                 href="#"
-                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
+                className="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                 Yes, I&apos;m sure
               </a>
               <a
                 href="#"
                 onClick={() => props.setIsShowError(false)}
-                className="text-gray-900 bg-white hover:bg-gray-100
-                  focus:ring-4 focus:ring-cyan-200 border border-gray-200
-                  font-medium inline-flex items-center rounded-lg text-base px-3
-                  py-2.5 text-center">
+                className="text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                 No, cancel
               </a>
             </div>
@@ -54,7 +51,7 @@ const Modal = (props) => {
         </div>
       </div>
     </div>,
-    document.getElementById("modal")
+    document.getElementById("root")
   );
 };
 

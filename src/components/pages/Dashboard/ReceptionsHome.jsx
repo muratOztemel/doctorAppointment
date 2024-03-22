@@ -15,52 +15,8 @@ const ReceptionsHome = () => {
   const [appointments, setAppointments] = useState(null);
   const [patients, setPatients] = useState(null);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3004/appointments")
-      .then((resAppointments) => {
-        setAppointments(resAppointments.data);
-        // Sort data by date (most recent date at the top)
-        const sortedAppointments = resAppointments.data.sort((a, b) => {
-          const dateA = new Date(a.date);
-          const dateB = new Date(b.date);
-          return dateB - dateA;
-        });
+  useEffect(() => {}, []);
 
-        // Get the last 30 days
-        const lastTenDaysAppointments = sortedAppointments.slice(0, 10);
-        setAppointments(lastTenDaysAppointments);
-        axios
-          .get("http://localhost:3004/patients")
-          .then((resPatients) => {
-            setPatients(resPatients.data);
-            // Sort data by date (most recent date at the top)
-            /*             const sortedPatients = resPatients.data.sort((a, b) => {
-              const dateA = new Date(a.createdAt);
-              const dateB = new Date(b.createdAt);
-              return dateB - dateA;
-            });
-
-            // Get the last 30 Patients
-            const lastTenPatients = sortedPatients.slice(0, 10);
-            setPatients(lastTenPatients); */
-          })
-          .catch((err) => console.log("Patients data is mistake!", err));
-      })
-      .catch((err) => console.log("Appointments data is mistake!", err));
-  }, []);
-
-  if (appointments === null || patients === null) {
-    return (
-      <div className="flex items-center justify-center align-middle">
-        <img
-          className="w-20 h-20 animate-spin"
-          src="/loading.png"
-          alt="Loading icon"
-        />
-      </div>
-    );
-  }
   return (
     <div>
       <div className="fixed z-50 inset-4 pointer-events-none" />

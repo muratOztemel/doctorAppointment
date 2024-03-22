@@ -15,7 +15,7 @@ const LeftSide = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3004/links")
+      .get("http://localhost:3001/links")
       .then((resLink) => setLinks(resLink.data))
       .catch((err) => console.log("Link data connection is mistake!", err));
   }, []);

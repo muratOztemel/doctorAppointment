@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { number, string } from "prop-types";
+import { number, string, array } from "prop-types";
 import ReactApexChart from "react-apexcharts";
 import axios from "axios";
 
@@ -12,102 +12,93 @@ const Chart = ({ color, days, dataName, chartType }) => {
 
   useEffect(() => {
     const counts = {};
-    (async () => {
-      try {
-        await axios.get("http://localhost:3004/" + dataName).then((res) => {
-          let lastXDaysRes = res.data;
 
-          if (days === 30 || chartType === "pie") {
-            // Sort data by date (most recent date at the top)
-            const sortedRes = lastXDaysRes.sort((a, b) => {
-              const dateA = new Date(a.date);
-              const dateB = new Date(b.date);
-              return dateB - dateA;
-            });
+    if (days === 30 || chartType === "pie") {
+      // Sort data by date (most recent date at the top)
+      const sortedRes = dataName.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB - dateA;
+      });
 
-            // Get the last 30 days
-            lastXDaysRes = sortedRes.slice(0, days);
-          }
-          // Initialize total count
-          let totalCount = 0;
+      // Get the last 30 days
+      dataName = sortedRes.slice(0, days);
+    }
+    // Initialize total count
+    let totalCount = 0;
 
-          lastXDaysRes.map((item) => {
-            const date = item.date;
-            if (counts[date]) {
-              counts[date]++;
-            } else {
-              counts[date] = 1;
-            }
-            // Increment total count
-            totalCount++;
-            return null;
-          });
-          setTotalCounts(totalCount);
-          setDailyCounts(counts);
-          setSeries([
-            {
-              name: "Total",
-              data: Object.values(counts).slice(0, 10),
-              color: color,
-            },
-          ]);
-          setObject({
-            chart: {
-              type: chartType,
-              toolbar: {
-                show: false, // x-ekseni araç çubuğunu gizle
-              },
-            },
-            grid: {
-              show: false,
-            },
-            plotOptions: {
-              bar: {
-                horizontal: false,
-                borderRadius: 2,
-                columnWidth: "85%",
-                endingShape: "rounded",
-              },
-            },
-            dataLabels: {
-              enabled: false,
-            },
-            stroke: {
-              show: true,
-              width: 2,
-              colors: ["transparent"],
-            },
-            xaxis: {
-              categories: Object.keys(counts).slice(0, 10),
-              labels: {
-                show: false, // x-ekseni etiketlerini gizle
-              },
-              axisBorder: {
-                show: false,
-              },
-              axisTicks: {
-                show: false,
-              },
-            },
-            yaxis: {
-              labels: {
-                show: false,
-              },
-            },
-            tooltip: {
-              format: "dd MMM",
-              y: {
-                formatter: function (val) {
-                  return "Total " + val;
-                },
-              },
-            },
-          });
-        });
-      } catch (err) {
-        console.log(`${dataName} data is connection mistake!`, err);
+    dataName.map((item) => {
+      const date = item.date;
+      if (counts[date]) {
+        counts[date]++;
+      } else {
+        counts[date] = 1;
       }
-    })();
+      // Increment total count
+      totalCount++;
+      return null;
+    });
+    setTotalCounts(totalCount);
+    setDailyCounts(counts);
+    setSeries([
+      {
+        name: "Total",
+        data: Object.values(counts).slice(0, 10),
+        color: color,
+      },
+    ]);
+    setObject({
+      chart: {
+        type: chartType,
+        toolbar: {
+          show: false, // x-ekseni araç çubuğunu gizle
+        },
+      },
+      grid: {
+        show: false,
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          borderRadius: 2,
+          columnWidth: "85%",
+          endingShape: "rounded",
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ["transparent"],
+      },
+      xaxis: {
+        categories: Object.keys(counts).slice(0, 10),
+        labels: {
+          show: false, // x-ekseni etiketlerini gizle
+        },
+        axisBorder: {
+          show: false,
+        },
+        axisTicks: {
+          show: false,
+        },
+      },
+      yaxis: {
+        labels: {
+          show: false,
+        },
+      },
+      tooltip: {
+        format: "dd MMM",
+        y: {
+          formatter: function (val) {
+            return "Total " + val;
+          },
+        },
+      },
+    });
   }, []);
 
   return (
@@ -136,6 +127,6 @@ export default Chart;
 Chart.propTypes = {
   color: string,
   days: number,
-  dataName: string,
+  dataName: array,
   chartType: string,
 };
