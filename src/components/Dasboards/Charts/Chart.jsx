@@ -2,15 +2,15 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { number, string } from "prop-types";
 import {
+  useGetPatientsQuery,
+  useGetAppointmentsQuery,
+} from "../../../redux/features/api/apiSlice.js";
+import {
   setTotalCounts,
   setDailyCounts,
   setSeries,
   setOptions,
 } from "../../../redux/slices/chartSlice.js";
-import {
-  useGetPatientsQuery,
-  useGetAppointmentsQuery,
-} from "../../../redux/features/api/apiSlice.js";
 import ReactApexChart from "react-apexcharts";
 
 const Chart = ({ color, days, dataName, chartType }) => {
@@ -139,6 +139,9 @@ const Chart = ({ color, days, dataName, chartType }) => {
               show: false, // Y ekseni işaretlerini gizle
             },
           },
+          grid: {
+            show: false,
+          },
           fill: {
             opacity: 1,
           },
@@ -186,8 +189,6 @@ const Chart = ({ color, days, dataName, chartType }) => {
 export default Chart;
 
 Chart.propTypes = {
-  // color: string,
-  // days: number,
-  // dataName: string,
-  // chartType: string,
+  dataName: string,
+  widthChart: number,
 };

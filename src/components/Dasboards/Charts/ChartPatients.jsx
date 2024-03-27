@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { number, string } from "prop-types";
 import {
-  setTotalCounts,
-  setDailyCounts,
-  setSeries,
-  setOptions,
-} from "../../../redux/slices/chartSlice.js";
+  setPatientsTotalCounts,
+  setPatientsDailyCounts,
+  setPatientsSeries,
+  setPatientsOptions,
+} from "../../../redux/slices/chartPatientsSlice.js";
 import {
   useGetPatientsQuery,
   useGetAppointmentsQuery,
@@ -14,10 +14,14 @@ import {
 import ReactApexChart from "react-apexcharts";
 
 const ChartPatients = ({ color, days, dataName, chartType }) => {
-  const options = useSelector((state) => state.chart.options);
-  const series = useSelector((state) => state.chart.series);
-  const dailyCounts = useSelector((state) => state.chart.dailyCounts);
-  const totalCounts = useSelector((state) => state.chart.totalCounts);
+  const options = useSelector((state) => state.chartPatients.patientsOptions);
+  const series = useSelector((state) => state.chartPatients.patientsSeries);
+  const dailyCounts = useSelector(
+    (state) => state.chartPatients.patientsDailyCounts
+  );
+  const totalCounts = useSelector(
+    (state) => state.chartPatients.patientsTotalCounts
+  );
 
   const dispatch = useDispatch();
 
@@ -33,6 +37,7 @@ const ChartPatients = ({ color, days, dataName, chartType }) => {
   } = useGetAppointmentsQuery();
 
   let selectedData = dataName === "patients" ? patients : appointments;
+
   useEffect(() => {
     if (
       !patientsLoading &&
@@ -48,17 +53,16 @@ const ChartPatients = ({ color, days, dataName, chartType }) => {
       if (days === 30) {
         // Sort data by date (most recent date at the top)
         const sortedRes = [...selectedData].sort((a, b) => {
-          const dateA = new Date(a.date);
-          const dateB = new Date(b.date);
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
           return dateB - dateA;
         });
 
         // Get the last 30 days
-        selectedData = sortedRes.slice(0, days);
+        selectedData = sortedRes;
       }
-
       selectedData.map((item) => {
-        const date = item.date;
+        const date = item.createdAt;
         if (counts[date]) {
           counts[date]++;
         } else {
@@ -68,10 +72,11 @@ const ChartPatients = ({ color, days, dataName, chartType }) => {
         totalCounts++;
         return null;
       });
-      dispatch(setTotalCounts(totalCounts));
-      dispatch(setDailyCounts(counts));
+
+      dispatch(setPatientsTotalCounts(totalCounts));
+      dispatch(setPatientsDailyCounts(counts));
       dispatch(
-        setSeries([
+        setPatientsSeries([
           {
             name: "Total",
             data: Array.from(Object.values(counts).slice(0, 7)),
@@ -79,7 +84,7 @@ const ChartPatients = ({ color, days, dataName, chartType }) => {
         ])
       );
       dispatch(
-        setOptions({
+        setPatientsOptions({
           chart: {
             type: "line",
             height: 200,
@@ -90,7 +95,7 @@ const ChartPatients = ({ color, days, dataName, chartType }) => {
               show: false, // Çubuk çizgisini gösterme
             },
           },
-          colors: "#f0ad4e",
+          colors: color,
           plotOptions: {
             bar: {
               horizontal: false,
@@ -139,6 +144,9 @@ const ChartPatients = ({ color, days, dataName, chartType }) => {
               show: false, // Y ekseni işaretlerini gizle
             },
           },
+          grid: {
+            show: false,
+          },
           fill: {
             opacity: 1,
           },
@@ -176,7 +184,7 @@ const ChartPatients = ({ color, days, dataName, chartType }) => {
       <div className="flex flex-col col-span-3">
         <h4 className="text-3xl font-medium text-right mr-5">{totalCounts}</h4>
         <p className={`text-sm flex gap-2 text-right text-[${color}] mr-5`}>
-          {days === 30 ? "Monthly" : ""} Total
+          Patients Total
         </p>
       </div>
     </>
