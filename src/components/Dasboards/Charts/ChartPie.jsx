@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { number, array } from "prop-types";
+import { number, array, string } from "prop-types";
 import ReactApexChart from "react-apexcharts";
 
 const ChartPie = ({ dataName, color, widthChart }) => {
@@ -75,7 +75,7 @@ const ChartPie = ({ dataName, color, widthChart }) => {
 export default ChartPie;
 
 ChartPie.propTypes = {
-  dataName: array,
+  dataName: string,
   widthChart: number,
   color: array,
   series: array,

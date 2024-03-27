@@ -13,32 +13,37 @@ const PatientsHome = () => {
   const [appointments, setAppointments] = useState(null);
   const [patients, setPatients] = useState([]);
   const [query, setQuery] = useState("");
+  const [value, setValue] = useState("");
+  const [sortValue, setSortValue] = useState("");
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const [resAppointments, resPatients] = await Promise.all([
-          axios.get("http://localhost:3001/appointments"),
-          axios.get(`http://localhost:3001/patients?q=${query}`),
-        ]);
-        const appointmentsData = resAppointments.data;
-        const patientsData = resPatients.data.splice(0, 10);
-        // Sort data by date (most recent date at the top)
-        const sortedAppointments = appointmentsData.sort((a, b) => {
-          const dateA = new Date(a.date);
-          const dateB = new Date(b.date);
-          return dateB - dateA;
-        });
+    getData();
+  }, [query]);
 
-        // Get the last 30 days
-        const lastTenDaysAppointments = sortedAppointments.slice(0, 10);
-        setAppointments(lastTenDaysAppointments);
+  const getData = async () => {
+    try {
+      const [resAppointments, resPatients] = await Promise.all([
+        axios.get("http://localhost:3001/appointments"),
+        axios.get(`http://localhost:3001/patients?q=${query}`),
+      ]);
+      const appointmentsData = resAppointments.data;
+      const patientsData = resPatients.data.splice(0, 10);
+      // Sort data by date (most recent date at the top)
+      const sortedAppointments = appointmentsData.sort((a, b) => {
+        const dateA = new Date(a.date);
+        const dateB = new Date(b.date);
+        return dateB - dateA;
+      });
 
-        // Update patients state
-        setPatients(patientsData);
+      // Get the last 30 days
+      const lastTenDaysAppointments = sortedAppointments.slice(0, 10);
+      setAppointments(lastTenDaysAppointments);
 
-        // Sort data by date (most recent date at the top)
-        /*             const sortedPatients = resPatients.data.sort((a, b) => {
+      // Update patients state
+      setPatients(patientsData);
+
+      // Sort data by date (most recent date at the top)
+      /*             const sortedPatients = resPatients.data.sort((a, b) => {
               const dateA = new Date(a.createdAt);
               const dateB = new Date(b.createdAt);
               return dateB - dateA;
@@ -47,14 +52,13 @@ const PatientsHome = () => {
             // Get the last 30 Patients
             const lastTenPatients = sortedPatients.slice(0, 10);
             setPatients(lastTenPatients); */
-      } catch (error) {
-        console.error("Fetching error:", error);
-      }
-    };
-    getData();
-  }, [query]);
+    } catch (error) {
+      console.error("Fetching error:", error);
+    }
+  };
 
   const keys = ["name", "surname", "identyNo", "email", "birthDate", "phone"];
+  const genderSort = ["male", "female", "agender"];
 
   const search = (data, query) => {
     return data.filter((item) => {
@@ -65,6 +69,32 @@ const PatientsHome = () => {
         return false;
       });
     });
+  };
+
+  const handleSort = async (e) => {
+    let value = e.target.value;
+    setSortValue(value);
+    try {
+      const resPatients = await axios.get(
+        `http://localhost:3001/patients?_sort=${value}&_order=asc`
+      );
+      setPatients(resPatients.data);
+    } catch {
+      (err) => console.log(err);
+    }
+  };
+
+  const handleGenderSort = async (e) => {
+    let value = e.target.value;
+    setSortValue(value);
+    try {
+      const resPatients = await axios.get(
+        `http://localhost:3001/patients?_sort=${value}&_order=asc`
+      );
+      setPatients(resPatients.data);
+    } catch {
+      (err) => console.log(err);
+    }
   };
 
   return (
@@ -90,54 +120,40 @@ const PatientsHome = () => {
                   />
                   <div className="text-sm relative w-full ">
                     <div className="w-full">
-                      <button
-                        className="w-full"
-                        id="headlessui-listbox-button-:r4:"
-                        type="button"
-                        aria-haspopup="listbox"
-                        aria-expanded="false"
-                        data-headlessui-state="">
-                        <div className="h-14 w-full text-xs text-main rounded-md bg-dry border border-border px-4 flex items-center justify-between">
-                          <p>Sort by...</p>
-                          <svg
-                            stroke="currentColor"
-                            fill="currentColor"
-                            strokeWidth="0"
-                            viewBox="0 0 24 24"
-                            className="text-xl"
-                            height="1em"
-                            width="1em"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16.293 9.293 12 13.586 7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z"></path>
-                          </svg>
-                        </div>
-                      </button>
+                      <div className="relative h-10 w-full min-w-[200px]">
+                        <select
+                          onChange={handleSort}
+                          value={sortValue}
+                          className="peer h-14 w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50">
+                          <option className="h-16">Please Select Value</option>
+                          {keys.map((item, index) => {
+                            return (
+                              <option value={item} key={index}>
+                                {item}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
                     </div>
                   </div>
                   <div className="text-sm relative w-full ">
                     <div className="w-full">
-                      <button
-                        className="w-full"
-                        id="headlessui-listbox-button-:r6:"
-                        type="button"
-                        aria-haspopup="listbox"
-                        aria-expanded="false"
-                        data-headlessui-state="">
-                        <div className="h-14 w-full text-xs text-main rounded-md bg-dry border border-border px-4 flex items-center justify-between">
-                          <p>Gender...</p>
-                          <svg
-                            stroke="currentColor"
-                            fill="currentColor"
-                            strokeWidth="0"
-                            viewBox="0 0 24 24"
-                            className="text-xl"
-                            height="1em"
-                            width="1em"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16.293 9.293 12 13.586 7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z"></path>
-                          </svg>
-                        </div>
-                      </button>
+                      <div className="relative h-10 w-full min-w-[200px]">
+                        <select
+                          onChange={handleGenderSort}
+                          value={sortValue}
+                          className="peer h-14 w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50">
+                          <option className="h-16">Please Select Value</option>
+                          {genderSort.map((item, index) => {
+                            return (
+                              <option value={item} key={index}>
+                                {item}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
                     </div>
                   </div>
                   <div className="text-sm w-full flex flex-col gap-2">

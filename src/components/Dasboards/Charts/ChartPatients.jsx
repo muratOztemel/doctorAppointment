@@ -13,7 +13,7 @@ import {
 } from "../../../redux/features/api/apiSlice.js";
 import ReactApexChart from "react-apexcharts";
 
-const Chart = ({ color, days, dataName, chartType }) => {
+const ChartPatients = ({ color, days, dataName, chartType }) => {
   const options = useSelector((state) => state.chart.options);
   const series = useSelector((state) => state.chart.series);
   const dailyCounts = useSelector((state) => state.chart.dailyCounts);
@@ -183,9 +183,9 @@ const Chart = ({ color, days, dataName, chartType }) => {
   );
 };
 
-export default Chart;
+export default ChartPatients;
 
-Chart.propTypes = {
+ChartPatients.propTypes = {
   // color: string,
   // days: number,
   // dataName: string,

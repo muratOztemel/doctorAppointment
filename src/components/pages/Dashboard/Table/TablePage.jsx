@@ -106,7 +106,7 @@ const TablePage = ({ patients }) => {
 
     {
       label: "Actions",
-      render: (patient) => {
+      render: () => {
         return (
           <div className="flex justify-end">
             <a
@@ -125,7 +125,7 @@ const TablePage = ({ patients }) => {
             <Modal
               setIsShowError={setIsShowError}
               isShowError={isShowError}
-              message={`Are you sure you want to delete ${patient.name} ${patient.surname}`}
+              message={`Are you sure you want to delete user`}
             />
           </div>
         );
@@ -134,7 +134,7 @@ const TablePage = ({ patients }) => {
   ];
 
   const keyFn = (patient) => {
-    return patient.name;
+    return patient.id;
   };
 
   return (
