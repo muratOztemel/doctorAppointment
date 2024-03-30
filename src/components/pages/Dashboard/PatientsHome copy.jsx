@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   setSortField,
   setSortOrder,
@@ -20,9 +20,8 @@ import Modal from "../../UI/Modal.jsx";
 
 const PatientsHome = () => {
   const [page, setPage] = useState(1);
-
   const dispatch = useDispatch();
-  const { sortField, sortOrder, searchTerm, filter } = useSelector(
+  const { sortField, sortOrder, searchTerm, filter, isShowError } = useSelector(
     (state) => state.tablePatients
   );
 
@@ -39,7 +38,9 @@ const PatientsHome = () => {
     filter,
   });
 
-  /*   useEffect(() => {
+  console.log(page);
+
+  useEffect(() => {
     const handleScroll = () => {
       if (
         window.innerHeight + document.documentElement.scrollTop >=
@@ -52,7 +53,7 @@ const PatientsHome = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isFetching]); */
+  }, [isFetching]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error!</div>;
@@ -117,16 +118,6 @@ const PatientsHome = () => {
     return age; // Yaşı döndürme
   };
 
-  const handleSearch = (e) => {
-    dispatch(setSearchTerm(e.target.value));
-    setPage(1); // Arama yapıldığında sayfayı sıfırla!
-  };
-
-  const handleFilterChange = (e) => {
-    dispatch(setFilter(e.target.value));
-    setPage(1); // Filter yapıldığında sayfayı sıfırla!
-  };
-
   return (
     <div>
       <div className="fixed z-50 inset-4 pointer-events-none" />
@@ -145,35 +136,14 @@ const PatientsHome = () => {
                   <input
                     type="text"
                     placeholder='Search "Patients"'
-                    className="h-14 text-sm rounded-md bg-dry border border-border px-4"
-                    onChange={handleSearch}
+                    className="h-14 text-sm text-main rounded-md bg-dry border border-border px-4"
+                    onChange={(e) => dispatch(setSearchTerm(e.target.value))}
                   />
                   <div className="text-sm relative w-full ">
                     <div className="w-full">
                       <div className="relative h-10 w-full min-w-[200px]">
-                        <button
-                          onClick={() => setPage(1)}
-                          className="w-full h-14 bg-green-300 rounded-md text-white hover:bg-green-600">
-                          RESET
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-sm relative w-full ">
-                    <div className="w-full">
-                      <div className="relative h-10 w-full min-w-[200px]">
-                        <select
-                          onChange={handleFilterChange}
-                          className="bg-slate-500 text-white  peer h-14 w-full rounded-[7px] p-3">
-                          <option value="">All Blood Groups</option>
-                          <option value="A+">A+</option>
-                          <option value="A-">A-</option>
-                          <option value="B+">B+</option>
-                          <option value="B-">B-</option>
-                          <option value="AB+">AB+</option>
-                          <option value="AB-">AB-</option>
-                          <option value="O+">O+</option>
-                          <option value="O-">O-</option>
+                        <select className="peer h-14 w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50">
+                          <option className="h-16">Please Select Value</option>
                         </select>
                       </div>
                     </div>
@@ -181,19 +151,40 @@ const PatientsHome = () => {
                   <div className="text-sm relative w-full ">
                     <div className="w-full">
                       <div className="relative h-10 w-full min-w-[200px]">
-                        <select
-                          onChange={handleFilterChange}
-                          className="bg-slate-700 text-white  peer h-14 w-full rounded-[7px] p-3">
-                          <option value="">Gender</option>
-                          <option value="Female">Female</option>
-                          <option value="Male">Male</option>
-                          <option value="Agender">Other</option>
+                        <select className="peer h-14 w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50">
+                          <option className="h-16">Please Select Value</option>
                         </select>
                       </div>
                     </div>
                   </div>
+                  <div className="text-sm w-full flex flex-col gap-2">
+                    <div className="react-datepicker-wrapper">
+                      <div className="react-datepicker__input-container">
+                        <input
+                          type="text"
+                          className="w-full bg-dry  text-xs px-4 h-14 border border-border text-main font-normal rounded-lg focus:border focus:border-subMain"
+                          /* value="03/19/2024 - 03/19/2024" */
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <button className="w-full flex-rows gap-4 hover:opacity-80 transitions bg-subMain text-white text-sm font-medium px-2 py-4 rounded">
+                    Filter
+                    <svg
+                      stroke="currentColor"
+                      fill="currentColor"
+                      strokeWidth="0"
+                      viewBox="0 0 24 24"
+                      className="text-white text-xl"
+                      height="1em"
+                      width="1em"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill="none" d="M0 0h24v24H0z"></path>
+                      <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path>
+                    </svg>
+                  </button>
                 </div>
-                <div className="mt-8 w-full overflow-x-scroll">
+                <div className="mt-8 w-full overflow-visible">
                   {/* <TablePage patients={patients} /> */}
                   <div>
                     {/* Search and Filter Inputs */}
@@ -394,6 +385,8 @@ const PatientsHome = () => {
                                   Delete
                                 </a>
                                 <Modal
+                                  setIsShowError={setIsShowError}
+                                  isShowError={isShowError}
                                   message={`Are you sure you want to delete user`}
                                 />
                               </div>
@@ -403,53 +396,7 @@ const PatientsHome = () => {
                       </tbody>
                     </table>
                     {/* Pagination Controls */}
-                    {/*                     {!isFetching && <p>Loading more users...</p>} */}
-                    {isFetching ? (
-                      <div>Loading...</div>
-                    ) : (
-                      <div className="flex justify-center m-4">
-                        <button
-                          href="#"
-                          onClick={() => setPage(page - 1)}
-                          className="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                          <svg
-                            className="w-3.5 h-3.5 me-2 rtl:rotate-180"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 14 10">
-                            <path
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M13 5H1m0 0 4 4M1 5l4-4"
-                            />
-                          </svg>
-                          Previous
-                        </button>
-                        <button
-                          href="#"
-                          onClick={() => setPage(page + 1)}
-                          className="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                          Next
-                          <svg
-                            className="w-3.5 h-3.5 ms-2 rtl:rotate-180"
-                            aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 14 10">
-                            <path
-                              stroke="currentColor"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M1 5h12m0 0L9 1m4 4L9 9"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    )}
+                    {!isFetching && <p>Loading more users...</p>}
                   </div>
                 </div>
               </Card>

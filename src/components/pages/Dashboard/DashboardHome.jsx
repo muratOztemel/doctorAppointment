@@ -20,11 +20,12 @@ const DashboardHome = () => {
     isLoading: patientsLoading,
   } = useGetPatientsQuery();
   const {
-    data: appointments,
+    data: appointmentsData,
     error: appointmentsError,
     isLoading: appointmentsLoading,
   } = useGetAppointmentsQuery();
 
+  const appointments = appointmentsData?.appointments ?? [];
   // Yükleme durumu kontrolü
   if (patientsLoading || appointmentsLoading) return <div>Loading...</div>;
   // Hata durumu kontrolü
