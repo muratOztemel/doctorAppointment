@@ -4,10 +4,12 @@ export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "http://127.0.0.1:3001/" }),
   endpoints: (builder) => ({
+    // Get Patients By Page
     getPatientsPage: builder.query({
       query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
         `patients?_page=${page}&_limit=10&q=${searchTerm}&_sort=${sortField}&_order=${sortOrder}`,
     }),
+    // Delete Patient By Id
     DeletePatient: builder.mutation({
       query(id) {
         return {

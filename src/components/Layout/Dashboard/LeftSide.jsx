@@ -32,31 +32,33 @@ const LeftSide = () => {
     );
   }
   return (
-    <div className="bg-white xl:shadow-lg py-6 px-4 xl:h-screen w-full border-r border-border">
-      <a href="/">
-        <img
-          src="/logo.png"
-          alt="logo"
-          className="w-3/4 h-18 ml-4 object-contain"
-        />
-      </a>
-      <div className="flex-col gap-2 mt-12">
-        <ul>
-          {links.map((link) => (
-            <li key={link.id}>
-              <Link
-                to={link.link}
-                className="flex gap-4 transitions group items-center w-full p-4 rounded-lg hover:bg-cyan-50">
-                {createElement(eval(link.iconName), {
-                  className: "text-xl text-cyan-500",
-                })}
-                <p className="text-sm font-medium  text-cyan-500 group-hover:text-text-teal-100">
-                  {link.name}
-                </p>
-              </Link>
-            </li>
-          ))}
-        </ul>
+    <div className="col-span-2 xl:block hidden">
+      <div className="bg-white xl:shadow-lg py-6 px-4 xl:h-screen w-full border-r border-border">
+        <a href="/">
+          <img
+            src="/logo.png"
+            alt="logo"
+            className="w-3/4 h-18 ml-4 object-contain"
+          />
+        </a>
+        <div className="flex-col gap-2 mt-12">
+          <ul>
+            {links.map((link) => (
+              <li key={link.id}>
+                <Link
+                  to={link.link}
+                  className="flex gap-4 transitions group items-center w-full p-4 rounded-lg hover:bg-cyan-50">
+                  {createElement(eval(link.iconName), {
+                    className: "text-xl text-cyan-500",
+                  })}
+                  <p className="text-sm font-medium  text-cyan-500 group-hover:text-text-teal-100">
+                    {link.name}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
