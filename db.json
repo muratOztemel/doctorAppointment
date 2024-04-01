@@ -14,7 +14,7 @@
       "email": "cwabe0@cargocollective.com",
       "phoneNumber": "+90 808 853 6045",
       "photo": null,
-      "bloodGroup": "0 Rh-",
+      "bloodGroup": "0-",
       "createdAt": "01.07.2023",
       "updatedAt": "10.11.2022",
       "ip_address": "19.46.112.196"
@@ -9552,7 +9552,7 @@
       "email": "cegerxwin@gmail.com",
       "phoneNumber": "+905327118792",
       "photo": "https://t4.ftcdn.net/jpg/06/08/55/73/360_F_608557356_ELcD2pwQO9pduTRL30umabzgJoQn5fnd.jpg",
-      "bloodGroup": "A Rh+",
+      "bloodGroup": "A+",
       "createdAt": "03.13.2024",
       "updatedAt": "03.13.2024",
       "ipAddress": ""
@@ -9727,6 +9727,44 @@
       "createdAt": "14.03.2024",
       "updatedAt": "14.03.2024",
       "ipAddress": ""
+    },
+    {
+      "id": 513,
+      "name": "Test",
+      "surname": "Soyadı",
+      "nationality": "Türkiye",
+      "identyType": "true",
+      "identyNo": "12345678911",
+      "country": "Türkiye",
+      "language": "English",
+      "birthDate": "28.05.1917",
+      "gender": "Male",
+      "email": "cwabe0@cargocollective.com",
+      "phoneNumber": "+90 808 853 6045",
+      "photo": null,
+      "bloodGroup": "0-",
+      "createdAt": "2024-03-31T07:38:45.702Z",
+      "updatedAt": "2024-03-31T07:38:45.702Z",
+      "ipAddress": "85.103.225.183"
+    },
+    {
+      "name": "Test",
+      "surname": "Soyadı",
+      "nationality": "Türkiye",
+      "identyType": "true",
+      "identyNo": "12345678911",
+      "country": "Türkiye",
+      "language": "English",
+      "birthDate": "28.05.1917",
+      "gender": "Male",
+      "email": "cwabe0@cargocollective.com",
+      "phoneNumber": "+90 808 853 6045",
+      "photo": null,
+      "bloodGroup": "0-",
+      "createdAt": "2024-03-31T08:49:50.168Z",
+      "updatedAt": "2024-03-31T08:49:50.168Z",
+      "ipAddress": "85.103.225.183",
+      "id": 514
     }
   ],
   "doctors": [
@@ -10738,34 +10776,27 @@
     },
     {
       "id": 3,
-      "name": "Receptions",
-      "pageName": "ReceptionsHome",
-      "link": "/receptions",
-      "iconName": "RiCustomerService2Fill"
-    },
-    {
-      "id": 4,
       "name": "Doctors",
       "pageName": "DoctorsHome",
       "link": "/doctors",
       "iconName": "FaUserDoctor"
     },
     {
-      "id": 5,
+      "id": 4,
       "name": "Appointments",
       "pageName": "AppointmentsHome",
       "link": "/appointments",
       "iconName": "IoDocumentTextOutline"
     },
     {
-      "id": 6,
+      "id": 5,
       "name": "Medicine",
       "pageName": "MedicineHome",
       "link": "/medicine",
       "iconName": "RiMedicineBottleLine"
     },
     {
-      "id": 7,
+      "id": 6,
       "name": "Settings",
       "pageName": "SettingsHome",
       "link": "/settings",

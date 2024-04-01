@@ -2,7 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://127.0.0.1:3001/" }),
+  //  baseQuery: fetchBaseQuery({ baseUrl: "http://127.0.0.1:3001/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "http://api.makinaburada.net/" }),
   endpoints: (builder) => ({
     // Get Patients By Page
     getPatientsPage: builder.query({
@@ -10,23 +11,39 @@ export const apiSlice = createApi({
         `patients?_page=${page}&_limit=10&q=${searchTerm}&_sort=${sortField}&_order=${sortOrder}`,
     }),
     // Delete Patient By Id
-    DeletePatient: builder.mutation({
-      query(id) {
-        return {
-          url: `patients/${id}`,
-          method: "DELETE",
-        };
-      },
+    deletePatient: builder.mutation({
+      query: (id) => ({
+        url: `patients/${id}`,
+        method: "DELETE",
+      }),
     }),
-    CreatePatient: builder.mutation({
-      query(newPost) {
+    authentication: builder.mutation({
+      query: (id, loginModel) => ({
+        url: `api/v1/Authentication`,
+        method: "POST",
+        body: loginModel,
+      }),
+    }),
+    addNewPatient: builder.mutation({
+      query(newPatient) {
         return {
           url: `patients`,
           method: "POST",
-          body: newPost,
+          header: { "Content-Type": "application/json" },
+          body: newPatient,
         };
       },
     }),
+
+    updatePatient: builder.mutation({
+      query: ({ id, updatedPatient }) => ({
+        url: `patients/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedPatient,
+      }),
+    }),
+
     getPatientById: builder.query({
       query: (id) => `patients/${id}`,
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
@@ -77,8 +94,10 @@ export const apiSlice = createApi({
 
 export const {
   useGetPatientsPageQuery,
-  useDeletePatientQuery,
-  useCreatePatientQuery,
+  useAuthenticationMutation,
+  useDeletePatientMutation,
+  useAddNewPatientMutation,
+  useUpdatePatientMutation,
   useGetPatientByIdQuery,
   useGetPatientsQuery,
   useGetAppointmentsQuery,

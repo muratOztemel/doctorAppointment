@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const tablePatientsSlice = createSlice({
+export const usersSlice = createSlice({
   name: "tablePatients",
   initialState: {
+    email: "",
+    password: "",
     patientId: 0,
     sortField: "id",
     sortOrder: "asc",
@@ -39,6 +41,6 @@ export const {
   setSearchTerm,
   setFilter,
   setIsShowError,
-} = tablePatientsSlice.actions;
+} = usersSlice.actions;
 
-export default tablePatientsSlice.reducer;
+export default usersSlice.reducer;
