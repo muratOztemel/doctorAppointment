@@ -11,7 +11,8 @@ import { PiUsers } from "react-icons/pi";
 import LinkDashboardBar from "../../Layout/Dashboard/LinkDashboardBar";
 import ChartDoctors from "../../Dasboards/Charts/ChartDoctors";
 import AddNewPatient from "../../Dasboards/Patients/AddNewPatient.jsx";
-import Login from "../../Form/Login.jsx";
+import Login from "../../Form/login/Login";
+import RegisterForm from "../../Form/register/RegisterForm.jsx";
 
 const DashboardHome = () => {
   const {
@@ -37,13 +38,15 @@ const DashboardHome = () => {
     <>
       <div className="xl:px-8 px-2 pt-24">
         <Login />
+        <RegisterForm />
         <LinkDashboardBar />
         <div className="w-full my-6 grid xl:grid-cols-8 grid-cols-1 gap-6">
           <div className="xl:col-span-6  w-full">
             <Card
               title={"Appointments with Doctor Graphic"}
               icon={<PiUsers />}
-              color={"cyan"}>
+              color={"cyan"}
+            >
               <ChartDoctors />
             </Card>
           </div>
@@ -51,7 +54,8 @@ const DashboardHome = () => {
             <Card
               title={"Last Appointments"}
               icon={<IoDocumentTextOutline />}
-              color={"yellow"}>
+              color={"yellow"}
+            >
               {appointments.map((appointment) => {
                 const whoPatients = patients.find(
                   (patient) => patient.id === appointment.patientId

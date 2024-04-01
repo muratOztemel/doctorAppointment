@@ -9,7 +9,8 @@ import MedicineHome from "./components/pages/Dashboard/MedicineHome";
 import SettingsHome from "./components/pages/Dashboard/SettingsHome";
 import LeftSide from "./components/Layout/Dashboard/LeftSide";
 import MainHeader from "./components/Layout/Dashboard/MainHeader";
-import Login from "./components/Form/Login";
+import Login from "./components/Form/login/Login";
+import RegisterForm from "./components/Form/register/RegisterForm";
 
 const App = () => {
   return (
@@ -22,6 +23,8 @@ const App = () => {
             <MainHeader />
             <Routes>
               <Route path="/" element={<Login />} />
+              <Route path="/login" element={<RegisterForm />} />
+              <Route path="/dashboard" element={<DashboardHome />} />
               <Route path="/patients" element={<PatientsHome />} />
               <Route path="/patientProfile" element={<PatientProfile />} />
               <Route path="/patientDelete" element={<DeletePatient />} />
