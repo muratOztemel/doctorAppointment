@@ -41,13 +41,6 @@ const PatientProfile = () => {
               </h1>
               <p className="text-xs text-gray-500">+254 712 345 678</p>
             </div>
-            <div className="gap-2 flex-col justify-center items-center">
-              <h2 className="text-sm font-semibold">
-                {patient.name} {patient.surname}
-              </h2>
-              <p className="text-xs text-textGray">{patient.email}</p>
-              <p className="text-xs">+254 712 345 678</p>
-            </div>
           </div>
         </div>
         <div>

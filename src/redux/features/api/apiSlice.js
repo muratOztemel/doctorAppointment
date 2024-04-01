@@ -2,32 +2,52 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const apiSlice = createApi({
   reducerPath: "api",
-  //  baseQuery: fetchBaseQuery({ baseUrl: "http://127.0.0.1:3001/" }),
-  baseQuery: fetchBaseQuery({ baseUrl: "http://api.makinaburada.net/" }),
+  //baseQuery: fetchBaseQuery({ baseUrl: "http://127.0.0.1:3001/" }),
+  // baseQuery: fetchBaseQuery({ baseUrl: "https://bsg37cps-5002.euw.devtunnels.ms/",
+  baseQuery: fetchBaseQuery({
+    baseUrl: "http://api.makinaburada.net/api/v1/",
+    prepareHeaders: (headers, { getState }) => {
+      // Redux state'inden token'ı al
+      const token = getState().users.userLogin.token;
+      console.log("in headers");
+      console.log(getState());
+      // Eğer token varsa, header'a ekle
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      return headers;
+    },
+  }),
   endpoints: (builder) => ({
     // Get Patients By Page
+    // getPatientsPage: builder.query({
+    //   query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
+    //     `patients?_page=${page}&_limit=10&q=${searchTerm}&_sort=${sortField}&_order=${sortOrder}`,
+    // }),
     getPatientsPage: builder.query({
       query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
-        `patients?_page=${page}&_limit=10&q=${searchTerm}&_sort=${sortField}&_order=${sortOrder}`,
+        `Patients?page=${page}&pageSize=10&q=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
+      method: "GET",
     }),
     // Delete Patient By Id
     deletePatient: builder.mutation({
       query: (id) => ({
-        url: `patients/${id}`,
+        url: `Patients/${id}`,
         method: "DELETE",
       }),
     }),
+    // Authentication Control
     authentication: builder.mutation({
-      query: (id, loginModel) => ({
-        url: `api/v1/Authentication`,
+      query: (loginModel) => ({
+        url: `Authentication`,
         method: "POST",
-        body: loginModel,
+        body: { username: "ali@makinaburada.net", password: "123456" },
       }),
     }),
     addNewPatient: builder.mutation({
       query(newPatient) {
         return {
-          url: `patients`,
+          url: `Patients`,
           method: "POST",
           header: { "Content-Type": "application/json" },
           body: newPatient,
@@ -37,7 +57,7 @@ export const apiSlice = createApi({
 
     updatePatient: builder.mutation({
       query: ({ id, updatedPatient }) => ({
-        url: `patients/${id}`,
+        url: `Patients/${id}`,
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: updatedPatient,
@@ -45,17 +65,17 @@ export const apiSlice = createApi({
     }),
 
     getPatientById: builder.query({
-      query: (id) => `patients/${id}`,
+      query: (id) => `Patients/${id}`,
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
     }),
     getPatients: builder.query({
-      query: () => "patients",
+      query: () => "Patients",
     }),
     getAppointments: builder.query({
-      query: () => "appointments",
+      query: () => "Appointments",
     }),
     getDoctors: builder.query({
-      query: () => "doctors",
+      query: () => "Doctors",
     }),
     getBranchs: builder.query({
       query: () => "branchs",

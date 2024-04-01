@@ -7,6 +7,7 @@ import chartPatientsReducer from "./slices/chartPatientsSlice.js";
 import chartAppointmentsPieReducer from "./slices/chartAppointmentsPieSlice.js";
 import chartPatientsPieReducer from "./slices/chartPatientsPieSlice.js";
 import tablePatientsReducer from "./slices/tablePatientsSlice.js";
+import usersReducer from "./slices/usersSlice.js";
 
 const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
     chartAppointmentsPie: chartAppointmentsPieReducer,
     chartPatientsPie: chartPatientsPieReducer,
     tablePatients: tablePatientsReducer,
+    users: usersReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),

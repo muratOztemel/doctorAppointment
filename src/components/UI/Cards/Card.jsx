@@ -24,7 +24,7 @@ export default Card;
 Card.propTypes = {
   icon: object,
   title: string,
-  children: node,
+  // children: node,
   className: string,
   color: string,
 };

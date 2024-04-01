@@ -1,46 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const usersSlice = createSlice({
-  name: "tablePatients",
+  name: "users",
   initialState: {
-    email: "",
-    password: "",
-    patientId: 0,
-    sortField: "id",
-    sortOrder: "asc",
-    searchTerm: "",
-    filter: "",
-    isShowError: false,
+    userLogin: {
+      username: "",
+      password: "",
+      token: "",
+    },
   },
   reducers: {
-    setPatientId: (state, action) => {
-      state.patientId = action.payload;
-    },
-    setSortField: (state, action) => {
-      state.sortField = action.payload;
-    },
-    setSortOrder: (state, action) => {
-      state.sortOrder = action.payload;
-    },
-    setSearchTerm: (state, action) => {
-      state.searchTerm = action.payload;
-    },
-    setFilter: (state, action) => {
-      state.filter = action.payload;
-    },
-    setIsShowError: (state) => {
-      state.isShowError = !state.isShowError;
+    setUsersLogin: (state, action) => {
+      state.userLogin = action.payload;
     },
   },
 });
 
-export const {
-  setPatientId,
-  setSortField,
-  setSortOrder,
-  setSearchTerm,
-  setFilter,
-  setIsShowError,
-} = usersSlice.actions;
+export const { setUsersLogin } = usersSlice.actions;
 
 export default usersSlice.reducer;

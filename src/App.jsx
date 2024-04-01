@@ -21,7 +21,8 @@ const App = () => {
           <div className="col-span-10 xl:h-screen overflow-y-scroll relative">
             <MainHeader />
             <Routes>
-              <Route path="/" element={<Login />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<DashboardHome />} />
               <Route path="/patients" element={<PatientsHome />} />
               <Route path="/patientProfile" element={<PatientProfile />} />
               <Route path="/patientDelete" element={<DeletePatient />} />

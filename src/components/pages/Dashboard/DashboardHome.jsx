@@ -38,6 +38,7 @@ const DashboardHome = () => {
       <div className="xl:px-8 px-2 pt-24">
         <Login />
         <LinkDashboardBar />
+        <Login />
         <div className="w-full my-6 grid xl:grid-cols-8 grid-cols-1 gap-6">
           <div className="xl:col-span-6  w-full">
             <Card

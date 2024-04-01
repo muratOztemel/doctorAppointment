@@ -68,8 +68,8 @@ const PatientsHome = () => {
         // Tarih alanı için özel karşılaştırma
         if (sortField === "birthdate") {
           // Tarih string'lerini Date objelerine dönüştür
-          const dateA = new Date(a.birthdate);
-          const dateB = new Date(b.birthdate);
+          const dateA = new Date(a.birthDate);
+          const dateB = new Date(b.birthDate);
           // Tarihleri karşılaştır
           return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
         } else {
@@ -308,9 +308,9 @@ const PatientsHome = () => {
                           src={
                             patient.photo !== null && patient.photo !== ""
                               ? patient.photo
-                              : patient.gender === "Male"
+                              : patient.gender === "0"
                               ? "/images/male.png"
-                              : patient.gender === "Female"
+                              : patient.gender === "1"
                               ? "/images/female.png"
                               : "/images/agender.png"
                           }

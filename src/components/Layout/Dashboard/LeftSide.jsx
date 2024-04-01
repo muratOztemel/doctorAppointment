@@ -13,14 +13,59 @@ import { IoSettingsOutline } from "react-icons/io5";
 const LeftSide = () => {
   const [links, setLinks] = useState([]);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/links")
-      .then((resLink) => setLinks(resLink.data))
-      .catch((err) => console.log("Link data connection is mistake!", err));
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:3001/links")
+  //     .then((resLink) => setLinks(resLink.data))
+  //     .catch((err) => console.log("Link data connection is mistake!", err));
+  // }, []);
 
-  if (links === "") {
+  const linkDizi = [
+    {
+      id: 1,
+      name: "Dashboard",
+      pageName: "DashboardHome",
+      link: "/",
+      iconName: "IoHomeOutline",
+    },
+    {
+      id: 2,
+      name: "Patients",
+      pageName: "PatientsHome",
+      link: "/patients",
+      iconName: "PiUsers",
+    },
+    {
+      id: 3,
+      name: "Doctors",
+      pageName: "DoctorsHome",
+      link: "/doctors",
+      iconName: "FaUserDoctor",
+    },
+    {
+      id: 4,
+      name: "Appointments",
+      pageName: "AppointmentsHome",
+      link: "/appointments",
+      iconName: "IoDocumentTextOutline",
+    },
+    {
+      id: 5,
+      name: "Medicine",
+      pageName: "MedicineHome",
+      link: "/medicine",
+      iconName: "RiMedicineBottleLine",
+    },
+    {
+      id: 6,
+      name: "Settings",
+      pageName: "SettingsHome",
+      link: "/settings",
+      iconName: "IoSettingsOutline",
+    },
+  ];
+
+  if (linkDizi === "") {
     return (
       <div className="flex items-center justify-center place-content-center">
         <img
@@ -43,7 +88,7 @@ const LeftSide = () => {
         </a>
         <div className="flex-col gap-2 mt-12">
           <ul>
-            {links.map((link) => (
+            {linkDizi.map((link) => (
               <li key={link.id}>
                 <Link
                   to={link.link}
