@@ -23,7 +23,7 @@ const App = () => {
             <MainHeader />
             <Routes>
               <Route path="/" element={<Login />} />
-              <Route path="/login" element={<RegisterForm />} />
+              <Route path="/register" element={<RegisterForm />} />
               <Route path="/dashboard" element={<DashboardHome />} />
               <Route path="/patients" element={<PatientsHome />} />
               <Route path="/patientProfile" element={<PatientProfile />} />
