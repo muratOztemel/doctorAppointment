@@ -1,3 +1,53 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.1);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.1);
+  }
+  70% {
+    transform: scale(1);
+  }
+}
+
+.heart-loader {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background-color: red;
+  margin: 24px;
+  position: relative;
+  transform: rotate(45deg);
+  animation: heartbeat 1s infinite;
+}
+
+.heart-loader::before,
+.heart-loader::after {
+  content: "";
+  display: block;
+  width: 50px;
+  height: 50px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.heart-loader::before {
+  top: -25px;
+  left: 0;
+}
+
+.heart-loader::after {
+  top: 0;
+  left: 25px;
+}

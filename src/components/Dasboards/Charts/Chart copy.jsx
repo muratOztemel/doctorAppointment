@@ -2,15 +2,15 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { number, string } from "prop-types";
 import {
-  useGetPatientsQuery,
-  useGetAppointmentsQuery,
-} from "../../../redux/features/api/apiSlice.js";
-import {
   setTotalCounts,
   setDailyCounts,
   setSeries,
   setOptions,
 } from "../../../redux/slices/chartSlice.js";
+import {
+  useGetPatientsQuery,
+  useGetAppointmentsQuery,
+} from "../../../redux/features/api/apiSlice.js";
 import ReactApexChart from "react-apexcharts";
 
 const Chart = ({ color, days, dataName, chartType }) => {
@@ -42,10 +42,10 @@ const Chart = ({ color, days, dataName, chartType }) => {
       patients &&
       appointments
     ) {
-      let counts = {};
+      let dailyCounts = {};
       // Initialize total count
       let totalCounts = 0;
-      if (days === 30) {
+      if (days === 30 || chartType === "pie") {
         // Sort data by date (most recent date at the top)
         const sortedRes = [...selectedData].sort((a, b) => {
           const dateA = new Date(a.date);
@@ -56,41 +56,42 @@ const Chart = ({ color, days, dataName, chartType }) => {
         // Get the last 30 days
         selectedData = sortedRes.slice(0, days);
       }
+      let newDailyCounts = { ...dailyCounts };
 
       selectedData.map((item) => {
         const date = item.date;
-        if (counts[date]) {
-          counts[date]++;
+        if (newDailyCounts[date]) {
+          newDailyCounts[date]++;
         } else {
-          counts[date] = 1;
+          newDailyCounts[date] = 1;
         }
         // Increment total count
         totalCounts++;
         return null;
       });
       dispatch(setTotalCounts(totalCounts));
-      dispatch(setDailyCounts(counts));
+      dispatch(setDailyCounts(newDailyCounts));
       dispatch(
         setSeries([
           {
             name: "Total",
-            data: Array.from(Object.values(counts).slice(0, 7)),
+            data: Object.values(dailyCounts).slice(0, 10),
+            color: color,
           },
         ])
       );
+      console.log(Object.keys(dailyCounts).slice(0, 10));
       dispatch(
         setOptions({
           chart: {
-            type: "line",
-            height: 200,
+            type: chartType,
             toolbar: {
               show: false, // x-ekseni araç çubuğunu gizle
             },
-            line: {
-              show: false, // Çubuk çizgisini gösterme
-            },
           },
-          colors: "#f0ad4e",
+          grid: {
+            show: false,
+          },
           plotOptions: {
             bar: {
               horizontal: false,
@@ -107,43 +108,30 @@ const Chart = ({ color, days, dataName, chartType }) => {
             width: 2,
             colors: ["transparent"],
           },
-          legend: {
-            show: false,
-          },
           xaxis: {
-            categories: Object.keys(counts).slice(0, 7),
+            categories: Object.keys(dailyCounts).slice(0, 10),
             labels: {
               show: false, // x-ekseni etiketlerini gizle
             },
-            grid: {
-              show: false,
-            },
             axisBorder: {
               show: false,
             },
             axisTicks: {
-              show: false, // X ekseni işaretlerini gizle
+              show: false,
             },
           },
           yaxis: {
-            grid: {
-              show: false,
-            },
-            axisBorder: {
-              show: false,
-            },
             labels: {
               show: false,
             },
-            axisTicks: {
-              show: false, // Y ekseni işaretlerini gizle
+          },
+          tooltip: {
+            x: { format: "dd MMM" },
+            y: {
+              formatter: function (val) {
+                return "Total " + val;
+              },
             },
-          },
-          grid: {
-            show: false,
-          },
-          fill: {
-            opacity: 1,
           },
         })
       );
@@ -189,6 +177,8 @@ const Chart = ({ color, days, dataName, chartType }) => {
 export default Chart;
 
 Chart.propTypes = {
-  dataName: string,
-  widthChart: number,
+  // color: string,
+  // days: number,
+  // dataName: string,
+  // chartType: string,
 };
