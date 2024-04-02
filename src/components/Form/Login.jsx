@@ -1,48 +1,69 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useAuthenticationMutation } from "../../redux/features/api/apiSlice";
+import { useNavigate } from "react-router";
 import Spinner from "../UI/Spinner";
 import { setUsersLogin } from "../../redux/slices/usersSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const [authentication, { data, isError, isLoading }] =
-    useAuthenticationMutation();
-
-  const { userLogin } = useSelector((state) => state.users);
+  const navigate = useNavigate();
+  const [authentication, { isError, isLoading }] = useAuthenticationMutation();
+  const [loginInfo, setLoginInfo] = useState({ username: "", password: "" });
 
   if (isError) return <div>Error: {isError.toString()}</div>;
   if (isLoading) return <Spinner />;
+
+  const handleChange = ({ target: { name, value } }) => {
+    setLoginInfo({ ...loginInfo, [name]: value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const modelData = {
-        username: "ali@makinaburada.net", //"murat@makinaarabul.com",
-        password: "123456",
-      };
+      const result = await authentication(loginInfo);
 
-      let result = await authentication(modelData);
+      if (result.data.accessToken) {
+        // Token'ı localStorage'a kaydet
+        localStorage.setItem("token", result.data.accessToken);
 
-      dispatch(
-        setUsersLogin({
-          username: modelData.username,
-          password: modelData.password,
-          token: result.data.accessToken,
-        })
-      );
+        // Redux state'ini güncelle (gerekirse)
+        dispatch(
+          setUsersLogin({
+            username: loginInfo.username,
+            token: result.data.accessToken,
+          })
+        );
+        // Formu temizle veya başka bir sayfaya yönlendir
+        setLoginInfo({ username: "", password: "" }); // Parolayı hemen temizle
+        // Yönlendirme veya başka bir işlem yap
+        navigate("/"); // Anasayfaya yönlendirme
+      }
     } catch (err) {
-      console.error("Error adding new product:", err);
+      console.error("Error user login:", err);
     }
   };
-  console.log(userLogin);
+
   return (
     <div className="mt-20">
       <h1>Authentication</h1>
       <form onSubmit={handleSubmit}>
-        <input type="email" name="email" onChange={(e) => e.target.value} />
-        <input type="text" name="password" onChange={(e) => e.target.value} />
-        <button>Login</button>
+        <input
+          type="email"
+          name="username"
+          value={loginInfo.username}
+          onChange={handleChange}
+          placeholder="Email"
+        />
+        <input
+          type="password"
+          name="password"
+          value={loginInfo.password}
+          onChange={handleChange}
+          placeholder="Password"
+        />
+        <button type="submit">Login</button>
       </form>
     </div>
   );

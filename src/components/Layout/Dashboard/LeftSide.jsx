@@ -77,7 +77,7 @@ const LeftSide = () => {
     );
   }
   return (
-    <div className="col-span-2 xl:block hidden">
+    <aside className="col-span-2 xl:block hidden">
       <div className="bg-white xl:shadow-lg py-6 px-4 xl:h-screen w-full border-r border-border">
         <a href="/">
           <img
@@ -105,7 +105,7 @@ const LeftSide = () => {
           </ul>
         </div>
       </div>
-    </div>
+    </aside>
   );
 };
 export default LeftSide;

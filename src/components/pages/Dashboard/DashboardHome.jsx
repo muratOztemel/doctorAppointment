@@ -37,17 +37,13 @@ const DashboardHome = () => {
   return (
     <>
       <div className="xl:px-8 px-2 pt-24">
-        <Login />
-        <RegisterForm />
         <LinkDashboardBar />
-        <Login />
         <div className="w-full my-6 grid xl:grid-cols-8 grid-cols-1 gap-6">
           <div className="xl:col-span-6  w-full">
             <Card
               title={"Appointments with Doctor Graphic"}
               icon={<PiUsers />}
-              color={"cyan"}
-            >
+              color={"cyan"}>
               <ChartDoctors />
             </Card>
           </div>
@@ -55,8 +51,7 @@ const DashboardHome = () => {
             <Card
               title={"Last Appointments"}
               icon={<IoDocumentTextOutline />}
-              color={"yellow"}
-            >
+              color={"yellow"}>
               {appointments.map((appointment) => {
                 const whoPatients = patients.find(
                   (patient) => patient.id === appointment.patientId

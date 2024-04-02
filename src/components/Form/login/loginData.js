@@ -1,9 +1,9 @@
 import { MdEmail } from "react-icons/md";
-import { FaKey } from "react-icons/fa6";
+import { FaKey } from "react-icons/fa";
 
 export const loginData = [
   {
-    id: "email",
+    id: "username",
     type: "email",
     label: "E-posta",
     placeholder: "E-posta Adresiniz",

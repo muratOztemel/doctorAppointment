@@ -17,6 +17,7 @@ import { PiUsers } from "react-icons/pi";
 import PatientsDashboard from "../../Layout/Dashboard/PatientsDashboard.jsx";
 import Flags from "../../Dasboards/Flags/Flags.jsx";
 import Modal from "../../UI/Modal.jsx";
+import BloodType from "../../Dasboards/Services/BloodType.jsx";
 
 const PatientsHome = () => {
   const [page, setPage] = useState(1);
@@ -93,29 +94,35 @@ const PatientsHome = () => {
     dispatch(setSortOrder(order));
   };
 
-  const ageCalculate = (ageSim) => {
-    // Doğum tarihini ayrıştırma
-    const birthDateArray = ageSim.split(".");
-    const birthDay = parseInt(birthDateArray[0], 10);
-    const birthMonth = parseInt(birthDateArray[1], 10);
-    const birthYear = parseInt(birthDateArray[2], 10);
+  const ageCalculate = (birthDateString) => {
+    // Doğum tarihini Date nesnesine dönüştürme
+    const birthDate = new Date(birthDateString);
 
     // Bugünkü tarihi alma
     const today = new Date();
-    const currentDay = today.getDate();
-    const currentMonth = today.getMonth() + 1; // JavaScript'te aylar 0'dan başlar
     const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth() + 1; // JavaScript'te aylar 0'dan başlar, bu yüzden +1 ekliyoruz
+    const currentDay = today.getDate();
 
     // Yaş hesaplama
-    let age = currentYear - birthYear;
+    let age = currentYear - birthDate.getFullYear();
     if (
-      currentMonth < birthMonth ||
-      (currentMonth === birthMonth && currentDay < birthDay)
+      currentMonth < birthDate.getMonth() + 1 || // Ayları karşılaştırırken 1 eklemeyi unutmayın
+      (currentMonth === birthDate.getMonth() + 1 &&
+        currentDay < birthDate.getDate())
     ) {
       age--;
     }
     return age; // Yaşı döndürme
   };
+
+  function formatDate(createdAt) {
+    const date = new Date(createdAt);
+    const day = date.getDate().toString().padStart(2, "0"); // Günü al ve iki basamaklı yap
+    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Ayı al (0'dan başladığı için 1 ekliyoruz) ve iki basamaklı yap
+    const year = date.getFullYear(); // Yılı al
+    return `${day}.${month}.${year}`; // Formatı DD.MM.YYYY olarak döndür
+  }
 
   const handleSearch = (e) => {
     dispatch(setSearchTerm(e.target.value));
@@ -130,9 +137,22 @@ const PatientsHome = () => {
   return (
     <>
       <div className="xl:px-8 px-2 pt-24">
+        <div className="flex items-center text-center gap-4">
+          <div className=" flex gap-4 bg-white border border-cyan-500 border-dashed rounded-lg py-3 px-4 text-md w-full">
+            <div className="p-3 w-[70px]">
+              <p className="bg-white border border-cyan-500 border-dashed rounded-lg text-3xl p-2">
+                {">"}
+              </p>
+            </div>
+            <div className="p-5">
+              <h1 className="text-3xl font-semibold text-slate-500">
+                P A T I E N T S
+              </h1>
+            </div>
+          </div>
+        </div>
         <PatientsDashboard />
         <Card title={"Patient List"} icon={<PiUsers />} color={"cyan"}>
-          {/* <SearchPatients patients={patients} setQuery={setQuery} /> */}
           <div className="grid lg:grid-cols-5 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-2">
             <input
               type="text"
@@ -306,11 +326,13 @@ const PatientsHome = () => {
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         <img
                           src={
-                            patient.photo !== null && patient.photo !== ""
+                            patient.photo !== "null" &&
+                            patient.photo !== null &&
+                            patient.photo !== ""
                               ? patient.photo
-                              : patient.gender === "0"
+                              : patient.gender === 2
                               ? "/images/male.png"
-                              : patient.gender === "1"
+                              : patient.gender === 1
                               ? "/images/female.png"
                               : "/images/agender.png"
                           }
@@ -327,18 +349,18 @@ const PatientsHome = () => {
                         {patient.bloodGroup !== null &&
                         patient.bloodGroup !== "" ? (
                           <span className="py-1 px-4 bg-slate-300 text-red-500 bg-opacity-10 text-xs rounded-xl">
-                            {patient.bloodGroup}
+                            <BloodType bloodType={patient.bloodGroup} />
                           </span>
                         ) : (
                           ""
                         )}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {patient.gender === "Male" ? (
+                        {patient.gender === 2 ? (
                           <span className="py-1 px-4 bg-cyan-300 text-cyan-500 bg-opacity-10 text-xs rounded-xl">
                             Male
                           </span>
-                        ) : patient.gender === "Female" ? (
+                        ) : patient.gender === 1 ? (
                           <span className="py-1 px-4 bg-pink-300 text-pink-500 bg-opacity-10 text-xs rounded-xl">
                             Female
                           </span>
@@ -358,7 +380,7 @@ const PatientsHome = () => {
                         {patient.phoneNumber}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {patient.createdAt}
+                        {formatDate(patient.createdAt)}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         <div className="flex justify-end">

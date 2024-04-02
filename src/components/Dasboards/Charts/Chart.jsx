@@ -45,38 +45,29 @@ const Chart = ({ color, days, dataName, chartType }) => {
       let counts = {};
       // Initialize total count
       let totalCounts = 0;
-      if (days === 30) {
-        // Sort data by date (most recent date at the top)
-        const sortedRes = [...selectedData].sort((a, b) => {
-          const dateA = new Date(a.date);
-          const dateB = new Date(b.date);
-          return dateB - dateA;
-        });
+      selectedData = selectedData.map((item) => {
+        return {
+          ...item,
+          date: new Date(item.apointmentDate.split("T")[0]),
+        };
+      });
 
-        // Get the last 30 days
+      if (days === 30) {
+        const sortedRes = selectedData.sort((a, b) => b.date - a.date);
+        // Son 30 günü al
         selectedData = sortedRes.slice(0, days);
       }
 
-      selectedData.map((item) => {
-        const date = item.date;
-        if (counts[date]) {
-          counts[date]++;
-        } else {
-          counts[date] = 1;
-        }
-        // Increment total count
+      selectedData.forEach((item) => {
+        // Tarihi "YYYY-MM-DD" formatına dönüştür
+        const dateString = item.date.toISOString().split("T")[0];
+        counts[dateString] = (counts[dateString] || 0) + 1;
         totalCounts++;
-        return null;
       });
       dispatch(setTotalCounts(totalCounts));
-      dispatch(setDailyCounts(counts));
+      dispatch(setDailyCounts(Object.values(counts).slice(0, 7)));
       dispatch(
-        setSeries([
-          {
-            name: "Total",
-            data: Array.from(Object.values(counts).slice(0, 7)),
-          },
-        ])
+        setSeries([{ name: "Total", data: Object.values(counts).slice(0, 7) }])
       );
       dispatch(
         setOptions({
@@ -90,7 +81,7 @@ const Chart = ({ color, days, dataName, chartType }) => {
               show: false, // Çubuk çizgisini gösterme
             },
           },
-          colors: "#f0ad4e",
+          colors: [color],
           plotOptions: {
             bar: {
               horizontal: false,
@@ -150,6 +141,9 @@ const Chart = ({ color, days, dataName, chartType }) => {
     }
   }, [
     dispatch,
+    days,
+    dataName,
+    chartType,
     patients,
     appointments,
     patientsLoading,

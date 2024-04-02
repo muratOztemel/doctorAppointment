@@ -1,4 +1,4 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useGetPatientByIdQuery } from "../../../redux/features/api/apiSlice";
 import { setPatientId } from "../../../redux/slices/tablePatientsSlice.js";
@@ -10,10 +10,8 @@ import {
   FaHeartPulse,
 } from "react-icons/fa6";
 import BloodType from "../Services/BloodType.jsx";
-import { Link } from "react-router-dom";
 
-const PatientProfile = () => {
-  const dispatch = useDispatch();
+const AddDoctor = () => {
   const navigate = useNavigate();
   const { patientId } = useSelector((state) => state.tablePatients);
   const {
@@ -85,11 +83,9 @@ const PatientProfile = () => {
             </div>
 
             <div className="flex flex-col gap-3 px-2 xl:px-12 w-full">
-              <Link
-                to="/addMedical"
-                className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
+              <button className="bg-cyan-50 text-cyan-500 text-sm gap-4 flex items-center w-full p-4 rounded">
                 <FaBoxArchive /> Medical Records
-              </Link>
+              </button>
               <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
                 <FaRegCalendarDays />
                 Appointments
@@ -110,11 +106,9 @@ const PatientProfile = () => {
                   Medical Record
                 </h1>
                 <div className="sm:w-1/4 w-full">
-                  <Link
-                    to="/addMedical"
-                    className="w-full flex flex-rows justify-center gap-4 hover:opacity-80 transitions bg-cyan-500 text-white text-sm font-medium px-2 py-4 rounded">
+                  <button className="w-full flex-rows gap-4 hover:opacity-80 transitions bg-cyan-500 text-white text-sm font-medium px-2 py-4 rounded">
                     New Record
-                  </Link>
+                  </button>
                 </div>
               </div>
               <div className="bg-cyan-50 items-start grid grid-cols-12 gap-4 rounded-xl border-[1px] border-cyan-100 p-6">
@@ -160,4 +154,4 @@ const PatientProfile = () => {
   );
 };
 
-export default PatientProfile;
+export default AddDoctor;

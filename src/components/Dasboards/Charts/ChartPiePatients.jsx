@@ -46,28 +46,34 @@ const ChartPiePatients = ({ dataName, color, widthChart }) => {
       let groupedData = {};
       let months = [];
       let totalDataCounts = [];
-      let dateParts;
-      data.map((item) => {
+
+      data.forEach((item) => {
+        let date;
         if (dataName === "appointments") {
-          dateParts = item.date.split(".");
+          date = new Date(item.apointmentDate); // apointmentDate yazım hatası varsa düzeltilmeli: appointmentDate olarak.
         } else {
-          dateParts = item.createdAt.split(".");
+          date = new Date(item.createdAt);
         }
 
-        let [day, month, year] = dateParts;
-
-        let key = `${year}-${month}`;
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1; // JavaScript ayları 0'dan başlatır, bu yüzden 1 ekliyoruz.
+        let key = `${year}-${month < 10 ? "0" + month : month}`; // Ay tek basamaklıysa başına 0 ekleyerek formatı koruyoruz.
 
         groupedData[key] = [...(groupedData[key] || []), item];
       });
 
       // Her ay için toplam veriyi hesapla
-      Object.keys(groupedData).forEach((key) => {
-        months = [...months, key]; // Ayı diziyi ekle
-        totalDataCounts = [...totalDataCounts, groupedData[key].length]; // Toplam veri sayısını diziyi ekle
-      });
+      Object.keys(groupedData)
+        .sort()
+        .forEach((key) => {
+          // Anahtarları sıralı tutmak için sort() kullanıldı.
+          months.push(key); // Ayı diziye ekle
+          totalDataCounts.push(groupedData[key].length); // Toplam veri sayısını diziyi ekle
+        });
+
       return { months, totalDataCounts };
     }
+
     if (
       !patientsLoading &&
       !appointmentsLoading &&

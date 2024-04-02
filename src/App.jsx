@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./components/Security/ProtectedRoute.jsx";
 import DashboardHome from "./components/pages/Dashboard/DashboardHome";
 import PatientsHome from "./components/pages/Dashboard/PatientsHome";
 import PatientProfile from "./components/Dasboards/Patients/PatientProfile";
@@ -9,8 +10,10 @@ import MedicineHome from "./components/pages/Dashboard/MedicineHome";
 import SettingsHome from "./components/pages/Dashboard/SettingsHome";
 import LeftSide from "./components/Layout/Dashboard/LeftSide";
 import MainHeader from "./components/Layout/Dashboard/MainHeader";
-import Login from "./components/Form/Login.jsx";
+import Login from "./components/Form/login/Login.jsx";
 import RegisterForm from "./components/Form/register/RegisterForm";
+import AddMedical from "./components/Dasboards/Medical/AddMedical.jsx";
+import AddDoctor from "./components/Dasboards/Doctors/AddDoctor.jsx";
 
 const App = () => {
   return (
@@ -22,15 +25,88 @@ const App = () => {
           <div className="col-span-10 xl:h-screen overflow-y-scroll relative">
             <MainHeader />
             <Routes>
-              <Route path="/" element={<DashboardHome />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/patients" element={<PatientsHome />} />
-              <Route path="/patientProfile" element={<PatientProfile />} />
-              <Route path="/patientDelete" element={<DeletePatient />} />
-              <Route path="/doctors" element={<DoctorsHome />} />
-              <Route path="/appointments" element={<AppointmentsHome />} />
-              <Route path="/medicine" element={<MedicineHome />} />
-              <Route path="/settings" element={<SettingsHome />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <DashboardHome />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="/registerForm" element={<RegisterForm />} />
+              <Route
+                path="/patients"
+                element={
+                  <ProtectedRoute>
+                    <PatientsHome />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/addMedical"
+                element={
+                  <ProtectedRoute>
+                    <AddMedical />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/addDoctor"
+                element={
+                  <ProtectedRoute>
+                    <AddDoctor />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/patientProfile"
+                element={
+                  <ProtectedRoute>
+                    <PatientProfile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/patientDelete"
+                element={
+                  <ProtectedRoute>
+                    <DeletePatient />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/doctors"
+                element={
+                  <ProtectedRoute>
+                    <DoctorsHome />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/appointments"
+                element={
+                  <ProtectedRoute>
+                    <AppointmentsHome />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/medicine"
+                element={
+                  <ProtectedRoute>
+                    <MedicineHome />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/settings"
+                element={
+                  <ProtectedRoute>
+                    <SettingsHome />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </div>
         </div>
