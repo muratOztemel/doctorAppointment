@@ -1,67 +1,48 @@
-import { createElement } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { IoHomeOutline } from "react-icons/io5";
-import { PiUsers } from "react-icons/pi";
-import { RiCustomerService2Fill } from "react-icons/ri";
-import { FaUserDoctor } from "react-icons/fa6";
-import { IoDocumentTextOutline } from "react-icons/io5";
-import { RiMedicineBottleLine } from "react-icons/ri";
-import { IoSettingsOutline } from "react-icons/io5";
 
 const LeftSide = () => {
-  const [links, setLinks] = useState([]);
-
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:3001/links")
-  //     .then((resLink) => setLinks(resLink.data))
-  //     .catch((err) => console.log("Link data connection is mistake!", err));
-  // }, []);
-
   const linkDizi = [
     {
       id: 1,
       name: "Dashboard",
       pageName: "DashboardHome",
       link: "/",
-      iconName: "IoHomeOutline",
+      icon: "/images/icons/home.png",
     },
     {
       id: 2,
       name: "Patients",
       pageName: "PatientsHome",
       link: "/patients",
-      iconName: "PiUsers",
+      icon: "/images/icons/home.png",
     },
     {
       id: 3,
       name: "Doctors",
       pageName: "DoctorsHome",
       link: "/doctors",
-      iconName: "FaUserDoctor",
+      icon: "/images/icons/home.png",
     },
     {
       id: 4,
       name: "Appointments",
       pageName: "AppointmentsHome",
       link: "/appointments",
-      iconName: "IoDocumentTextOutline",
+      icon: "/images/icons/home.png",
     },
     {
       id: 5,
       name: "Medicine",
       pageName: "MedicineHome",
       link: "/medicine",
-      iconName: "RiMedicineBottleLine",
+      icon: "/images/icons/home.png",
     },
     {
       id: 6,
       name: "Settings",
       pageName: "SettingsHome",
       link: "/settings",
-      iconName: "IoSettingsOutline",
+      icon: "/images/icons/home.png",
     },
   ];
 
@@ -93,9 +74,7 @@ const LeftSide = () => {
                 <Link
                   to={link.link}
                   className="flex gap-4 transitions group items-center w-full p-4 rounded-lg hover:bg-cyan-50">
-                  {createElement(eval(link.iconName), {
-                    className: "text-xl text-cyan-500",
-                  })}
+                  <img src={link.icon} alt={link.name} />
                   <p className="text-sm font-medium  text-cyan-500 group-hover:text-text-teal-100">
                     {link.name}
                   </p>

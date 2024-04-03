@@ -109,8 +109,59 @@ const AddMedical = () => {
               <label>Complains</label>
               <textarea
                 rows="3"
-                placeholder="Bad breath, toothache, ...."
                 className="focus:border-cyan-500 w-full bg-transparent text-sm mt-3 p-4 border border-cyan-300 rounded font-light"></textarea>
+              <label>Diagnosis</label>
+              <textarea
+                rows="3"
+                className="focus:border-cyan-500 w-full bg-transparent text-sm mt-3 p-4 border border-cyan-300 rounded font-light"></textarea>
+              <label>Vital Signs</label>
+              <textarea
+                rows="3"
+                className="focus:border-cyan-500 w-full bg-transparent text-sm mt-3 p-4 border border-cyan-300 rounded font-light"></textarea>
+              <label>Medicine</label>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Dosage</th>
+                    <th>Instraction</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Paracetamol</td>
+                    <td>1000</td>
+                    <td>1 - M/A/E </td>
+                    <td>1</td>
+                    <td>1000</td>
+                    <td>
+                      <button className="flex justify-center items-center text-sm bg-red-300 hover:bg-red-500 hover:text-amber-500 text-white border-red-50 border-opacity-5 hover:border-red-500 rounded-md w-2/4 md:w-8 h-8">
+                        <img
+                          src="/images/delete.png"
+                          alt="detail"
+                          className="h-4"
+                        />
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <button className=" text-cyan-500 flex flex-rows justify-center items-center gap-2 rounded-lg border border-cyan-500 border-dashed py-4 w-full text-sm">
+                <svg
+                  stroke="currentColor"
+                  fill="currentColor"
+                  strokeWidth="0"
+                  viewBox="0 0 24 24"
+                  height="1em"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z"></path>
+                </svg>{" "}
+                Add Medicine
+              </button>
             </div>
           </div>
         </div>

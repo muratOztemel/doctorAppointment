@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import LoginSchema from "./LoginSchema"; // Yup ile oluşturulmuş schema'nızın yolu
 import { loginData } from "./loginData"; // Giriş formu alanlarınızı içeren dizi
+import { useEffect } from "react";
 
 function Login() {
   const dispatch = useDispatch();
@@ -13,16 +14,13 @@ function Login() {
     useAuthenticationMutation();
   const navigate = useNavigate();
 
-  if (isError) return <div>Error: {isError.toString()}</div>;
-  if (isLoading) return <Spinner />;
-
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
     validationSchema: LoginSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { setFieldError }) => {
       try {
         let result = await authentication({
           username: values.username,
@@ -41,13 +39,40 @@ function Login() {
           // Giriş başarılı, anasayfaya yönlendir
           // formik'in onSubmit içinde başarılı giriş sonrası
           navigate("/");
+        } else {
+          console.log("resulta girmiyor");
+          // API'den başarılı bir yanıt gelmezse (örneğin, yanıtta accessToken yoksa)
+          // Kullanıcıya genel bir hata mesajı göster
+          setFieldError(
+            "general",
+            "Giriş başarısız. Lütfen bilgilerinizi kontrol edin."
+          );
         }
       } catch (error) {
         console.error("Error user login:", error);
         // Hata yönetimi, formik.setError gibi bir yöntemle kullanıcıya hata göster
+        setFieldError("username", "Kullanıcı adı veya şifre hatalı.");
+        setFieldError("password", "Kullanıcı adı veya şifre hatalı.");
       }
     },
   });
+
+  // Form içinde genel hata mesajını göstermek için
+  {
+    formik.errors.general && (
+      <p className="text-red-500 text-center">{formik.errors.general}</p>
+    );
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/"); // Token varsa kullanıcıyı dashboard'a yönlendir
+    }
+  }, [navigate]);
+
+  if (isLoading) return <Spinner />;
+  if (isError) return <div>Error: {isError.toString()}</div>;
 
   return (
     <div className="flex justify-center items-center bg-gray-50 vh-100 h-screen">
@@ -97,7 +122,7 @@ function Login() {
           <p>Siz hala kayıt olmadınız mı?</p>
           <div className="mt-2 flex w-full">
             <Link
-              to="/register"
+              to="/registerForm"
               className="text-white w-full mt-4 bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
               Sing Up
             </Link>

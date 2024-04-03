@@ -330,9 +330,9 @@ const PatientsHome = () => {
                             patient.photo !== null &&
                             patient.photo !== ""
                               ? patient.photo
-                              : patient.gender === 2
-                              ? "/images/male.png"
                               : patient.gender === 1
+                              ? "/images/male.png"
+                              : patient.gender === 2
                               ? "/images/female.png"
                               : "/images/agender.png"
                           }
@@ -356,11 +356,11 @@ const PatientsHome = () => {
                         )}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {patient.gender === 2 ? (
+                        {patient.gender === 1 ? (
                           <span className="py-1 px-4 bg-cyan-300 text-cyan-500 bg-opacity-10 text-xs rounded-xl">
                             Male
                           </span>
-                        ) : patient.gender === 1 ? (
+                        ) : patient.gender === 2 ? (
                           <span className="py-1 px-4 bg-pink-300 text-pink-500 bg-opacity-10 text-xs rounded-xl">
                             Female
                           </span>

@@ -37,6 +37,24 @@ const DashboardHome = () => {
   return (
     <>
       <div className="xl:px-8 px-2 pt-24">
+        <div className="flex items-center text-center gap-4 mb-6">
+          <div className=" flex gap-4 bg-white border border-cyan-500 border-dashed rounded-lg py-3 px-4 text-md w-full">
+            <div className="p-3">
+              <p className="flex justify-center items-center bg-white border border-cyan-500 border-dashed rounded-lg p-2 w-[50px] h-[50px]">
+                <img
+                  src="/images/icons/fast-forward.png"
+                  alt="Administrator"
+                  className=""
+                />
+              </p>
+            </div>
+            <div className="p-5">
+              <h1 className="text-3xl font-semibold text-slate-500">
+                A D M I N I S T R A T O R
+              </h1>
+            </div>
+          </div>
+        </div>
         <LinkDashboardBar />
         <div className="w-full my-6 grid xl:grid-cols-8 grid-cols-1 gap-6">
           <div className="xl:col-span-6  w-full">

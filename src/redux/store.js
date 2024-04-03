@@ -7,6 +7,8 @@ import chartPatientsReducer from "./slices/chartPatientsSlice.js";
 import chartAppointmentsPieReducer from "./slices/chartAppointmentsPieSlice.js";
 import chartPatientsPieReducer from "./slices/chartPatientsPieSlice.js";
 import tablePatientsReducer from "./slices/tablePatientsSlice.js";
+import tableDoctorsReducer from "./slices/tableDoctorsSlice.js";
+import tableAppointmentsReducer from "./slices/tableAppointmentsSlice.js";
 import usersReducer from "./slices/usersSlice.js";
 
 const store = configureStore({
@@ -18,6 +20,8 @@ const store = configureStore({
     chartAppointmentsPie: chartAppointmentsPieReducer,
     chartPatientsPie: chartPatientsPieReducer,
     tablePatients: tablePatientsReducer,
+    tableDoctors: tableDoctorsReducer,
+    tableAppointments: tableAppointmentsReducer,
     users: usersReducer,
   },
   middleware: (getDefaultMiddleware) =>

@@ -1,11 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const apiSlice = createApi({
+export const apiSlice1 = createApi({
   reducerPath: "api",
-  //baseQuery: fetchBaseQuery({ baseUrl: "http://127.0.0.1:3001/" }),
+  //baseQuery: fetchBaseQuery({ baseUrl: "http://api.makinaburada.net/api/" }),
   // baseQuery: fetchBaseQuery({ baseUrl: "https://bsg37cps-5002.euw.devtunnels.ms/",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://api.makinaburada.net/api/v1/",
+    baseUrl: "http://127.0.0.1:3001/",
     prepareHeaders: (headers) => {
       // LocalStorage'dan token'ı al
       const token = localStorage.getItem("token");
@@ -25,7 +25,7 @@ export const apiSlice = createApi({
     getPatientsPage: builder.query({
       query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
         // `Patients/SearchPatient?page=${page}&pageSize=10&q=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
-        `Patients/SearchPatient?page=${page}&pageSize=20&q=a&sort=${sortField}&sortby=${sortOrder}`,
+        `v1/Patients/SearchPatient?page=${page}&pageSize=10&q=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
       method: "GET",
     }),
     // Delete Patient By Id
@@ -38,15 +38,15 @@ export const apiSlice = createApi({
     // Authentication Control
     authentication: builder.mutation({
       query: (loginModel) => ({
-        url: `Authentication`,
+        url: `v1/Authentication`,
         method: "POST",
-        body: loginModel,
+        body: { username: "ali@makinaburada.net", password: "123456" },
       }),
     }),
     addNewPatient: builder.mutation({
       query(newPatient) {
         return {
-          url: `Patients`,
+          url: `v1/Patients`,
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: newPatient,
@@ -56,7 +56,7 @@ export const apiSlice = createApi({
 
     updatePatient: builder.mutation({
       query: ({ id, updatedPatient }) => ({
-        url: `Patients/${id}`,
+        url: `v1/Patients/${id}`,
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: updatedPatient,
@@ -64,27 +64,21 @@ export const apiSlice = createApi({
     }),
 
     getPatientById: builder.query({
-      query: (id) => `Patients/${id}`,
+      query: (id) => `v1/Patients/${id}`,
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
     }),
     getDoctorById: builder.query({
-      query: (id) => `Doctors/${id}`,
+      query: (id) => `v1/Doctors/${id}`,
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
     }),
     getPatients: builder.query({
-      query: () => "Patients",
-    }),
-    getAppointmentsPage: builder.query({
-      query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
-        // `Patients/SearchPatient?page=${page}&pageSize=10&q=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
-        `Appointments?page=${page}&pageSize=20&q=a&sort=${sortField}&sortby=${sortOrder}`,
-      method: "GET",
+      query: () => "v1/Patients",
     }),
     getAppointments: builder.query({
       query: () => "Appointments",
     }),
     getDoctors: builder.query({
-      query: () => "Doctors",
+      query: () => "v1/Doctors",
     }),
     getBranchs: builder.query({
       query: () => "branchs",
@@ -130,7 +124,6 @@ export const {
   useGetPatientByIdQuery,
   useGetDoctorByIdQuery,
   useGetPatientsQuery,
-  useGetAppointmentsPageQuery,
   useGetAppointmentsQuery,
   useGetDoctorsQuery,
   useGetBranchsQuery,
@@ -143,4 +136,4 @@ export const {
   useGetAuthorityQuery,
   useGetHolidaysQuery,
   useGetLinksQuery,
-} = apiSlice;
+} = apiSlice1;

@@ -3,7 +3,7 @@ import { eighteenYearsAgo } from "./date";
 const passwordRegex = new RegExp();
 
 export const schema = yup.object().shape({
-  name: yup.string().required("İsim ve Soyisim  zorunlu bir alamdır"),
+  name: yup.string().min(3).required("İsim ve Soyisim  zorunlu bir alamdır"),
   surname: yup.string().required("Soy isim zorunlu bir alandır"),
   idNumber: yup
     .string()
