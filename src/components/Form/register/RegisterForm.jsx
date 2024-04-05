@@ -155,7 +155,7 @@ const RegisterForm = () => {
             type="submit"
             className="mt-4 w-full bg-green-500 text-white p-2 rounded hover:bg-green-700"
           >
-            Kayıt Ol
+            Sing Up
           </button>
           <div className="mt-2 flex w-full">
             <Link
