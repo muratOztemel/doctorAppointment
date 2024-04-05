@@ -27,7 +27,6 @@ function Login() {
           password: values.password,
         });
         if (result.data.accessToken) {
-          // Token'ı localStorage'a kaydet
           localStorage.setItem("token", result.data.accessToken);
           // Kullanıcı giriş bilgilerini Redux state'ine kaydet
           dispatch(
