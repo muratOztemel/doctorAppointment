@@ -15,6 +15,7 @@ import { TbLockAccess } from "react-icons/tb";
 import { RiLockPasswordLine } from "react-icons/ri";
 
 const SettingsHome = () => {
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userId } = useSelector((state) => state.users);
@@ -37,13 +38,13 @@ const SettingsHome = () => {
             </div>
           </div>
         </div>
-
         <div className="grid grid-cols-12 gap-6 my-8 items-start">
           <div className="col-span-12 flex flex-col items-center justify-center gap-6 lg:col-span-4 bg-white rounded-xl border-[1px] border-cyan-500 p-6 lg:sticky top-28 ">
             <div className="gap-2 flex-col justify-center items-center text-center">
               <h2 className="text-sm font-semibold">{user.userName}</h2>
               <p className="text-xs text-gray-500">{user.userName}</p>
             </div>
+
 
             <div className="flex flex-col gap-3 px-2 xl:px-12 w-full">
               <Link

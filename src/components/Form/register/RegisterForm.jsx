@@ -1,13 +1,27 @@
+import { useDispatch } from "react-redux";
+import { useAddNewPatientMutation } from "../../../redux/features/api/apiSlice";
+import Spinner from "../../UI/Spinner";
+import { setUserRegisterForm } from "../../../redux/slices/usersSlice";
 import { registerData } from "./registerData";
 import { useFormik } from "formik";
 import { schema } from "./reigisterSchema";
-/* import { Link } from "react-router-dom";
- */ import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const RegisterForm = () => {
-  const [formData, setFormdata] = useState({});
+  const dispatch = useDispatch();
+  const [addNewPatient, { data, isError, isLoading }] =
+    useAddNewPatientMutation();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
+
+  const addIpAddress = async () => {
+    const response = await fetch("https://api.ipify.org?format=json");
+    const data = await response.json();
+    return data.ip;
+  };
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -21,16 +35,41 @@ const RegisterForm = () => {
       terms: false,
     },
     validationSchema: schema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values, { setFieldError }) => {
+      try {
+        const ip = await addIpAddress();
+        const newPatientData = {
+          name: values.name,
+          surname: values.surname,
+          idNumber: values.idNumber,
+          birthDate: values.birthDate,
+          email: values.email,
+          password: values.password,
+          confirmPassword: values.confirmPassword,
+          phoneNumber: values.phoneNumber,
+          terms: values.terms,
+          ipAddress: ip,
+        };
+
+        dispatch(setUserRegisterForm(newPatientData));
+
+        await addNewPatient(newPatientData);
+        console.log("kayıt oldu");
+      } catch (err) {
+        console.error("Error adding new product:", err);
+      }
     },
   });
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:3000/register")
-  //     .then((ressponse) => setFormdata(ressponse.data))
-  //     .catch((err) => console.log(err));
-  // }, []);
+
+  // Form içinde genel hata mesajını göstermek için
+  {
+    formik.errors.general && (
+      <p className="text-red-500 text-center">{formik.errors.general}</p>
+    );
+  }
+
+  if (isLoading) return <Spinner />;
+  if (isError) return <div>Error: {isError.toString()}</div>;
 
   return (
     <div className="flex justify-center items-center bg-gray-50  vh-120 h-screen">
@@ -67,6 +106,10 @@ const RegisterForm = () => {
               )}
             </div>
           ))}
+          {formik.errors.submit && (
+            <p className="text-red-500 text-center">{formik.errors.submit}</p>
+          )}
+
           <div className="relative w-full flex flex-col">
             <div className="flex justify-center items-center mx-2">
               <input
@@ -112,10 +155,18 @@ const RegisterForm = () => {
           </div>
           <button
             type="submit"
+
             className="mt-4 w-full bg-green-500 text-white p-2 rounded hover:bg-green-700">
             Kayıt Ol
           </button>
-          {/*    <Link to={"/userForm"}>UserForm </Link> */}
+          <div className="mt-2 flex w-full">
+            <Link
+              to="/"
+              className="text-white w-full mt-4 bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
+              Login
+            </Link>
+          </div>
         </form>
       </div>
     </div>

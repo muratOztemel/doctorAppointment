@@ -33,7 +33,6 @@ function Login() {
         }
 
         if (result.data.accessToken) {
-          // Token'ı localStorage'a kaydet
           localStorage.setItem("token", result.data.accessToken);
           // Kullanıcı giriş bilgilerini Redux state'ine kaydet
           dispatch(
@@ -111,14 +110,16 @@ function Login() {
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="text-white w-full mb-4 bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+            className="text-white w-full mb-4 bg-green-500 hover:bg-green-600 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          >
             Login
           </button>
           <p>Siz hala kayıt olmadınız mı?</p>
           <div className="mt-2 flex w-full">
             <Link
               to="/registerForm"
-              className="text-white w-full mt-4 bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+              className="text-white w-full mt-4 bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+            >
               Sing Up
             </Link>
           </div>
