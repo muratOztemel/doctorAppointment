@@ -15,7 +15,6 @@ const RegisterForm = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
 
-  // IP adresini alma fonksiyonu
   const addIpAddress = async () => {
     try {
       const response = await fetch("https://api.ipify.org?format=json");
@@ -56,20 +55,17 @@ const RegisterForm = () => {
         };
 
         dispatch(setUserRegisterForm(newPatientData));
-        await addNewPatient(newPatientData).unwrap(); // unwrap() kullanarak, hata durumunda direkt olarak catch bloğuna düşür
-
-        navigate("/success"); // Başarılı kayıttan sonra kullanıcıyı başka bir sayfaya yönlendir
+        await addNewPatient(newPatientData).unwrap();
+        navigate("/success");
       } catch (err) {
         console.error("Yeni hastaya ekleme hatası:", err);
-        setFieldError("general", "Beklenmeyen bir hata oluştu."); // Formik'e genel bir hata mesajı ekleyin
+        setFieldError("general", "Beklenmeyen bir hata oluştu.");
       }
     },
   });
 
   if (isLoading) return <Spinner />;
   if (isError) return <div>Hata: {isError.toString()}</div>;
-
-  // Diğer bileşenleri burada düzenleyebilirsiniz
 
   return (
     <div className="flex justify-center items-center bg-gray-50  vh-120 h-screen">
@@ -126,7 +122,8 @@ const RegisterForm = () => {
                 <button
                   type="button"
                   onClick={() => setIsOpen(true)}
-                  className="text-green-600 hover:text-green-900 ">
+                  className="text-green-600 hover:text-green-900 "
+                >
                   Kullanıcı sözleşmesini kabul ediyorum.
                 </button>
               </span>
@@ -145,7 +142,8 @@ const RegisterForm = () => {
                         setIsOpen(false);
                         setChecked(true);
                       }}
-                      className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
+                      className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                    >
                       Kabul Et
                     </button>
                   </div>
@@ -155,8 +153,8 @@ const RegisterForm = () => {
           </div>
           <button
             type="submit"
-
-            className="mt-4 w-full bg-green-500 text-white p-2 rounded hover:bg-green-700">
+            className="mt-4 w-full bg-green-500 text-white p-2 rounded hover:bg-green-700"
+          >
             Kayıt Ol
           </button>
           <div className="mt-2 flex w-full">
