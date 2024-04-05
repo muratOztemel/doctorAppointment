@@ -5,6 +5,7 @@ import { setUsersLogin } from "../../../redux/slices/usersSlice";
 import { MdOutlineNotificationsNone } from "react-icons/md";
 import { IoLogOut, IoSettings } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const MainHeader = () => {
   const dispatch = useDispatch();
@@ -28,7 +29,7 @@ const MainHeader = () => {
     navigate("/login");
   };
   return (
-    <div className="xl:w-5/6 w-full 2xl:max-w-[1640px] bg-slate-50 grid md:grid-cols-2 grid-cols-12 items-center bg-opacity-95 fixed top-0 z-40 xl:px-8 px-2">
+    <header className="mt-5 xl:w-5/6 w-full 2xl:max-w-[1640px] bg-slate-50 grid md:grid-cols-2 grid-cols-12 items-center bg-opacity-95 fixed top-0 z-40 xl:px-8 px-2">
       <div className="md:col-span-1 sm:col-span-11 col-span-10 flex gap-4 items-center md:py-0 py-4">
         <button className="block xl:hidden border text-2xl bg-gray-50 w-16 md:w-12 h-12 rounded-md flex-col text-gray-500 transitions hover:bg-gray-50"></button>
         <input
@@ -61,18 +62,20 @@ const MainHeader = () => {
             </button>
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                <a
-                  href="#"
+                <Link
+                  to="/settings"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="flex justify-start items-center px-4 py-2 font-semibold text-sm text-gray-700 hover:bg-gray-100">
                   <FaUser className="ml-0.5 mr-2 text-slate-500 w-4 h-4" />
                   Profile
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  to="/settings"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                   className="flex justify-start items-center px-4 py-2 font-semibold text-sm text-gray-700 hover:bg-gray-100">
                   <IoSettings className="mr-2 text-slate-500 w-5 h-5" />
                   Settings
-                </a>
+                </Link>
                 <hr className="my-1" />
                 <button
                   onClick={handleLogout}
@@ -129,7 +132,7 @@ const MainHeader = () => {
           {/* notification finish */}
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 export default MainHeader;

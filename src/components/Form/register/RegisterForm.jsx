@@ -126,8 +126,7 @@ const RegisterForm = () => {
                 <button
                   type="button"
                   onClick={() => setIsOpen(true)}
-                  className="text-green-600 hover:text-green-900 "
-                >
+                  className="text-green-600 hover:text-green-900 ">
                   Kullanıcı sözleşmesini kabul ediyorum.
                 </button>
               </span>
@@ -146,8 +145,7 @@ const RegisterForm = () => {
                         setIsOpen(false);
                         setChecked(true);
                       }}
-                      className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-                    >
+                      className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
                       Kabul Et
                     </button>
                   </div>
@@ -157,8 +155,8 @@ const RegisterForm = () => {
           </div>
           <button
             type="submit"
-            className="mt-4 w-full bg-green-500 text-white p-2 rounded-lg hover:bg-green-700"
-          >
+
+            className="mt-4 w-full bg-green-500 text-white p-2 rounded hover:bg-green-700">
             Kayıt Ol
           </button>
           <div className="mt-2 flex w-full">

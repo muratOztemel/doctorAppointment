@@ -1,16 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { number, string, array } from "prop-types";
 
 import {
   setSeries,
   setOptions,
   setDoctorsName,
 } from "../../../redux/slices/chartDoctorsSlice.js";
-import {
-  useGetDoctorsQuery,
-  useGetAppointmentsQuery,
-} from "../../../redux/features/api/apiSlice.js";
+import { useGetAppointmentCountByDoctorQuery } from "../../../redux/features/api/apiSlice.js";
 
 import ReactApexChart from "react-apexcharts";
 
@@ -23,22 +19,10 @@ const ChartDoctors = () => {
     data: doctors,
     error: doctorsError,
     isLoading: doctorsLoading,
-  } = useGetDoctorsQuery();
-  const {
-    data: appointments,
-    error: appointmentsError,
-    isLoading: appointmentsLoading,
-  } = useGetAppointmentsQuery();
+  } = useGetAppointmentCountByDoctorQuery();
 
   useEffect(() => {
-    if (
-      !doctorsLoading &&
-      !appointmentsLoading &&
-      !doctorsError &&
-      !appointmentsError &&
-      doctors &&
-      appointments
-    ) {
+    if (!doctorsLoading && !doctorsError && doctors) {
       const colors = [
         "#0ea5e9",
         "#34d399",
@@ -48,24 +32,12 @@ const ChartDoctors = () => {
         "#14b8a6",
         "#64748b",
       ];
-      const doctorsNameData = doctors.map((doctor) => [
-        doctor.name,
-        doctor.surname,
-      ]);
-      const appointmentsCountByDoctor = doctors.map((doctor) => {
-        const doctorId = doctor.id;
-
-        const appointmentsCount = appointments.filter(
-          (appointment) => appointment.doctorId === doctorId
-        ).length;
-        return appointmentsCount;
-      });
-      dispatch(setDoctorsName(doctorsNameData));
+      dispatch(setDoctorsName(doctors.doctorFullName));
       dispatch(
         setSeries([
           {
             name: "Total",
-            data: appointmentsCountByDoctor,
+            data: doctors.data,
           },
         ])
       );
@@ -94,7 +66,7 @@ const ChartDoctors = () => {
             show: false,
           },
           xaxis: {
-            categories: Array.from(doctorsNameData),
+            categories: doctors.categories,
             labels: {
               style: {
                 colors: colors,
@@ -105,22 +77,10 @@ const ChartDoctors = () => {
         })
       );
     }
-  }, [
-    dispatch,
-    doctors,
-    appointments,
-    doctorsLoading,
-    appointmentsLoading,
-    doctorsError,
-    appointmentsError,
-  ]);
+  }, [dispatch, doctors, doctorsLoading, doctorsError]);
 
-  // Yükleme durumu kontrolü
-  if (doctorsLoading || appointmentsLoading) return <div>Loading...</div>;
-  // Hata durumu kontrolü
+  if (doctorsLoading) return <div>Loading...</div>;
   if (doctorsError) return <div>Error: {doctorsError.toString()}</div>;
-  if (appointmentsError)
-    return <div>Error: {appointmentsError.toString()}</div>;
 
   return (
     <>
@@ -135,12 +95,3 @@ const ChartDoctors = () => {
 };
 
 export default ChartDoctors;
-
-ChartDoctors.propTypes = {
-  color: string,
-  days: number,
-  dataName: string,
-  chartType: string,
-  doctors: array,
-  appointments: array,
-};
