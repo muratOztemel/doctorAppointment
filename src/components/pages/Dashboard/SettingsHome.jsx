@@ -21,6 +21,7 @@ const SettingsHome = () => {
       .then((resAppointments) => {
         setAppointments(resAppointments.data);
         // Sort data by date (most recent date at the top)
+        /* merhaba */
         const sortedAppointments = resAppointments.data.sort((a, b) => {
           const dateA = new Date(a.date);
           const dateB = new Date(b.date);
@@ -78,7 +79,8 @@ const SettingsHome = () => {
                   <Card
                     title={"Patient List"}
                     icon={<PiUsers />}
-                    color={"cyan"}>
+                    color={"cyan"}
+                  >
                     <div className="mt-4">
                       <table className="table-auto w-full">
                         <thead className="bg-cyan-50 rounded-md overflow-hidden">
@@ -119,7 +121,8 @@ const SettingsHome = () => {
                   <Card
                     title={"Last Appointments"}
                     icon={<IoDocumentTextOutline />}
-                    color={"yellow"}>
+                    color={"yellow"}
+                  >
                     {appointments.map((appointment) => {
                       const whoPatients = patients.find(
                         (patient) => patient.id === appointment.patientId
@@ -143,7 +146,8 @@ const SettingsHome = () => {
                   <Card
                     title={"Recent Patients"}
                     icon={<PiUsers />}
-                    className="mt-4">
+                    className="mt-4"
+                  >
                     <RecentPatientList />
                     <RecentPatientList />
                   </Card>
