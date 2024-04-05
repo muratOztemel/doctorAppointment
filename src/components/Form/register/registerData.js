@@ -3,6 +3,7 @@ import { FaPhone } from "react-icons/fa6";
 import { MdEmail } from "react-icons/md";
 import { FaKey } from "react-icons/fa6";
 import { FaEye } from "react-icons/fa";
+
 export const registerData = [
   {
     id: "name",
@@ -27,12 +28,6 @@ export const registerData = [
     icon: FaUser,
   },
   {
-    id: "birthDate",
-    type: "date",
-    label: "Doğum Tarihi",
-    placeholder: "Doğum Tarihiniz",
-  },
-  {
     id: "email",
     type: "email",
     label: "E-posta",
@@ -43,7 +38,7 @@ export const registerData = [
     id: "password",
     type: "password",
     label: "Şifre",
-    placeholder: "Şifreniz",
+    placeholder: "Şifrenizi giriniz",
     icon: FaKey,
   },
   {
@@ -53,6 +48,13 @@ export const registerData = [
     placeholder: "Şifrenizi Onaylayın",
     icon: FaEye,
   },
+  {
+    id: "birthDate",
+    type: "date",
+    label: "Doğum Tarihi",
+    placeholder: "Doğum Tarihiniz",
+  },
+
   {
     id: "phoneNumber",
     type: "tel",

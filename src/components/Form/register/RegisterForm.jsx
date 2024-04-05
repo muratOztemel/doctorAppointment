@@ -2,12 +2,11 @@ import { useDispatch } from "react-redux";
 import { useAddNewPatientMutation } from "../../../redux/features/api/apiSlice";
 import Spinner from "../../UI/Spinner";
 import { setUserRegisterForm } from "../../../redux/slices/usersSlice";
-import { registerData } from "./registerData";
 import { useFormik } from "formik";
 import { schema } from "./reigisterSchema";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import { registerData } from "./registerData";
 const RegisterForm = () => {
   const dispatch = useDispatch();
   const [addNewPatient, { data, isError, isLoading }] =
@@ -16,10 +15,15 @@ const RegisterForm = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
 
+  // IP adresini alma fonksiyonu
   const addIpAddress = async () => {
-    const response = await fetch("https://api.ipify.org?format=json");
-    const data = await response.json();
-    return data.ip;
+    try {
+      const response = await fetch("https://api.ipify.org?format=json");
+      const data = await response.json();
+      return data.ip;
+    } catch (err) {
+      console.error("Yeni hastaya IP eklenirken hata oluştu:", err);
+    }
   };
 
   const formik = useFormik({
@@ -27,10 +31,10 @@ const RegisterForm = () => {
       name: "",
       surname: "",
       idNumber: "",
-      birthDate: "",
       email: "",
       password: "",
       confirmPassword: "",
+      birthDate: "",
       phoneNumber: "",
       terms: false,
     },
@@ -52,24 +56,20 @@ const RegisterForm = () => {
         };
 
         dispatch(setUserRegisterForm(newPatientData));
+        await addNewPatient(newPatientData).unwrap(); // unwrap() kullanarak, hata durumunda direkt olarak catch bloğuna düşür
 
-        await addNewPatient(newPatientData);
-        console.log("kayıt oldu");
+        navigate("/success"); // Başarılı kayıttan sonra kullanıcıyı başka bir sayfaya yönlendir
       } catch (err) {
-        console.error("Error adding new product:", err);
+        console.error("Yeni hastaya ekleme hatası:", err);
+        setFieldError("general", "Beklenmeyen bir hata oluştu."); // Formik'e genel bir hata mesajı ekleyin
       }
     },
   });
 
-  // Form içinde genel hata mesajını göstermek için
-  {
-    formik.errors.general && (
-      <p className="text-red-500 text-center">{formik.errors.general}</p>
-    );
-  }
-
   if (isLoading) return <Spinner />;
-  if (isError) return <div>Error: {isError.toString()}</div>;
+  if (isError) return <div>Hata: {isError.toString()}</div>;
+
+  // Diğer bileşenleri burada düzenleyebilirsiniz
 
   return (
     <div className="flex justify-center items-center bg-gray-50  vh-120 h-screen">
