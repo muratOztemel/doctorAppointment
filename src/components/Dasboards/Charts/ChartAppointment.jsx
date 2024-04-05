@@ -1,41 +1,34 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { number, string } from "prop-types";
+import { useGetDailyAppointmentCountQuery } from "../../../redux/features/api/apiSlice.js";
 import {
-  setPatientsTotalCounts,
-  setPatientsSeries,
-  setPatientsOptions,
-} from "../../../redux/slices/chartPatientsSlice.js";
-import { useGetDailyPatientCountQuery } from "../../../redux/features/api/apiSlice.js";
+  setTotalCounts,
+  setSeries,
+  setOptions,
+} from "../../../redux/slices/chartAppointmentSlice.js";
 import ReactApexChart from "react-apexcharts";
 
-const ChartPatients = () => {
-  const options = useSelector((state) => state.chartPatients.patientsOptions);
-  const series = useSelector((state) => state.chartPatients.patientsSeries);
-  const totalCounts = useSelector(
-    (state) => state.chartPatients.patientsTotalCounts
-  );
+const ChartAppointment = () => {
+  const options = useSelector((state) => state.chart.options);
+  const series = useSelector((state) => state.chart.series);
+  const dailyCounts = useSelector((state) => state.chart.dailyCounts);
+  const totalCounts = useSelector((state) => state.chart.totalCounts);
+
   const dispatch = useDispatch();
 
   const {
-    data: patients,
-    error: patientsError,
-    isLoading: patientsLoading,
-  } = useGetDailyPatientCountQuery();
+    data: dashboardData,
+    error: dashboardDataError,
+    isLoading: dashboardDataLoading,
+  } = useGetDailyAppointmentCountQuery();
 
   useEffect(() => {
-    if (!patientsLoading && !patientsError && patients) {
-      dispatch(setPatientsTotalCounts(patients.totalCount));
-
+    if (!dashboardDataLoading && !dashboardDataError && dashboardData) {
+      // dispatch(setDailyCounts(Object.values(counts).slice(0, 7)));
+      dispatch(setSeries([{ data: dashboardData.data }]));
       dispatch(
-        setPatientsSeries([
-          {
-            name: "Total",
-            data: patients.data,
-          },
-        ])
-      );
-      dispatch(
-        setPatientsOptions({
+        setOptions({
           chart: {
             type: "line",
             height: 200,
@@ -46,7 +39,7 @@ const ChartPatients = () => {
               show: false, // Çubuk çizgisini gösterme
             },
           },
-          colors: "#32b8d5",
+          colors: ["#32b8d5"],
           plotOptions: {
             bar: {
               horizontal: false,
@@ -67,7 +60,7 @@ const ChartPatients = () => {
             show: false,
           },
           xaxis: {
-            categories: patients.categories,
+            categories: dashboardData.categories,
             labels: {
               show: false, // x-ekseni etiketlerini gizle
             },
@@ -104,10 +97,13 @@ const ChartPatients = () => {
         })
       );
     }
-  }, [dispatch, patients, patientsLoading, patientsError]);
+  }, [dispatch, dashboardDataLoading, dashboardDataError, dashboardData]);
 
-  if (patientsLoading) return <div>Loading...</div>;
-  if (patientsError) return <div>Error: {patientsError.toString()}</div>;
+  // Yükleme durumu kontrolü
+  if (dashboardDataLoading) return <div>Loading...</div>;
+  // Hata durumu kontrolü
+  if (dashboardDataError)
+    return <div>Error: {dashboardDataError.toString()}</div>;
 
   return (
     <>
@@ -121,13 +117,20 @@ const ChartPatients = () => {
         />
       </div>
       <div className="flex flex-col col-span-3">
-        <h4 className="text-3xl font-medium text-right mr-5">{totalCounts}</h4>
+        <h4 className="text-3xl font-medium text-right mr-5">
+          {dashboardData.totalCount}
+        </h4>
         <p className={`text-sm flex gap-2 text-right text-[#32b8d5] mr-5`}>
-          Patients Total
+          Monthly Total
         </p>
       </div>
     </>
   );
 };
 
-export default ChartPatients;
+export default ChartAppointment;
+
+ChartAppointment.propTypes = {
+  dataName: string,
+  widthChart: number,
+};

@@ -15,6 +15,7 @@ import RegisterForm from "./components/Form/register/RegisterForm";
 import AddMedical from "./components/Dasboards/Medical/AddMedical.jsx";
 import AddDoctor from "./components/Dasboards/Doctors/AddDoctor.jsx";
 import DoctorProfile from "./components/Dasboards/Doctors/DoctorProfile.jsx";
+import AppointmentProfile from "./components/Dasboards/Appointments/AppointmentProfile.jsx";
 
 const App = () => {
   return (
@@ -103,6 +104,14 @@ const App = () => {
                         element={
                           <ProtectedRoute>
                             <AppointmentsHome />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/appointmentProfile"
+                        element={
+                          <ProtectedRoute>
+                            <AppointmentProfile />
                           </ProtectedRoute>
                         }
                       />

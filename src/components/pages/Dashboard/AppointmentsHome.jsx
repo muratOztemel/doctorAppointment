@@ -9,12 +9,12 @@ import {
   setFilter,
 } from "../../../redux/slices/tableAppointmentsSlice.js";
 import { useGetAppointmentsPageQuery } from "../../../redux/features/api/apiSlice.js";
-
 import Card from "../../UI/Cards/Card.jsx";
-
 import { PiUsers } from "react-icons/pi";
-import PatientsDashboard from "../../Layout/Dashboard/PatientsDashboard.jsx";
 import Modal from "../../UI/Modal.jsx";
+import AppointmentsDashboardBar from "../../Layout/Dashboard/AppointmentsDashboardBar.jsx";
+import { format } from "date-fns";
+import { setPatientId } from "../../../redux/slices/tablePatientsSlice.js";
 
 const AppointmentsHome = () => {
   const [appointmentsPage, setAppointmentsPage] = useState(1);
@@ -36,6 +36,11 @@ const AppointmentsHome = () => {
     sortOrder,
     filter,
   });
+  /*   const {
+    data: doctorsData,
+    error: appointmentsError,
+    isLoading: appointmentsLoading,
+  } = useGetDoctorByIdQuery(doctorId); */
 
   /*   useEffect(() => {
     const handleScroll = () => {
@@ -89,28 +94,6 @@ const AppointmentsHome = () => {
     dispatch(setSortOrder(order));
   };
 
-  const ageCalculate = (birthDateString) => {
-    // Doğum tarihini Date nesnesine dönüştürme
-    const birthDate = new Date(birthDateString);
-
-    // Bugünkü tarihi alma
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth() + 1; // JavaScript'te aylar 0'dan başlar, bu yüzden +1 ekliyoruz
-    const currentDay = today.getDate();
-
-    // Yaş hesaplama
-    let age = currentYear - birthDate.getFullYear();
-    if (
-      currentMonth < birthDate.getMonth() + 1 || // Ayları karşılaştırırken 1 eklemeyi unutmayın
-      (currentMonth === birthDate.getMonth() + 1 &&
-        currentDay < birthDate.getDate())
-    ) {
-      age--;
-    }
-    return age; // Yaşı döndürme
-  };
-
   function formatDate(createdAt) {
     const date = new Date(createdAt);
     const day = date.getDate().toString().padStart(2, "0"); // Günü al ve iki basamaklı yap
@@ -146,9 +129,9 @@ const AppointmentsHome = () => {
             </div>
           </div>
         </div>
-        <PatientsDashboard />
+        <AppointmentsDashboardBar />
         <Card title={"Appointment List"} icon={<PiUsers />} color={"cyan"}>
-          <div className="grid lg:grid-cols-5 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-2">
+          <div className="grid lg:grid-cols-5 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-2 mt-6">
             <input
               type="text"
               placeholder='Search "Appointments"'
@@ -268,16 +251,6 @@ const AppointmentsHome = () => {
                         : ""}
                     </th>
                     <th
-                      onClick={() => handleSort("phoneNumber")}
-                      className="cursor-pointer hover:bg-cyan-300">
-                      Phone Number{" "}
-                      {sortField === "phoneNumber"
-                        ? sortOrder === "asc"
-                          ? "↓"
-                          : "↑"
-                        : ""}
-                    </th>
-                    <th
                       onClick={() => handleSort("createdAt")}
                       className="cursor-pointer hover:bg-cyan-300">
                       Created Date{" "}
@@ -299,22 +272,38 @@ const AppointmentsHome = () => {
                         {appointment.id}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {appointment.doctorId}
+                        {appointment.doctorFullName}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {appointment.patientId}
+                        {appointment.patientFullName}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {appointment.apointmentDate}
+                        {format(
+                          new Date(appointment.appointmentDate),
+                          "MM/dd/yyyy"
+                        )}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {appointment.apointmentTime}
+                        {appointment.appointmentTime.substring(0, 5)}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {appointment.status}
-                      </td>
-                      <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        phone Number
+                        {appointment.status === 0 ? (
+                          <span className="py-1 px-4 bg-cyan-300 text-cyan-500 bg-opacity-10 text-xs rounded-xl">
+                            Pending
+                          </span>
+                        ) : appointment.status === 1 ? (
+                          <span className="py-1 px-4 bg-pink-300 text-pink-500 bg-opacity-10 text-xs rounded-xl">
+                            Approved
+                          </span>
+                        ) : appointment.status === 2 ? (
+                          <span className="py-1 px-4 bg-purple-300 text-purple-500 bg-opacity-10 text-xs rounded-xl">
+                            Reject
+                          </span>
+                        ) : (
+                          <span className="py-1 px-4 bg-red-300 text-red-500 bg-opacity-10 text-xs rounded-xl">
+                            Finished
+                          </span>
+                        )}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         {formatDate(appointment.createdAt)}
@@ -323,10 +312,11 @@ const AppointmentsHome = () => {
                         <div className="flex justify-end">
                           <Link
                             to="/appointmentProfile"
-                            onClick={() =>
-                              dispatch(setAppointmentId(appointment.id))
-                            }
-                            className="w-28 h-9 text-white bg-green-300 hover:bg-green-500 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
+                            onClick={() => {
+                              dispatch(setAppointmentId(appointment.id));
+                              dispatch(setPatientId(appointment.patientId));
+                            }}
+                            className="w-28 h-9 text-white bg-amber-300 hover:bg-amber-500 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                             <img
                               src="/images/eye.png"
                               alt="detail"
@@ -334,8 +324,21 @@ const AppointmentsHome = () => {
                             />
                             Detail
                           </Link>
-                          <Link
+                          <button
                             to="/appointmentDelete"
+                            onClick={() => {
+                              // dispatch(setIsShowError());
+                              dispatch(setAppointmentId(appointment.id));
+                            }}
+                            className="w-28 h-9 text-white bg-green-300 hover:bg-green-500 focus:ring-4 focus:ring-amber-green font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
+                            <img
+                              src="/images/delete.png"
+                              alt="detail"
+                              className="h-4 mr-2"
+                            />
+                            Approve
+                          </button>
+                          <button
                             onClick={() => {
                               // dispatch(setIsShowError());
                               dispatch(setAppointmentId(appointment.id));
@@ -346,8 +349,8 @@ const AppointmentsHome = () => {
                               alt="detail"
                               className="h-4 mr-2"
                             />
-                            Delete
-                          </Link>
+                            Reject
+                          </button>
                           <Modal
                             message={`Are you sure you want to delete user`}
                           />

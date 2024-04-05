@@ -10,9 +10,6 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { PiUsers } from "react-icons/pi";
 import LinkDashboardBar from "../../Layout/Dashboard/LinkDashboardBar";
 import ChartDoctors from "../../Dasboards/Charts/ChartDoctors";
-import AddNewPatient from "../../Dasboards/Patients/AddNewPatient.jsx";
-import Login from "../../Form/login/Login";
-import RegisterForm from "../../Form/register/RegisterForm.jsx";
 
 const DashboardHome = () => {
   const {
@@ -50,7 +47,7 @@ const DashboardHome = () => {
             </div>
             <div className="p-5">
               <h1 className="text-3xl font-semibold text-slate-500">
-                A D M I N I S T R A T O R
+                D A S H B O A R D
               </h1>
             </div>
           </div>

@@ -22,10 +22,13 @@ export const apiSlice = createApi({
     //   query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
     //     `patients?_page=${page}&_limit=10&q=${searchTerm}&_sort=${sortField}&_order=${sortOrder}`,
     // }),
+    getDashboardData: builder.query({
+      query: () => "Dashboard/GetDashboardData",
+    }),
     getPatientsPage: builder.query({
       query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
         // `Patients/SearchPatient?page=${page}&pageSize=10&q=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
-        `Patients/SearchPatient?page=${page}&pageSize=20&q=a&sort=${sortField}&sortby=${sortOrder}`,
+        `Patients/SearchPatient?page=${page}&pageSize=20&q=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
       method: "GET",
     }),
     // Delete Patient By Id
@@ -53,7 +56,6 @@ export const apiSlice = createApi({
         };
       },
     }),
-
     updatePatient: builder.mutation({
       query: ({ id, updatedPatient }) => ({
         url: `Patients/${id}`,
@@ -62,7 +64,6 @@ export const apiSlice = createApi({
         body: updatedPatient,
       }),
     }),
-
     getPatientById: builder.query({
       query: (id) => `Patients/${id}`,
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
@@ -80,14 +81,18 @@ export const apiSlice = createApi({
         `Appointments?page=${page}&pageSize=20&q=a&sort=${sortField}&sortby=${sortOrder}`,
       method: "GET",
     }),
+    getAppointmentById: builder.query({
+      query: (id) => `Appointments/${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
     getAppointments: builder.query({
       query: () => "Appointments",
     }),
     getDoctors: builder.query({
       query: () => "Doctors",
     }),
-    getBranchs: builder.query({
-      query: () => "branchs",
+    getBranches: builder.query({
+      query: () => "Branches",
     }),
     getRoles: builder.query({
       query: () => "roles",
@@ -116,12 +121,33 @@ export const apiSlice = createApi({
     getLinks: builder.query({
       query: () => "links",
     }),
+    getMonthlyAppointmentCount: builder.query({
+      query: () =>
+        "Dashboard/monthly-appointment-count?startDate=2024-03-01T00%3A00%3A00&endDate=2024-04-21T00%3A00%3A00",
+    }),
+    getMonthlyPatientCount: builder.query({
+      query: () =>
+        "Dashboard/monthly-patient-count?startDate=2024-01-01&endDate=2024-03-30",
+    }),
+    getDailyAppointmentCount: builder.query({
+      query: () =>
+        "Dashboard/daily-appointment-count?startDate=2024-04-15&endDate=2024-04-21",
+    }),
+    getDailyPatientCount: builder.query({
+      query: () =>
+        "Dashboard/daily-patient-count?startDate=2024-03-28&endDate=2024-04-03",
+    }),
+    GetAppointmentCountByDoctor: builder.query({
+      query: () =>
+        "Dashboard/appointment-count-by-doctor?startDate=2024-04-01&endDate=2024-05-01",
+    }),
   }),
-  keepUnusedDataFor: 30,
-  refetchOnMountOrArgChange: 5,
+  /*   keepUnusedDataFor: 30,
+  refetchOnMountOrArgChange: 5, */
 });
 
 export const {
+  useGetDashboardDataQuery,
   useGetPatientsPageQuery,
   useAuthenticationMutation,
   useDeletePatientMutation,
@@ -131,9 +157,10 @@ export const {
   useGetDoctorByIdQuery,
   useGetPatientsQuery,
   useGetAppointmentsPageQuery,
+  useGetAppointmentByIdQuery,
   useGetAppointmentsQuery,
   useGetDoctorsQuery,
-  useGetBranchsQuery,
+  useGetBranchesQuery,
   useGetRolesQuery,
   useGetUsersRolesQuery,
   useGetUsersQuery,
@@ -143,4 +170,9 @@ export const {
   useGetAuthorityQuery,
   useGetHolidaysQuery,
   useGetLinksQuery,
+  useGetMonthlyAppointmentCountQuery,
+  useGetMonthlyPatientCountQuery,
+  useGetDailyAppointmentCountQuery,
+  useGetDailyPatientCountQuery,
+  useGetAppointmentCountByDoctorQuery,
 } = apiSlice;
