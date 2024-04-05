@@ -67,6 +67,8 @@ const ChartPie = ({ dataName, color, widthChart }) => {
 
     // Gruplanmış veriyi al
     const { months, totalDataCounts } = groupDataByMonth(selectedData);
+    console.log(totalDataCounts);
+    console.log(months);
     dispatch(setSeries(totalDataCounts.slice(0, 3)));
     dispatch(
       setOptions({

@@ -4,6 +4,7 @@ import { number, string } from "prop-types";
 import {
   useGetPatientsQuery,
   useGetAppointmentsQuery,
+  useGetDashboardDataQuery,
 } from "../../../redux/features/api/apiSlice.js";
 import {
   setTotalCounts,
@@ -12,6 +13,8 @@ import {
   setOptions,
 } from "../../../redux/slices/chartSlice.js";
 import ReactApexChart from "react-apexcharts";
+import { format } from "date-fns";
+import { RiContactsBookLine } from "react-icons/ri";
 
 const Chart = ({ color, days, dataName, chartType }) => {
   const options = useSelector((state) => state.chart.options);
@@ -31,8 +34,12 @@ const Chart = ({ color, days, dataName, chartType }) => {
     error: appointmentsError,
     isLoading: appointmentsLoading,
   } = useGetAppointmentsQuery();
+  const {
+    data: dashboardData,
+    error: dashboardDataError,
+    isLoading: dashboardDataLoading,
+  } = useGetDashboardDataQuery();
 
-  let selectedData = dataName === "patients" ? patients : appointments;
   useEffect(() => {
     if (
       !patientsLoading &&
@@ -44,27 +51,27 @@ const Chart = ({ color, days, dataName, chartType }) => {
     ) {
       let counts = {};
       // Initialize total count
-      let totalCounts = 0;
-      selectedData = selectedData.map((item) => {
+      /*       const dateChange = new Date(item.date);
+      const formattedDate = format(now, "dd.MM.yyyy"); */
+
+      let selectedData = patients.map((item) => {
+        console.log(item.date);
         return {
           ...item,
-          date: new Date(item.apointmentDate.split("T")[0]),
+          //date: new Date(item.date.toISOString().split("T")[0]),
+          date: format(new Date(item.date), "yyyy-MM-dd"),
         };
       });
 
-      if (days === 30) {
-        const sortedRes = selectedData.sort((a, b) => b.date - a.date);
-        // Son 30 günü al
-        selectedData = sortedRes.slice(0, days);
-      }
+      const sortedRes = selectedData.sort((a, b) => b.date - a.date);
+      // Son 30 günü al
+      selectedData = sortedRes.slice(0, 7);
 
       selectedData.forEach((item) => {
         // Tarihi "YYYY-MM-DD" formatına dönüştür
-        const dateString = item.date.toISOString().split("T")[0];
+        const dateString = format(new Date(item.date), "yyyy-MM-dd");
         counts[dateString] = (counts[dateString] || 0) + 1;
-        totalCounts++;
       });
-      dispatch(setTotalCounts(totalCounts));
       dispatch(setDailyCounts(Object.values(counts).slice(0, 7)));
       dispatch(
         setSeries([{ name: "Total", data: Object.values(counts).slice(0, 7) }])
@@ -142,6 +149,7 @@ const Chart = ({ color, days, dataName, chartType }) => {
   }, [
     dispatch,
     days,
+    color,
     dataName,
     chartType,
     patients,
@@ -153,11 +161,14 @@ const Chart = ({ color, days, dataName, chartType }) => {
   ]);
 
   // Yükleme durumu kontrolü
-  if (patientsLoading || appointmentsLoading) return <div>Loading...</div>;
+  if (patientsLoading || appointmentsLoading || dashboardDataLoading)
+    return <div>Loading...</div>;
   // Hata durumu kontrolü
   if (patientsError) return <div>Error: {patientsError.toString()}</div>;
   if (appointmentsError)
     return <div>Error: {appointmentsError.toString()}</div>;
+  if (dashboardDataError)
+    return <div>Error: {dashboardDataError.toString()}</div>;
 
   return (
     <>
@@ -171,7 +182,9 @@ const Chart = ({ color, days, dataName, chartType }) => {
         />
       </div>
       <div className="flex flex-col col-span-3">
-        <h4 className="text-3xl font-medium text-right mr-5">{totalCounts}</h4>
+        <h4 className="text-3xl font-medium text-right mr-5">
+          {dashboardData.totalAppointmentCountThisMonth}
+        </h4>
         <p className={`text-sm flex gap-2 text-right text-[${color}] mr-5`}>
           {days === 30 ? "Monthly" : ""} Total
         </p>

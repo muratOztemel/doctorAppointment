@@ -10,11 +10,12 @@ import MedicineHome from "./components/pages/Dashboard/MedicineHome";
 import SettingsHome from "./components/pages/Dashboard/SettingsHome";
 import LeftSide from "./components/Layout/Dashboard/LeftSide";
 import MainHeader from "./components/Layout/Dashboard/MainHeader";
-import Login from "./components/Form/login/Login.jsx";
-import RegisterForm from "./components/Form/register/RegisterForm";
+import Login from "./components/Form/Login/Login.jsx";
+import RegisterForm from "./components/Form/Register/RegisterForm";
 import AddMedical from "./components/Dasboards/Medical/AddMedical.jsx";
 import AddDoctor from "./components/Dasboards/Doctors/AddDoctor.jsx";
 import DoctorProfile from "./components/Dasboards/Doctors/DoctorProfile.jsx";
+import AppointmentProfile from "./components/Dasboards/Appointments/AppointmentProfile.jsx";
 
 const App = () => {
   return (
@@ -103,6 +104,14 @@ const App = () => {
                         element={
                           <ProtectedRoute>
                             <AppointmentsHome />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/appointmentProfile"
+                        element={
+                          <ProtectedRoute>
+                            <AppointmentProfile />
                           </ProtectedRoute>
                         }
                       />

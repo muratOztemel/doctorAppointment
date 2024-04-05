@@ -2,16 +2,16 @@ import {
   useGetPatientsQuery,
   useGetAppointmentsQuery,
 } from "../../../redux/features/api/apiSlice.js";
-import Card from "../../UI/Cards/Card";
-import Spinner from "../../UI/Spinner";
-import RecentPatientList from "../../Dasboards/Patients/RecentPatientList";
-import AppointmentList from "../../Dasboards/Appointments/AppointmentList";
+import Card from "../../UI/Cards/Card.jsx";
+import Spinner from "../../UI/Spinner.jsx";
+import RecentPatientList from "../../Dasboards/Patients/RecentPatientList.jsx";
+import AppointmentList from "../../Dasboards/Appointments/AppointmentList.jsx";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { PiUsers } from "react-icons/pi";
-import LinkDashboardBar from "../../Layout/Dashboard/LinkDashboardBar";
-import ChartDoctors from "../../Dasboards/Charts/ChartDoctors";
+import LinkDashboardBar from "../../Layout/Dashboard/LinkDashboardBar.jsx";
+import ChartDoctors from "../../Dasboards/Charts/ChartDoctors.jsx";
 
-const DashboardHome = () => {
+const DoctorHomePage = () => {
   const {
     data: patients,
     error: patientsError,
@@ -87,4 +87,4 @@ const DashboardHome = () => {
     </>
   );
 };
-export default DashboardHome;
+export default DoctorHomePage;
