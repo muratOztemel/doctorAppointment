@@ -4,8 +4,8 @@ import Spinner from "../../UI/Spinner";
 import { setUsersLogin } from "../../../redux/slices/usersSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import LoginSchema from "./LoginSchema"; // Yup ile oluşturulmuş schema'nızın yolu
-import { loginData } from "./loginData"; // Giriş formu alanlarınızı içeren dizi
+import LoginSchema from "./LoginSchema";
+import { loginData } from "./loginData";
 import { useEffect, useState } from "react";
 
 function Login() {
@@ -27,12 +27,8 @@ function Login() {
           username: values.username,
           password: values.password,
         });
-        console.log(result);
         if (result?.error?.originalStatus == 400) {
           setWrongP(result.error?.data);
-          /*           navigate("/registerForm").navigation.setParams({
-            query: result.error.data,
-          }); */
           return;
         }
 

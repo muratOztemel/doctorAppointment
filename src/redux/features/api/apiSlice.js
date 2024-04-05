@@ -103,6 +103,10 @@ export const apiSlice = createApi({
     getUsers: builder.query({
       query: () => "users",
     }),
+    getUserById: builder.query({
+      query: (id) => `Users/${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
     getExaminations: builder.query({
       query: () => "examinations",
     }),
@@ -164,6 +168,7 @@ export const {
   useGetRolesQuery,
   useGetUsersRolesQuery,
   useGetUsersQuery,
+  useGetUserByIdQuery,
   useGetExaminationsQuery,
   useGetExamMedicinesQuery,
   useGetMedicinesQuery,
