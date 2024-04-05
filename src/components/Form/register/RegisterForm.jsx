@@ -1,20 +1,27 @@
 import { useDispatch } from "react-redux";
-import { useAuthenticationMutation } from "../../../redux/features/api/apiSlice";
+import { useAddNewPatientMutation } from "../../../redux/features/api/apiSlice";
 import Spinner from "../../UI/Spinner";
 import { setUserRegisterForm } from "../../../redux/slices/usersSlice";
 import { registerData } from "./registerData";
 import { useFormik } from "formik";
 import { schema } from "./reigisterSchema";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
-  const [authentication, { data, isError, isLoading }] =
-    useAuthenticationMutation();
+  const [addNewPatient, { data, isError, isLoading }] =
+    useAddNewPatientMutation();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
+
+  const addIpAddress = async () => {
+    const response = await fetch("https://api.ipify.org?format=json");
+    const data = await response.json();
+    return data.ip;
+  };
+
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -30,7 +37,8 @@ const RegisterForm = () => {
     validationSchema: schema,
     onSubmit: async (values, { setFieldError }) => {
       try {
-        let result = await authentication({
+        const ip = await addIpAddress();
+        const newPatientData = {
           name: values.name,
           surname: values.surname,
           idNumber: values.idNumber,
@@ -40,34 +48,15 @@ const RegisterForm = () => {
           confirmPassword: values.confirmPassword,
           phoneNumber: values.phoneNumber,
           terms: values.terms,
-        });
-        if (result.data.accessToken) {
-          localStorage.setItem("token", result.data.accessToken);
-          dispatch(
-            setUserRegisterForm({
-              name: values.name,
-              surname: values.surname,
-              idNumber: values.idNumber,
-              birthDate: values.birthDate,
-              email: values.email,
-              password: values.password,
-              confirmPassword: values.confirmPassword,
-              phoneNumber: values.phoneNumber,
-              terms: values.terms,
-              token: result.data.accessToken,
-            })
-          );
-        } else {
-          setFieldError(
-            "general",
-            "Kayıt başarısız. Lütfen bilgilerinizi kontrol edin."
-          );
-        }
-      } catch (error) {
-        console.error("Error user login:", error);
-        // Hata yönetimi, formik.setError gibi bir yöntemle kullanıcıya hata göster
-        setFieldError("username", "Kullanıcı adı veya şifre hatalı.");
-        setFieldError("password", "Kullanıcı adı veya şifre hatalı.");
+          ipAddress: ip,
+        };
+
+        dispatch(setUserRegisterForm(newPatientData));
+
+        await addNewPatient(newPatientData);
+        console.log("kayıt oldu");
+      } catch (err) {
+        console.error("Error adding new product:", err);
       }
     },
   });
@@ -78,13 +67,6 @@ const RegisterForm = () => {
       <p className="text-red-500 text-center">{formik.errors.general}</p>
     );
   }
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/"); // Token varsa kullanıcıyı dashboard'a yönlendir
-    }
-  }, [navigate]);
 
   if (isLoading) return <Spinner />;
   if (isError) return <div>Error: {isError.toString()}</div>;
