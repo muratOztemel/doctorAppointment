@@ -4,6 +4,7 @@ export const usersSlice = createSlice({
   name: "users",
   initialState: {
     userLogin: {
+      userId: 1,
       username: "",
       password: "",
       token: "",
@@ -21,6 +22,9 @@ export const usersSlice = createSlice({
     },
   },
   reducers: {
+    setUserId: (state, action) => {
+      state.userId = action.payload;
+    },
     setUsersLogin: (state, action) => {
       state.userLogin = action.payload;
     },
@@ -30,6 +34,7 @@ export const usersSlice = createSlice({
   },
 });
 
-export const { setUsersLogin, setUserRegisterForm } = usersSlice.actions;
+
+export const { setUserId, setUsersLogin, setUserRegisterForm } = usersSlice.actions;
 
 export default usersSlice.reducer;

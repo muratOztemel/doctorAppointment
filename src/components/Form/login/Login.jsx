@@ -4,11 +4,12 @@ import Spinner from "../../UI/Spinner";
 import { setUsersLogin } from "../../../redux/slices/usersSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import LoginSchema from "./LoginSchema"; // Yup ile oluşturulmuş schema'nızın yolu
-import { loginData } from "./loginData"; // Giriş formu alanlarınızı içeren dizi
-import { useEffect } from "react";
+import LoginSchema from "./LoginSchema";
+import { loginData } from "./loginData";
+import { useEffect, useState } from "react";
 
 function Login() {
+  const [wrongP, setWrongP] = useState("");
   const dispatch = useDispatch();
   const [authentication, { data, isError, isLoading }] =
     useAuthenticationMutation();
@@ -26,6 +27,11 @@ function Login() {
           username: values.username,
           password: values.password,
         });
+        if (result?.error?.originalStatus == 400) {
+          setWrongP(result.error?.data);
+          return;
+        }
+
         if (result.data.accessToken) {
           localStorage.setItem("token", result.data.accessToken);
           // Kullanıcı giriş bilgilerini Redux state'ine kaydet
@@ -38,20 +44,9 @@ function Login() {
           // Giriş başarılı, anasayfaya yönlendir
           // formik'in onSubmit içinde başarılı giriş sonrası
           navigate("/");
-        } else {
-          console.log("resulta girmiyor");
-          // API'den başarılı bir yanıt gelmezse (örneğin, yanıtta accessToken yoksa)
-          // Kullanıcıya genel bir hata mesajı göster
-          setFieldError(
-            "general",
-            "Giriş başarısız. Lütfen bilgilerinizi kontrol edin."
-          );
         }
       } catch (error) {
         console.error("Error user login:", error);
-        // Hata yönetimi, formik.setError gibi bir yöntemle kullanıcıya hata göster
-        setFieldError("username", "Kullanıcı adı veya şifre hatalı.");
-        setFieldError("password", "Kullanıcı adı veya şifre hatalı.");
       }
     },
   });
@@ -71,12 +66,12 @@ function Login() {
   }, [navigate]);
 
   if (isLoading) return <Spinner />;
-  if (isError) return <div>Error: {isError.toString()}</div>;
 
   return (
     <div className="flex justify-center items-center bg-gray-50 vh-100 h-screen">
       <div className="bg-white p-4 rounded w-[400px] my-6 mx-10 h-[400px] shadow-lg">
         <h2 className="text-center text-xl font-bold text-gray-900">Login</h2>
+        <p className="text-red-500 text-center">{wrongP}</p>
 
         <form onSubmit={formik.handleSubmit}>
           {loginData.map((field) => (
