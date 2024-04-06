@@ -136,7 +136,7 @@ const RegisterForm = () => {
                       Kullanıcı Sözleşmesi
                     </h2>
                     <p>
-                      Burada kullanıcı sözleşmesi metniniz eklegit add{" "}
+                      Burada kullanıcı sözleşmesi metniniz ekledim.
                       <div className=""></div>.
                     </p>
                     <button
