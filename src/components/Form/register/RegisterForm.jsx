@@ -135,7 +135,10 @@ const RegisterForm = () => {
                     <h2 className="text-lg font-semibold">
                       Kullanıcı Sözleşmesi
                     </h2>
-                    <p>Burada kullanıcı sözleşmesi metniniz yer alacak.</p>
+                    <p>
+                      Burada kullanıcı sözleşmesi metniniz eklegit add{" "}
+                      <div className=""></div>.
+                    </p>
                     <button
                       type="button"
                       onClick={() => {
