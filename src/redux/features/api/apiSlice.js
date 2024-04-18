@@ -1,21 +1,31 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+const baseQuery = fetchBaseQuery({
+  baseUrl: "https://api.makinaburada.net/api/v1/",
+  prepareHeaders: (headers) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
+    return headers;
+  },
+});
+
+const baseQueryWithReauth = async (args, api, extraOptions) => {
+  let result = await baseQuery(args, api, extraOptions);
+  if (result?.error?.status === 401) {
+    // If a 401 error is received, delete the token from localStorage and redirect to the login page
+    localStorage.removeItem("token");
+    // Redirect to login page
+    window.location.href = "/auth/login";
+  }
+  return result;
+};
+
 export const apiSlice = createApi({
   reducerPath: "api",
-  //baseQuery: fetchBaseQuery({ baseUrl: "http://127.0.0.1:3001/" }),
-  // baseQuery: fetchBaseQuery({ baseUrl: "https://bsg37cps-5002.euw.devtunnels.ms/",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "http://api.makinaburada.net/api/v1/",
-    prepareHeaders: (headers) => {
-      // LocalStorage'dan token'ı al
-      const token = localStorage.getItem("token");
-      // Eğer token varsa, header'a ekle
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
+  baseQuery: baseQueryWithReauth,
+  tagTypes: ["Patients"],
   endpoints: (builder) => ({
     // Get Patients By Page
     // getPatientsPage: builder.query({
@@ -28,20 +38,38 @@ export const apiSlice = createApi({
     getPatientsPage: builder.query({
       query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
         // `Patients/SearchPatient?page=${page}&pageSize=10&q=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
-        `Patients/SearchPatient?page=${page}&pageSize=20&q=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
-      method: "GET",
+        `Patients/SearchPatient?page=${page}&pageSize=20&searchterm=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
+      providesTags: ["Patients"],
     }),
+    // providesTags: ["Patients"],
     // Delete Patient By Id
     deletePatient: builder.mutation({
       query: (id) => ({
         url: `Patients/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Patients"],
     }),
     // Authentication Control
     authentication: builder.mutation({
       query: (loginModel) => ({
         url: `Authentication`,
+        method: "POST",
+        body: loginModel,
+      }),
+    }),
+    // Authentication Create user and send activation code
+    createAuthentication: builder.mutation({
+      query: (loginModel) => ({
+        url: `Authentication/create-user-and-send-activation-code`,
+        method: "POST",
+        body: loginModel,
+      }),
+    }),
+    // Authentication Control
+    confirmActivationCode: builder.mutation({
+      query: (loginModel) => ({
+        url: `Authentication/confirm-activation-code`,
         method: "POST",
         body: loginModel,
       }),
@@ -72,13 +100,37 @@ export const apiSlice = createApi({
       query: (id) => `Doctors/${id}`,
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
     }),
+    // Delete Doctor By Id
+    getDeleteDoctorById: builder.mutation({
+      query: (id) => ({
+        url: `Doctors/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Doctors"],
+    }),
+    getDoctorInfoByDoctorId: builder.query({
+      query: (id) => `DoctorInfos/GetDoctorInfoByDoctorId?doctorId=${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
     getPatients: builder.query({
       query: () => "Patients",
     }),
     getAppointmentsPage: builder.query({
       query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
         // `Patients/SearchPatient?page=${page}&pageSize=10&q=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
-        `Appointments?page=${page}&pageSize=20&q=a&sort=${sortField}&sortby=${sortOrder}`,
+        `Appointments?page=${page}&pageSize=20&q=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
+      method: "GET",
+    }),
+    getByDoctorAndDate: builder.query({
+      query: ({
+        date = "2024-04-21",
+        page = 1,
+        searchTerm,
+        sortField,
+        sortOrder,
+      }) =>
+        // `Appointments/GetByDoctorAndDate/1/${date}&page=${page}&pageSize=20&q=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
+        `Appointments/GetByDoctorAndDate/1/${date}`,
       method: "GET",
     }),
     getAppointmentById: builder.query({
@@ -88,8 +140,17 @@ export const apiSlice = createApi({
     getAppointments: builder.query({
       query: () => "Appointments",
     }),
+    AppointmentUpdate: builder.mutation({
+      query: ({ id, updatedAppointment }) => ({
+        url: `Appointments/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedAppointment,
+      }),
+    }),
     getDoctors: builder.query({
       query: () => "Doctors",
+      providesTags: ["Doctors"],
     }),
     getBranches: builder.query({
       query: () => "Branches",
@@ -98,10 +159,20 @@ export const apiSlice = createApi({
       query: () => "roles",
     }),
     getUsersRoles: builder.query({
-      query: () => "usersRoles",
+      query: () => "UsersRoles",
     }),
     getUsers: builder.query({
-      query: () => "users",
+      query: () => "Users",
+    }),
+    addNewUser: builder.mutation({
+      query(newUser) {
+        return {
+          url: `Users/`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newUser,
+        };
+      },
     }),
     getUserById: builder.query({
       query: (id) => `Users/${id}`,
@@ -115,6 +186,12 @@ export const apiSlice = createApi({
     }),
     getMedicines: builder.query({
       query: () => "medicines",
+    }),
+    getMedicinesPage: builder.query({
+      query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
+        // `Medicines?page=${page}&pageSize=20&searchterm=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
+        `Medicines`,
+      providesTags: ["Medicines"],
     }),
     getAuthority: builder.query({
       query: () => "authority",
@@ -153,25 +230,32 @@ export const apiSlice = createApi({
 export const {
   useGetDashboardDataQuery,
   useGetPatientsPageQuery,
-  useAuthenticationMutation,
   useDeletePatientMutation,
+  useAuthenticationMutation,
+  useCreateAuthenticationMutation,
+  useConfirmActivationCodeMutation,
   useAddNewPatientMutation,
   useUpdatePatientMutation,
   useGetPatientByIdQuery,
   useGetDoctorByIdQuery,
+  useGetDeleteDoctorByIdMutation,
+  useGetDoctorInfoByDoctorIdQuery,
   useGetPatientsQuery,
   useGetAppointmentsPageQuery,
+  useGetByDoctorAndDateQuery,
   useGetAppointmentByIdQuery,
   useGetAppointmentsQuery,
+  useAppointmentUpdateMutation,
   useGetDoctorsQuery,
   useGetBranchesQuery,
   useGetRolesQuery,
   useGetUsersRolesQuery,
   useGetUsersQuery,
+  useAddNewUserMutation,
   useGetUserByIdQuery,
   useGetExaminationsQuery,
   useGetExamMedicinesQuery,
-  useGetMedicinesQuery,
+  useGetMedicinesPageQuery,
   useGetAuthorityQuery,
   useGetHolidaysQuery,
   useGetLinksQuery,

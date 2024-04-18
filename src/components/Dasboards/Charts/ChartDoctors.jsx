@@ -1,19 +1,11 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import {
-  setSeries,
-  setOptions,
-  setDoctorsName,
-} from "../../../redux/slices/chartDoctorsSlice.js";
+import { useEffect, useState } from "react";
 import { useGetAppointmentCountByDoctorQuery } from "../../../redux/features/api/apiSlice.js";
-
 import ReactApexChart from "react-apexcharts";
 
 const ChartDoctors = () => {
-  const options = useSelector((state) => state.chartDoctors.options);
-  const series = useSelector((state) => state.chartDoctors.series);
-  const dispatch = useDispatch();
+  const [options, setOptions] = useState({});
+  const [series, setSeries] = useState([]);
+  const [doctorsName, setDoctorsName] = useState("");
 
   const {
     data: doctors,
@@ -32,52 +24,48 @@ const ChartDoctors = () => {
         "#14b8a6",
         "#64748b",
       ];
-      dispatch(setDoctorsName(doctors.doctorFullName));
-      dispatch(
-        setSeries([
-          {
-            name: "Total",
-            data: doctors.data,
-          },
-        ])
-      );
-      dispatch(
-        setOptions({
-          chart: {
-            height: 350,
-            type: "bar",
-            /*             events: {
+      setDoctorsName(doctors.doctorFullName);
+      setSeries([
+        {
+          name: "Total",
+          data: doctors.data,
+        },
+      ]);
+      setOptions({
+        chart: {
+          height: 350,
+          type: "bar",
+          /*             events: {
               click: function (chart, w, e) {
                 // console.log(chart, w, e)
               },
             }, */
+        },
+        colors: colors,
+        plotOptions: {
+          bar: {
+            columnWidth: "45%",
+            distributed: true,
           },
-          colors: colors,
-          plotOptions: {
-            bar: {
-              columnWidth: "45%",
-              distributed: true,
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        legend: {
+          show: false,
+        },
+        xaxis: {
+          categories: doctors.categories,
+          labels: {
+            style: {
+              colors: colors,
+              fontSize: "12px",
             },
           },
-          dataLabels: {
-            enabled: false,
-          },
-          legend: {
-            show: false,
-          },
-          xaxis: {
-            categories: doctors.categories,
-            labels: {
-              style: {
-                colors: colors,
-                fontSize: "12px",
-              },
-            },
-          },
-        })
-      );
+        },
+      });
     }
-  }, [dispatch, doctors, doctorsLoading, doctorsError]);
+  }, [doctors, doctorsLoading, doctorsError]);
 
   if (doctorsLoading) return <div>Loading...</div>;
   if (doctorsError) return <div>Error: {doctorsError.toString()}</div>;

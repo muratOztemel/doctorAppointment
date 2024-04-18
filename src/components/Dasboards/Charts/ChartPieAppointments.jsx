@@ -1,20 +1,11 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { useGetMonthlyAppointmentCountQuery } from "../../../redux/features/api/apiSlice.js";
-import {
-  setAppointmentsPieSeries,
-  setAppointmentsPieOptions,
-} from "../../../redux/slices/chartAppointmentsPieSlice.js";
 import ReactApexChart from "react-apexcharts";
 
 const ChartPieAppointments = () => {
-  const options = useSelector(
-    (state) => state.chartAppointmentsPie.appointmentsPieOptions
-  );
-  const series = useSelector(
-    (state) => state.chartAppointmentsPie.appointmentsPieSeries
-  );
-  const dispatch = useDispatch();
+  const [options, setOptions] = useState({});
+  const [series, setSeries] = useState([]);
+
   const {
     data: dashboardData,
     error: dashboardDataError,
@@ -23,31 +14,29 @@ const ChartPieAppointments = () => {
 
   useEffect(() => {
     if (!dashboardDataLoading && !dashboardDataError && dashboardData) {
-      dispatch(setAppointmentsPieSeries(dashboardData.series));
-      dispatch(
-        setAppointmentsPieOptions({
-          chart: {
-            width: 230,
-            type: "pie",
-          },
-          labels: dashboardData.labels,
-          responsive: [
-            {
-              breakpoint: 480,
-              options: {
-                chart: {
-                  width: 200,
-                },
-                legend: {
-                  position: "bottom",
-                },
+      setSeries(dashboardData.series);
+      setOptions({
+        chart: {
+          width: 230,
+          type: "pie",
+        },
+        labels: dashboardData.labels,
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200,
+              },
+              legend: {
+                position: "bottom",
               },
             },
-          ],
-        })
-      );
+          },
+        ],
+      });
     }
-  }, [dispatch, dashboardData, dashboardDataLoading, dashboardDataError]);
+  }, [dashboardData, dashboardDataLoading, dashboardDataError]);
 
   // Yükleme durumu kontrolü
   if (dashboardDataLoading) return <div>Loading...</div>;

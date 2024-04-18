@@ -1,14 +1,32 @@
-import { string } from "prop-types";
+import { useSelector } from "react-redux";
+import { object } from "prop-types";
 import { createPortal } from "react-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { setIsShowError } from "../../redux/slices/tablePatientsSlice.js";
+import {
+  useGetDoctorByIdQuery,
+  useGetDeleteDoctorByIdMutation,
+} from "../../../redux/features/api/apiSlice.js";
+import Spinner from "../Spinner.jsx";
 
-const Modal = (props) => {
-  const dispatch = useDispatch();
-  const { isShowError } = useSelector((state) => state.tablePatients);
-  if (!isShowError) {
+const ModalDeleteDoctor = (props) => {
+  const { doctorId } = useSelector((state) => state.tableDoctors);
+  const { data: doctor, isError, isLoading } = useGetDoctorByIdQuery(doctorId);
+  const [deleteDoctor, { data: doctorDelete, isErrorDelete, isLoadingDelete }] =
+    useGetDeleteDoctorByIdMutation(doctorId);
+  if (!props.isShowError) {
     return null;
   }
+  if (isError) return <div>Error: {isError.toString()}</div>;
+  if (isErrorDelete) return <div>Error: {isErrorDelete.toString()}</div>;
+  if (isLoading || isLoadingDelete) return <Spinner />;
+
+  const handleDeleteDoctor = async () => {
+    try {
+      await deleteDoctor(doctorId).unwrap();
+      props.setIsShowError(false);
+    } catch (err) {
+      console.error("Error deleting patient:", err);
+    }
+  };
 
   return createPortal(
     <div className="error-modal">
@@ -16,7 +34,7 @@ const Modal = (props) => {
         <div className="fixed inset-0 px-2 z-50 overflow-hidden flex items-center justify-center">
           <div
             className="absolute inset-0 bg-gray-500 transition-opacity"
-            onClick={() => dispatch(setIsShowError(false))}></div>
+            onClick={() => props.setIsShowError(false)}></div>
           <div className="bg-white rounded-md shadow-xl overflow-hidden max-w-md w-full sm:w-96 md:w-1/2 lg:w-2/3 xl:w-1/3 z-50">
             <div className="bg-red-500 text-white px-4 py-2">
               <h2 className="text-3xl font-semibold text-center">Attention!</h2>
@@ -35,18 +53,23 @@ const Modal = (props) => {
                   d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
               <h3 className="text-xl font-normal text-gray-500 mt-5 mb-6">
-                {props.message}
+                {props.message} <br />
+                <strong>
+                  {doctor.name} {doctor.surname}
+                </strong>
               </h3>
             </div>
             <div className="border-t px-4 py-2 flex justify-center">
               <a
                 href="#"
+                onClick={handleDeleteDoctor}
+                disabled={isLoading}
                 className="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                 Yes, I&apos;m sure
               </a>
               <a
                 href="#"
-                onClick={() => dispatch(setIsShowError(false))}
+                onClick={() => props.setIsShowError(false)}
                 className="text-white bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                 No, cancel
               </a>
@@ -59,8 +82,8 @@ const Modal = (props) => {
   );
 };
 
-export default Modal;
+export default ModalDeleteDoctor;
 
-Modal.propTypes = {
-  message: string,
+ModalDeleteDoctor.propTypes = {
+  props: object,
 };

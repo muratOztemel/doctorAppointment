@@ -4,8 +4,11 @@ import { node } from "prop-types";
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
 
-  // Eğer token yoksa, kullanıcıyı /login sayfasına yönlendir
-  return token ? children : <Navigate to="/login" replace />;
+  if (!token) {
+    return <Navigate to="/auth/login" replace />;
+  }
+
+  return children;
 };
 
 export default ProtectedRoute;

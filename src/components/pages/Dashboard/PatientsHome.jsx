@@ -7,7 +7,6 @@ import {
   setSortOrder,
   setSearchTerm,
   setFilter,
-  setIsShowError,
 } from "../../../redux/slices/tablePatientsSlice.js";
 import { useGetPatientsPageQuery } from "../../../redux/features/api/apiSlice.js";
 
@@ -21,6 +20,7 @@ import BloodType from "../../Dasboards/Services/BloodType.jsx";
 
 const PatientsHome = () => {
   const [page, setPage] = useState(1);
+  const [isShowError, setIsShowError] = useState(false);
 
   const dispatch = useDispatch();
   const { sortField, sortOrder, searchTerm, filter } = useSelector(
@@ -395,12 +395,14 @@ const PatientsHome = () => {
                             />
                             Detail
                           </Link>
-                          <Link
-                            to="/patientDelete"
+                          <button
                             onClick={() => {
-                              // dispatch(setIsShowError());
                               dispatch(setPatientId(patient.id));
+                              setIsShowError(true);
                             }}
+                            // dispatch(setIsShowError());
+                            // dispatch(setPatientId(patient.id));
+
                             className="w-28 h-9 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                             <img
                               src="/images/delete.png"
@@ -408,10 +410,14 @@ const PatientsHome = () => {
                               className="h-4 mr-2"
                             />
                             Delete
-                          </Link>
-                          <Modal
-                            message={`Are you sure you want to delete user`}
-                          />
+                          </button>
+                          {isShowError && (
+                            <Modal
+                              setIsShowError={setIsShowError}
+                              isShowError={isShowError}
+                              message={`Are you sure you want to delete user`}
+                            />
+                          )}
                         </div>
                       </td>
                     </tr>

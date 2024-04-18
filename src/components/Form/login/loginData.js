@@ -5,15 +5,15 @@ export const loginData = [
   {
     id: "username",
     type: "email",
-    label: "E-posta",
-    placeholder: "E-posta Adresiniz",
+    label: "E-Mail",
+    placeholder: "E-Mail Address",
     icon: MdEmail,
   },
   {
     id: "password",
     type: "password",
-    label: "Şifre",
-    placeholder: "Şifrenizi giriniz",
+    label: "Password",
+    placeholder: "Enter your password",
     icon: FaKey,
   },
 ];

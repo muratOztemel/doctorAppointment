@@ -1,4 +1,9 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { IoHome, IoSettingsOutline } from "react-icons/io5";
+import { FaUserInjured } from "react-icons/fa";
+import { FaUserDoctor } from "react-icons/fa6";
+import { LuCalendarSearch } from "react-icons/lu";
+import { AiFillMedicineBox } from "react-icons/ai";
 
 const LeftSide = () => {
   const linkDizi = [
@@ -6,43 +11,43 @@ const LeftSide = () => {
       id: 1,
       name: "Dashboard",
       pageName: "DashboardHome",
-      link: "/",
-      icon: "/images/icons/home.png",
+      path: "/dashboardAdmin",
+      icon: <IoHome />,
     },
     {
       id: 2,
       name: "Patients",
       pageName: "PatientsHome",
-      link: "/patients",
-      icon: "/images/icons/home.png",
+      path: "/patients",
+      icon: <FaUserInjured />,
     },
     {
       id: 3,
       name: "Doctors",
       pageName: "DoctorsHome",
-      link: "/doctors",
-      icon: "/images/icons/home.png",
+      path: "/doctors",
+      icon: <FaUserDoctor />,
     },
     {
       id: 4,
       name: "Appointments",
       pageName: "AppointmentsHome",
-      link: "/appointments",
-      icon: "/images/icons/home.png",
+      path: "/appointments",
+      icon: <LuCalendarSearch />,
     },
     {
       id: 5,
       name: "Medicine",
       pageName: "MedicineHome",
-      link: "/medicine",
-      icon: "/images/icons/home.png",
+      path: "/medicine",
+      icon: <AiFillMedicineBox />,
     },
     {
       id: 6,
       name: "Settings",
       pageName: "SettingsHome",
-      link: "/settings",
-      icon: "/images/icons/home.png",
+      path: "/settings",
+      icon: <IoSettingsOutline />,
     },
   ];
 
@@ -58,33 +63,44 @@ const LeftSide = () => {
     );
   }
   return (
-    <aside className="col-span-2 xl:block hidden">
-      <div className="bg-white xl:shadow-lg py-6 px-4 xl:h-screen w-full border-r border-border">
-        <a href="/">
-          <img
-            src="/logo.png"
-            alt="logo"
-            className="w-3/4 h-18 ml-4 object-contain"
-          />
-        </a>
-        <div className="flex-col gap-2 mt-12">
-          <ul>
-            {linkDizi.map((link) => (
-              <li key={link.id}>
-                <Link
-                  to={link.link}
-                  className="flex gap-4 transitions group items-center w-full p-4 rounded-lg hover:bg-cyan-50">
-                  <img src={link.icon} alt={link.name} />
-                  <p className="text-sm font-medium  text-cyan-500 group-hover:text-text-teal-100">
-                    {link.name}
-                  </p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </aside>
+    <>
+      {/*       <a href="/">
+        <img
+          src="/logo.png"
+          alt="logo"
+          className="w-3/4 h-18 ml-4 object-contain"
+        />
+      </a> */}
+
+      <ul className="flex flex-col py-4 space-y-1">
+        <li className="px-5 hidden md:block">
+          <div className="flex flex-row items-center h-8">
+            <div className="text-sm font-light tracking-wide text-gray-400 uppercase">
+              Admin Dashboard
+            </div>
+          </div>
+        </li>
+        {linkDizi.map(({ id, path, icon, name }) => (
+          <li key={id}>
+            <NavLink
+              to={path}
+              className={({ isActive }) =>
+                `relative flex flex-row items-center h-11 focus:outline-none dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-cyan-500 dark:hover:border-gray-800 pr-6 ${
+                  isActive ? "bg-cyan-100 border-cyan-500" : "hover:bg-cyan-50 "
+                }`
+              }>
+              <span className="inline-flex justify-center items-center ml-4">
+                {icon}
+              </span>
+
+              <span className="ml-2 text-sm tracking-wide truncate">
+                {name}
+              </span>
+            </NavLink>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 };
 export default LeftSide;

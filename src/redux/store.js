@@ -1,19 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { apiSlice } from "./features/api/apiSlice.js";
+import { apiSlice } from "./features/api/apiSlice";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import chartReducer from "./slices/chartSlice.js";
-import chartAppointmentReducer from "./slices/chartAppointmentSlice.js";
-import chartDoctorsReducer from "./slices/chartDoctorsSlice.js";
-import chartPatientsReducer from "./slices/chartPatientsSlice.js";
-import chartAppointmentsPieReducer from "./slices/chartAppointmentsPieSlice.js";
-import chartPatientsPieReducer from "./slices/chartPatientsPieSlice.js";
-import tablePatientsReducer from "./slices/tablePatientsSlice.js";
-import tableDoctorsReducer from "./slices/tableDoctorsSlice.js";
-import tableAppointmentsReducer from "./slices/tableAppointmentsSlice.js";
-import usersReducer from "./slices/usersSlice.js";
-import branchesListReducer from "./slices/branchesListSlice.js";
-import doctorsReducer from "./slices/doctorsSlice.js";
-import tableMedicinesReducer from "./slices/tableMedicinesSlice.js";
+import chartReducer from "./slices/chartSlice";
+import chartAppointmentReducer from "./slices/chartAppointmentSlice";
+import chartDoctorsReducer from "./slices/chartDoctorsSlice";
+import chartPatientsReducer from "./slices/chartPatientsSlice";
+import chartAppointmentsPieReducer from "./slices/chartAppointmentsPieSlice";
+import chartPatientsPieReducer from "./slices/chartPatientsPieSlice";
+import tablePatientsReducer from "./slices/tablePatientsSlice";
+import tableDoctorsReducer from "./slices/tableDoctorsSlice";
+import tableAppointmentsReducer from "./slices/tableAppointmentsSlice";
+import usersReducer from "./slices/usersSlice";
+import branchesListReducer from "./slices/branchesListSlice";
+import doctorsReducer from "./slices/doctorsSlice";
+import tableMedicinesReducer from "./slices/tableMedicinesSlice";
+import tableDoctorAppointmentReducer from "./slices/tableDoctorAppointmentSlice";
+import modalReducer from "./slices/modalSlice";
 
 const store = configureStore({
   reducer: {
@@ -31,6 +33,8 @@ const store = configureStore({
     branchesList: branchesListReducer,
     doctors: doctorsReducer,
     tableMedicines: tableMedicinesReducer,
+    tableDoctorAppointment: tableDoctorAppointmentReducer,
+    modal: modalReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),
