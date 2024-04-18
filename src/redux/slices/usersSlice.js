@@ -4,10 +4,10 @@ export const usersSlice = createSlice({
   name: "users",
   initialState: {
     userLogin: {
-      userId: 1,
+      userId: 0,
       username: "",
-      password: "",
       token: "",
+      userRole: "Patient",
     },
     userRegisterForm: {
       name: "",
@@ -19,13 +19,14 @@ export const usersSlice = createSlice({
       confirmPassword: "",
       phoneNumber: "",
       terms: false,
+      ipAddress: 0,
     },
   },
   reducers: {
     setUserId: (state, action) => {
       state.userId = action.payload;
     },
-    setUsersLogin: (state, action) => {
+    setUserLogin: (state, action) => {
       state.userLogin = action.payload;
     },
     setUserRegisterForm: (state, action) => {
@@ -34,7 +35,7 @@ export const usersSlice = createSlice({
   },
 });
 
-
-export const { setUserId, setUsersLogin, setUserRegisterForm } = usersSlice.actions;
+export const { setUserId, setUserLogin, setUserRegisterForm } =
+  usersSlice.actions;
 
 export default usersSlice.reducer;

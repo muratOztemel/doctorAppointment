@@ -1,16 +1,9 @@
+import { useParams, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useGetDoctorByIdQuery } from "../../../redux/features/api/apiSlice";
-import { Link } from "react-router-dom";
-import { setDoctorId } from "../../../redux/slices/tableDoctorsSlice.js";
 import Spinner from "../../UI/Spinner";
-import {
-  FaBoxArchive,
-  FaRegCalendarDays,
-  FaUser,
-  FaHeartPulse,
-  FaUserDoctor,
-} from "react-icons/fa6";
+import { FaRegCalendarDays, FaUser, FaUserDoctor } from "react-icons/fa6";
 import { TbLockAccess } from "react-icons/tb";
 import BloodType from "../Services/BloodType.jsx";
 import { RiLockPasswordLine } from "react-icons/ri";
@@ -18,7 +11,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 const DoctorProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { doctorId } = useSelector((state) => state.tableDoctors);
+  const { id: doctorId } = useParams();
   const { data: doctor, isError, isLoading } = useGetDoctorByIdQuery(doctorId);
 
   if (isError) return <div>Error: {isError.toString()}</div>;
@@ -27,7 +20,7 @@ const DoctorProfile = () => {
 
   return (
     <>
-      <div className="xl:px-8 px-2 pt-24">
+      <div className="xl:px-8 px-2">
         <div className="flex items-center text-center gap-4">
           <div className="mt-10 flex gap-4 bg-white border border-cyan-500 border-dashed rounded-lg py-3 px-4 text-md w-full">
             <div className="p-3">
@@ -51,17 +44,19 @@ const DoctorProfile = () => {
               <h1 className="text-xl font-semibold">
                 {doctor.name} {doctor.surname}
               </h1>
-              <p className="text-xs text-gray-500">+254 712 345 678</p>
+              <p className="text-xs text-gray-500">
+                {doctor?.doctorInfo?.phoneNumber}
+              </p>
             </div>
           </div>
         </div>
         <div>
           <img
             src={
-              doctor.photo !== "null" &&
-              doctor.photo !== null &&
-              doctor.photo !== ""
-                ? doctor.photo
+              doctor?.doctorInfo?.photo !== "null" &&
+              doctor?.doctorInfo?.photo !== null &&
+              doctor?.doctorInfo?.photo !== ""
+                ? doctor.doctorInfo.photo
                 : ""
             }
             alt={`${doctor.name} ${doctor.surname}`}
@@ -162,7 +157,7 @@ const DoctorProfile = () => {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                 <button className="w-full flex justify-center items-center flex-rows gap-4 hover:opacity-80 transitions bg-red-500 text-white text-sm font-medium px-2 py-4 rounded">
-                  Delete Account
+                  Delete Doctor
                   <svg
                     stroke="currentColor"
                     fill="currentColor"

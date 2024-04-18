@@ -1,21 +1,11 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { number, string } from "prop-types";
 import { useGetDailyAppointmentCountQuery } from "../../../redux/features/api/apiSlice.js";
-import {
-  setTotalCounts,
-  setSeries,
-  setOptions,
-} from "../../../redux/slices/chartAppointmentSlice.js";
 import ReactApexChart from "react-apexcharts";
 
 const ChartAppointment = () => {
-  const options = useSelector((state) => state.chart.options);
-  const series = useSelector((state) => state.chart.series);
-  const dailyCounts = useSelector((state) => state.chart.dailyCounts);
-  const totalCounts = useSelector((state) => state.chart.totalCounts);
-
-  const dispatch = useDispatch();
+  const [options, setOptions] = useState({});
+  const [series, setSeries] = useState([]);
 
   const {
     data: dashboardData,
@@ -25,79 +15,55 @@ const ChartAppointment = () => {
 
   useEffect(() => {
     if (!dashboardDataLoading && !dashboardDataError && dashboardData) {
-      // dispatch(setDailyCounts(Object.values(counts).slice(0, 7)));
-      dispatch(setSeries([{ data: dashboardData.data }]));
-      dispatch(
-        setOptions({
-          chart: {
-            type: "line",
-            height: 200,
-            toolbar: {
-              show: false, // x-ekseni araç çubuğunu gizle
-            },
-            line: {
-              show: false, // Çubuk çizgisini gösterme
-            },
+      setSeries([{ name: "Total", data: dashboardData.data }]);
+      setOptions({
+        chart: {
+          type: "line",
+          height: 200,
+          toolbar: {
+            show: false, // x-ekseni araç çubuğunu gizle
           },
-          colors: ["#32b8d5"],
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              borderRadius: 2,
-              columnWidth: "85%",
-              endingShape: "rounded",
-            },
+        },
+        colors: ["#feb019"],
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            borderRadius: 3,
+            columnWidth: "80%",
+            endingShape: "rounded",
           },
-          dataLabels: {
-            enabled: false,
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ["transparent"],
+        },
+        xaxis: {
+          categories: dashboardData.categories,
+          labels: {
+            show: false, // x-ekseni etiketlerini gizle
           },
-          stroke: {
-            show: true,
-            width: 2,
-            colors: ["transparent"],
-          },
-          legend: {
+          axisBorder: {
             show: false,
           },
-          xaxis: {
-            categories: dashboardData.categories,
-            labels: {
-              show: false, // x-ekseni etiketlerini gizle
-            },
-            grid: {
-              show: false,
-            },
-            axisBorder: {
-              show: false,
-            },
-            axisTicks: {
-              show: false, // X ekseni işaretlerini gizle
-            },
+          axisTicks: {
+            show: false, // X ekseni işaretlerini gizle
           },
-          yaxis: {
-            grid: {
-              show: false,
-            },
-            axisBorder: {
-              show: false,
-            },
-            labels: {
-              show: false,
-            },
-            axisTicks: {
-              show: false, // Y ekseni işaretlerini gizle
-            },
-          },
-          grid: {
+        },
+        yaxis: {
+          labels: {
             show: false,
           },
-          fill: {
-            opacity: 1,
-          },
-        })
-      );
+        },
+        grid: {
+          show: false,
+        },
+      });
     }
-  }, [dispatch, dashboardDataLoading, dashboardDataError, dashboardData]);
+  }, [dashboardDataLoading, dashboardDataError, dashboardData]);
 
   // Yükleme durumu kontrolü
   if (dashboardDataLoading) return <div>Loading...</div>;
@@ -120,7 +86,7 @@ const ChartAppointment = () => {
         <h4 className="text-3xl font-medium text-right mr-5">
           {dashboardData.totalCount}
         </h4>
-        <p className={`text-sm flex gap-2 text-right text-[#32b8d5] mr-5`}>
+        <p className={`text-sm flex gap-2 text-right text-amber-500 mr-5`}>
           Monthly Total
         </p>
       </div>

@@ -1,7 +1,7 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { useGetPatientByIdQuery } from "../../../redux/features/api/apiSlice";
-import { setPatientId } from "../../../redux/slices/tablePatientsSlice.js";
 import Spinner from "../../UI/Spinner";
 import {
   FaBoxArchive,
@@ -15,7 +15,8 @@ import { Link } from "react-router-dom";
 const PatientProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { patientId } = useSelector((state) => state.tablePatients);
+  const { id: patientId } = useParams();
+
   const {
     data: patient,
     isError,
@@ -28,7 +29,7 @@ const PatientProfile = () => {
 
   return (
     <>
-      <div className="xl:px-8 px-2 pt-24">
+      <div className="xl:px-8 px-2">
         <div className="flex items-center text-center gap-4">
           <div className="mt-10 flex gap-4 bg-white border border-cyan-500 border-dashed rounded-lg py-3 px-4 text-md w-full">
             <div className="p-3">
@@ -52,7 +53,7 @@ const PatientProfile = () => {
               <h1 className="text-xl font-semibold">
                 {patient.name} {patient.surname}
               </h1>
-              <p className="text-xs text-gray-500">+254 712 345 678</p>
+              <p className="text-xs text-gray-500">{patient.phone}</p>
             </div>
           </div>
         </div>
