@@ -37,6 +37,7 @@ const RegisterForm = () => {
       try {
         const ip = await addIpAddress();
         const newPatientData = {
+          id: 0,
           userId: userId,
           name: values.name,
           surname: values.surname,
