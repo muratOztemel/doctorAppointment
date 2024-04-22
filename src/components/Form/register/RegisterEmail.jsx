@@ -16,6 +16,7 @@ import { schema } from "./RegisterSchema.js";
 import { Link } from "react-router-dom";
 import Spinner from "../../UI/Spinner";
 import ModalConfirmation from "../../UI/Modal/ModalConfirmation.jsx";
+import { toast } from "react-toastify";
 
 const RegisterEmail = () => {
   const dispatch = useDispatch();
@@ -54,6 +55,17 @@ const RegisterEmail = () => {
     validationSchema: schema,
     onSubmit: async (values) => {
       try {
+        toast("Kayıt başarılı. Kayda devama Yönlendiriliyorsunuz!", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          type: "success",
+        });
         let newUserLogin = {
           username: values.email,
         };

@@ -9,6 +9,7 @@ import {
 import { registerData } from "./registerData";
 import { useFormik } from "formik";
 import { schema } from "./reigisterSchema";
+import { toast } from "react-toastify";
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,17 @@ const RegisterForm = () => {
     validationSchema: schema,
     onSubmit: async (values) => {
       try {
+        toast("Giriş Başarılı. Yönetim Paneline Yönlendiriliyorsunuz!", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          type: "success",
+        });
         const ip = await addIpAddress();
         const newPatientData = {
           id: 0,

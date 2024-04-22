@@ -4,10 +4,10 @@ export const usersSlice = createSlice({
   name: "users",
   initialState: {
     userLogin: {
-      userId: 0,
-      username: "",
-      token: "",
-      userRole: "Patient",
+      userId: null,
+      username: null,
+      token: null,
+      userRole: null,
     },
     userRegisterForm: {
       name: "",

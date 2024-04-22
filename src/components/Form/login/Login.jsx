@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuthenticationMutation } from "../../../redux/features/api/apiSlice";
 import { setUserLogin } from "../../../redux/slices/usersSlice";
@@ -7,15 +8,14 @@ import { jwtDecode } from "jwt-decode";
 import { useFormik } from "formik";
 import LoginSchema from "./LoginSchema";
 import { loginData } from "./loginData";
-import { useState } from "react";
+import { toast } from "react-toastify";
 
 function Login() {
   const { userId } = useSelector((state) => state.users.userLogin);
   const [showPassword, setShowPassword] = useState(false);
   const [wrongP, setWrongP] = useState("");
   const dispatch = useDispatch();
-  const [authentication, { data, isError, isLoading }] =
-    useAuthenticationMutation();
+  const [authentication, { isLoading }] = useAuthenticationMutation();
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -43,6 +43,17 @@ function Login() {
         const token = result.data.accessToken;
 
         if (token) {
+          toast("Giriş Başarılı. Yönetim Paneline Yönlendiriliyorsunuz!", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            type: "success",
+          });
           localStorage.setItem("token", token);
           const decodedToken = jwtDecode(token);
 
@@ -59,8 +70,6 @@ function Login() {
             decodedToken[
               "http://schemas.microsoft.com/ws/2008/06/identity/claims/groupsid"
             ];
-
-          console.log(decodedToken);
 
           dispatch(
             setUserLogin({

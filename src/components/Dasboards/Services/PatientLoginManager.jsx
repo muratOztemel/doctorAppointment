@@ -19,7 +19,7 @@ const PatientLoginManager = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    dispatch(setUserLogin({ userId: 0, username: "", token: "" }));
+    dispatch(setUserLogin({ userId: null, username: null, token: null }));
     setDropdownOpen(false);
     navigate("/auth/login");
   };
