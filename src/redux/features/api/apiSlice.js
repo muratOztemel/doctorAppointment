@@ -25,7 +25,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Patients"],
+  tagTypes: ["Patients", "Roles", "Doctors"],
   endpoints: (builder) => ({
     // Get Patients By Page
     // getPatientsPage: builder.query({
@@ -157,6 +157,36 @@ export const apiSlice = createApi({
     }),
     getRoles: builder.query({
       query: () => "roles",
+      providesTags: ["Roles"],
+    }),
+    addNewRole: builder.mutation({
+      query(newRole) {
+        return {
+          url: `Roles`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newRole,
+        };
+      },
+      invalidatesTags: ["Roles"],
+    }),
+    updateRole: builder.mutation({
+      query: ({ id, updatedRole }) => ({
+        url: `Roles/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedRole,
+      }),
+      invalidatesTags: ["Roles"],
+    }),
+    deleteRole: builder.mutation({
+      query(id) {
+        return {
+          url: `Roles/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Roles"], // Silme işlemi sonrası rolleri yenile
     }),
     getUsersRoles: builder.query({
       query: () => "UsersRoles",
@@ -249,6 +279,9 @@ export const {
   useGetDoctorsQuery,
   useGetBranchesQuery,
   useGetRolesQuery,
+  useAddNewRoleMutation,
+  useUpdateRoleMutation,
+  useDeleteRoleMutation,
   useGetUsersRolesQuery,
   useGetUsersQuery,
   useAddNewUserMutation,

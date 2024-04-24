@@ -13,7 +13,7 @@ export const useRestoreSession = () => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
-        toast("Giriş Başarılı. Yönetim Paneline Yönlendiriliyorsunuz!", {
+        /*         toast("Giriş Başarılı. Yönetim Paneline Yönlendiriliyorsunuz!", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -23,7 +23,7 @@ export const useRestoreSession = () => {
           progress: undefined,
           theme: "light",
           type: "success",
-        });
+        }); */
         const decodedToken = jwtDecode(token);
         const userRole =
           decodedToken[

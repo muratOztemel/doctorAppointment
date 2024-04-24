@@ -1,12 +1,11 @@
-// src/hooks/useDefaultImage.js
 import { useMemo } from "react";
 
-const useDefaultImage = (patient) =>
+const useDefaultImage = (item) =>
   useMemo(() => {
-    if (patient?.photo && patient.photo !== "null") {
-      return patient.photo;
+    if (item?.photo && item.photo !== "null") {
+      return item.photo;
     }
-    switch (patient?.gender) {
+    switch (item?.gender) {
       case 1:
         return "/images/male.png";
       case 2:
@@ -14,6 +13,6 @@ const useDefaultImage = (patient) =>
       default:
         return "/images/agender.png";
     }
-  }, [patient]);
+  }, [item]);
 
 export default useDefaultImage;

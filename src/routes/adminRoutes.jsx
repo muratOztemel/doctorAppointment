@@ -8,6 +8,9 @@ import DashboardAdminAppointmentsPage from "../pages/DashboardAdmin/DashboardAdm
 import DoctorProfile from "../components/Dasboards/Doctors/DoctorProfile";
 import AppointmentProfile from "../components/Dasboards/Appointments/AppointmentProfile";
 import MedicinesHome from "../pages/DashboardAdmin/MedicinesHome";
+import AddDoctor from "../components/Dasboards/Doctors/AddDoctor";
+import RolesList from "../components/Dasboards/Roles/RolesList";
+import UserList from "../components/Dasboards/User/UserList";
 
 export const adminRoutes = [
   {
@@ -36,6 +39,10 @@ export const adminRoutes = [
         element: <DoctorProfile />,
       },
       {
+        path: "addDoctor",
+        element: <AddDoctor />,
+      },
+      {
         path: "appointments",
         element: <DashboardAdminAppointmentsPage />,
       },
@@ -46,6 +53,14 @@ export const adminRoutes = [
       {
         path: "medicines",
         element: <MedicinesHome />,
+      },
+      {
+        path: "roles",
+        element: <RolesList />,
+      },
+      {
+        path: "users",
+        element: <UserList />,
       },
     ],
   },

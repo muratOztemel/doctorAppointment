@@ -11,6 +11,7 @@
     "server": "json-server --port 3001 --watch db.json --host 127.0.0.1"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.3.3",
     "@reduxjs/toolkit": "^2.2.2",
     "apexcharts": "^3.47.0",
     "axios": "^1.6.7",
