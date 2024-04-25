@@ -1,106 +1,128 @@
-import { useEffect } from "react";
+import {
+  useAddNewUserMutation,
+  useUpdateUserMutation,
+} from "../../../redux/features/api/apiSlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  useAddNewRoleMutation,
-  useUpdateRoleMutation,
-} from "../../../redux/features/api/apiSlice";
-import { useRef } from "react";
 
-const UserModal = ({ role, onClose, isAddingNew }) => {
-  const modalRef = useRef();
-  useEffect(() => {
-    function handleOutsideClick(event) {
-      if (modalRef.current && !modalRef.current.contains(event.target)) {
-        onClose();
-      }
+const UserModal = ({ user, roles, onClose, onSubmit, isAddingNew }) => {
+  const [addNewUser, { isLoading: isAdding }] = useAddNewUserMutation();
+  const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
+
+  function generatePassword(length = 10) {
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let password = "";
+    for (let i = 0; i < length; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length));
     }
+    return password;
+  }
 
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    };
-  }, [onClose]);
-
-  const [addNewRole, { isLoading: isAdding }] = useAddNewRoleMutation();
-  const [updateRole, { isLoading: isUpdating }] = useUpdateRoleMutation();
-
-  // Formik kullanarak form durum yönetimi ve doğrulama kuralları
   const formik = useFormik({
     initialValues: {
-      name: role ? role.name : "",
+      userName: user ? user.userName : "",
+      roleId: user ? user.roleId : roles[0]?.id || "", // Varsayılan değer olarak ilk rolün ID'sini atar veya boş bırakır
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Role name is required"),
+      userName: Yup.string().required("User name is required"),
+      roleId: Yup.number().required("Role is required"),
     }),
     onSubmit: async (values) => {
-      try {
-        if (isAddingNew) {
-          await addNewRole({ name: values.name }).unwrap();
-        } else {
-          console.log("Updating role:", values);
-          await updateRole({
-            id: role.id,
-            updatedRole: {
-              id: role.id,
-              name: values.name,
-              updatedAt: new Date().toISOString(),
-              status: true,
-            },
-          }).unwrap();
+      const payload = {
+        userName: values.userName,
+        password: generatePassword(),
+        createdAt: new Date().toISOString(),
+        roleId: values.roleId,
+        status: true,
+        activationCode: 0,
+        userRoles: null,
+        patients: null,
+        doctor: null,
+        user: "",
+      };
+
+      if (isAddingNew) {
+        try {
+          await addNewUser(payload).unwrap();
+        } catch (error) {
+          console.log(error);
         }
-        onClose(); // Form başarıyla gönderildikten sonra modal kapatılır
-      } catch (error) {
-        console.error("Failed to process role:", error);
+      } else {
+        try {
+          await updateUser({ id: user.id, ...payload }).unwrap();
+        } catch (error) {
+          console.log(error);
+        }
       }
+
+      onClose(); // Form gönderildikten sonra modal kapatılır
     },
   });
 
   return (
     <div className="flex flex-col justify-start gap-5 p-4 bg-cyan-50 shadow-md rounded-lg">
-      <h2 className="text-lg font-bold text-cyan-700">
-        {isAddingNew ? "Add New Role" : "Edit Role"}
-      </h2>
-      <form onSubmit={formik.handleSubmit}>
-        <div className="mb-4">
-          <label
-            htmlFor="name"
-            className="block mb-2 text-sm font-medium text-gray-900">
-            Role Name:
-          </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.name}
-            className={`block w-80 h-10 pl-4 pr-4 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none ${
-              formik.touched.name && formik.errors.name ? "border-red-500" : ""
-            }`}
-            required
-          />
-          {formik.touched.name && formik.errors.name ? (
-            <div className="text-red-500 text-sm mt-1">
-              {formik.errors.name}
+      <div className="modal-container">
+        <h2 className="text-lg font-bold text-cyan-700">
+          {isAddingNew ? "Add New User" : "Edit User"}
+        </h2>
+        <form onSubmit={formik.handleSubmit}>
+          <div className="mb-4 flex flex-col gap-6">
+            <div>
+              <label htmlFor="userName">User Name:</label>
+              <input
+                id="userName"
+                name="userName"
+                type="text"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.userName}
+                className={`block w-80 h-10 pl-4 pr-4 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none ${
+                  formik.touched.userName && formik.errors.userName
+                    ? "input-error"
+                    : ""
+                }`}
+              />
+              {formik.touched.userName && formik.errors.userName && (
+                <p className="error">{formik.errors.userName}</p>
+              )}
             </div>
-          ) : null}
-        </div>
-        <div className="flex justify-end gap-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="bg-cyan-500 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-700 text-white font-medium rounded-lg text-sm px-4 py-2 text-center">
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={isAdding || isUpdating}
-            className="bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-white text-sm px-4 py-2 text-center">
-            Save
-          </button>
-        </div>
-      </form>
+            <div>
+              <label htmlFor="roleId">Role:</label>
+              <select
+                id="roleId"
+                name="roleId"
+                onChange={formik.handleChange}
+                value={formik.values.roleId}
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+                onBlur={formik.handleBlur}>
+                {roles.map((role) => (
+                  <option key={role.id} value={role.id}>
+                    {role.name}
+                  </option>
+                ))}
+              </select>
+              {formik.touched.roleId && formik.errors.roleId && (
+                <p className="error">{formik.errors.roleId}</p>
+              )}
+            </div>
+          </div>
+          <div className="flex justify-end gap-4">
+            <button
+              type="submit"
+              // disabled={isAdding || isUpdating}
+              className="bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-white text-sm px-4 py-2 text-center">
+              Save
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-cyan-500 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-700 text-white font-medium rounded-lg text-sm px-4 py-2 text-center">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

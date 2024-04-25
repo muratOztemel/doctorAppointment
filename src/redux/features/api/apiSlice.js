@@ -25,7 +25,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Patients", "Roles", "Doctors"],
+  tagTypes: ["Patients", "Roles", "Doctors", "Users"],
   endpoints: (builder) => ({
     // Get Patients By Page
     // getPatientsPage: builder.query({
@@ -156,7 +156,7 @@ export const apiSlice = createApi({
       query: () => "Branches",
     }),
     getRoles: builder.query({
-      query: () => "roles",
+      query: () => "Roles",
       providesTags: ["Roles"],
     }),
     addNewRole: builder.mutation({
@@ -186,27 +186,47 @@ export const apiSlice = createApi({
           method: "DELETE",
         };
       },
-      invalidatesTags: ["Roles"], // Silme işlemi sonrası rolleri yenile
+      invalidatesTags: ["Roles"],
     }),
-    getUsersRoles: builder.query({
-      query: () => "UsersRoles",
+    getUserRoles: builder.query({
+      query: () => "UserRoles",
     }),
     getUsers: builder.query({
       query: () => "Users",
+      providesTags: ["Users"],
     }),
     addNewUser: builder.mutation({
       query(newUser) {
         return {
-          url: `Users/`,
+          url: `Users`,
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: newUser,
         };
       },
+      invalidatesTags: ["Users"],
     }),
     getUserById: builder.query({
       query: (id) => `Users/${id}`,
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
+    updateUser: builder.mutation({
+      query: ({ id, updatedUser }) => ({
+        url: `Users/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedUser,
+      }),
+      invalidatesTags: ["Users"],
+    }),
+    deleteUser: builder.mutation({
+      query(id) {
+        return {
+          url: `Users/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Users"], // Silme işlemi sonrası rolleri yenile
     }),
     getExaminations: builder.query({
       query: () => "examinations",
@@ -215,7 +235,41 @@ export const apiSlice = createApi({
       query: () => "examMedicines",
     }),
     getMedicines: builder.query({
-      query: () => "medicines",
+      query: () => "Medicines",
+      providesTags: ["Medicines"],
+    }),
+    getMedicineById: builder.query({
+      query: (id) => `Medicines/${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
+    addNewMedicine: builder.mutation({
+      query(newMedicine) {
+        return {
+          url: `Medicines`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newMedicine,
+        };
+      },
+      invalidatesTags: ["Medicines"],
+    }),
+    updateMedicine: builder.mutation({
+      query: ({ id, updatedMedicine }) => ({
+        url: `Medicines/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedMedicine,
+      }),
+      invalidatesTags: ["Medicines"],
+    }),
+    deleteMedicine: builder.mutation({
+      query(id) {
+        return {
+          url: `Medicines/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Medicines"],
     }),
     getMedicinesPage: builder.query({
       query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
@@ -282,12 +336,19 @@ export const {
   useAddNewRoleMutation,
   useUpdateRoleMutation,
   useDeleteRoleMutation,
-  useGetUsersRolesQuery,
+  useGetUserRolesQuery,
   useGetUsersQuery,
   useAddNewUserMutation,
   useGetUserByIdQuery,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
   useGetExaminationsQuery,
   useGetExamMedicinesQuery,
+  useGetMedicinesQuery,
+  useGetMedicineByIdQuery,
+  useAddNewMedicineMutation,
+  useUpdateMedicineMutation,
+  useDeleteMedicineMutation,
   useGetMedicinesPageQuery,
   useGetAuthorityQuery,
   useGetHolidaysQuery,

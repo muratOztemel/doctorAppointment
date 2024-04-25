@@ -7,10 +7,11 @@ import DashboardAdminDoctorsPage from "../pages/DashboardAdmin/DashboardAdminDoc
 import DashboardAdminAppointmentsPage from "../pages/DashboardAdmin/DashboardAdminAppointmentsPage";
 import DoctorProfile from "../components/Dasboards/Doctors/DoctorProfile";
 import AppointmentProfile from "../components/Dasboards/Appointments/AppointmentProfile";
-import MedicinesHome from "../pages/DashboardAdmin/MedicinesHome";
 import AddDoctor from "../components/Dasboards/Doctors/AddDoctor";
 import RolesList from "../components/Dasboards/Roles/RolesList";
-import UserList from "../components/Dasboards/User/UserList";
+import UsersList from "../components/Dasboards/User/UsersList";
+import MedicinesList from "../components/Dasboards/Medicine/MedicinesList";
+import LinksList from "../components/Dasboards/Links/LinksList";
 
 export const adminRoutes = [
   {
@@ -52,7 +53,7 @@ export const adminRoutes = [
       },
       {
         path: "medicines",
-        element: <MedicinesHome />,
+        element: <MedicinesList />,
       },
       {
         path: "roles",
@@ -60,7 +61,11 @@ export const adminRoutes = [
       },
       {
         path: "users",
-        element: <UserList />,
+        element: <UsersList />,
+      },
+      {
+        path: "links",
+        element: <LinksList />,
       },
     ],
   },

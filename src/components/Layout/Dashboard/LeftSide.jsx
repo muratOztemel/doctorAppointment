@@ -46,7 +46,7 @@ const LeftSide = () => {
       id: 6,
       name: "Medicine",
       pageName: "MedicineHome",
-      path: "/medicine",
+      path: "/medicines",
       icon: <AiFillMedicineBox />,
     },
     {

@@ -1,42 +1,60 @@
 import { useState } from "react";
 import {
+  useGetUsersQuery,
+  useDeleteUserMutation,
   useGetRolesQuery,
-  useDeleteRoleMutation,
+  useGetUserRolesQuery,
 } from "../../../redux/features/api/apiSlice";
 import TitleCard from "../../UI/Cards/TitleCard";
 import Card from "../../UI/Cards/Card";
 import { FaUserDoctor } from "react-icons/fa6";
-import RoleModal from "./RoleModal";
+import UserModal from "./UserModal1";
 import ConfirmModal from "./ConfirmModal";
 
-const RolesList = () => {
-  const { data: roles, isLoading, isError } = useGetRolesQuery();
-  const [deleteRole] = useDeleteRoleMutation();
-  const [selectedRole, setSelectedRole] = useState(null);
+const UsersList = () => {
+  const { data: users, isLoading, isError } = useGetUsersQuery();
+  const {
+    data: roles,
+    error: rolesError,
+    isLoading: rolesLoading,
+  } = useGetRolesQuery();
+  const {
+    data: userRoles,
+    error: userRolesError,
+    isLoading: userRolesLoading,
+  } = useGetUserRolesQuery();
+  const [deleteUser] = useDeleteUserMutation();
+  const [selectedUser, setSelectedUser] = useState(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [roleToDelete, setRoleToDelete] = useState(null);
+  const [userToDelete, setUserToDelete] = useState(null);
+
+  if (isLoading || rolesLoading || userRolesLoading) return <p>Loading...</p>;
+  if (isError || rolesError || userRolesError)
+    return <p>Error loading data.</p>;
 
   const handleDeleteConfirm = async () => {
-    if (roleToDelete) {
-      await deleteRole(roleToDelete).unwrap();
-      setRoleToDelete(null); // ID'yi temizle
-      setShowConfirmModal(false); // Modalı kapat
+    if (userToDelete) {
+      await deleteUser(userToDelete).unwrap();
+      setUserToDelete(null); // Clean ID
+      setShowConfirmModal(false); // Close to Modal
     }
   };
 
   const handleDelete = (id) => {
-    setRoleToDelete(id);
+    setUserToDelete(id);
     setShowConfirmModal(true);
   };
 
-  const handleEdit = (role) => {
-    setSelectedRole(role);
+  const handleEdit = (user) => {
+    const userRole = userRoles.find((ur) => ur.userId === user.id);
+    const roleDetails = roles.find((role) => role.id === userRole?.roleId);
+    setSelectedUser({ ...user, role: roleDetails });
     setIsAddingNew(false);
   };
 
   const handleAddNew = () => {
-    setSelectedRole({ name: "", id: null });
+    setSelectedUser({ name: "", id: null });
     setIsAddingNew(true);
   };
 
@@ -44,9 +62,9 @@ const RolesList = () => {
   if (isError) return <p>Error loading roles.</p>;
   return (
     <div className="xl:px-8 px-2 pt-6">
-      <TitleCard title={"R O L E S"} />
+      <TitleCard title={"U S E R S"} />
       <Card
-        title={"Role List"}
+        title={"User List"}
         icon={<FaUserDoctor />}
         color={"cyan"}
         className="mt-5">
@@ -56,7 +74,7 @@ const RolesList = () => {
               <button
                 onClick={handleAddNew}
                 className="w-40 h-20 bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-white text-lg">
-                Add New Role
+                Add New User
               </button>
             </div>
             <div>
@@ -71,19 +89,31 @@ const RolesList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {roles?.map((role) => (
+                  {users?.map((user) => (
                     <tr
-                      key={role.id}
+                      key={user.id}
                       className="border-b border-cyan-100 hover:bg-cyan-50 transition">
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {role.id}
+                        {user.id}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {role.name}
+                        {user.userName}
+                      </td>
+                      <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
+                        {roles && userRoles
+                          ? roles.find(
+                              (role) =>
+                                role.id ===
+                                userRoles.find(
+                                  (userRole) => userRole.userId === user.id
+                                )?.roleId
+                            )?.name || "No role"
+                          : "Loading roles..."}
+                        setRoleId(userRole.roleId)
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap flex justify-center items-center">
                         <button
-                          onClick={() => handleEdit(role)}
+                          onClick={() => handleEdit(user)}
                           className="w-28 h-9 text-white bg-amber-300 hover:bg-amber-500 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                           <img
                             src="/images/eye.png"
@@ -93,7 +123,7 @@ const RolesList = () => {
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDelete(role.id)}
+                          onClick={() => handleDelete(user.id)}
                           className="w-28 h-9 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                           <img
                             src="/images/delete.png"
@@ -109,15 +139,16 @@ const RolesList = () => {
               </table>
             </div>
             <div className="flex flex-col gab-6">
-              {(selectedRole || isAddingNew) && (
+              {(selectedUser || isAddingNew) && (
                 <div>
-                  <RoleModal
-                    role={selectedRole}
+                  <UserModal
+                    user={selectedUser}
                     onClose={() => {
-                      setSelectedRole(null);
+                      setSelectedUser(null);
                       setIsAddingNew(false);
                     }}
                     isAddingNew={isAddingNew}
+                    roles={roles}
                   />
                 </div>
               )}
@@ -127,7 +158,7 @@ const RolesList = () => {
                   <ConfirmModal
                     onClose={() => setShowConfirmModal(false)}
                     onConfirm={handleDeleteConfirm}
-                    message="Are you sure you want to delete this role?"
+                    message="Are you sure you want to delete this user?"
                   />
                 </div>
               )}
@@ -139,4 +170,4 @@ const RolesList = () => {
   );
 };
 
-export default RolesList;
+export default UsersList;

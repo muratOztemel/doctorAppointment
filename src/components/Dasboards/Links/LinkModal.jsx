@@ -1,31 +1,31 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
-  useAddNewRoleMutation,
-  useUpdateRoleMutation,
+  useAddNewLinkMutation,
+  useUpdateLinkMutation,
 } from "../../../redux/features/api/apiSlice";
 
-const RoleModal = ({ role, onClose, isAddingNew }) => {
-  const [addNewRole, { isLoading: isAdding }] = useAddNewRoleMutation();
-  const [updateRole, { isLoading: isUpdating }] = useUpdateRoleMutation();
+const LinkModal = ({ link, onClose, isAddingNew }) => {
+  const [addNewLink, { isLoading: isAdding }] = useAddNewLinkMutation();
+  const [updateLink, { isLoading: isUpdating }] = useUpdateLinkMutation();
 
   // Formik kullanarak form durum yönetimi ve doğrulama kuralları
   const formik = useFormik({
     initialValues: {
-      name: role ? role.name : "",
+      name: link ? link.name : "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Role name is required"),
+      name: Yup.string().required("Link name is required"),
     }),
     onSubmit: async (values) => {
       try {
         if (isAddingNew) {
-          await addNewRole({ name: values.name }).unwrap();
+          await addNewLink({ name: values.name }).unwrap();
         } else {
-          await updateRole({
-            id: role.id,
-            updatedRole: {
-              id: role.id,
+          await updateLink({
+            id: link.id,
+            updatedLink: {
+              id: link.id,
               name: values.name,
               updatedAt: new Date().toISOString(),
               status: true,
@@ -34,7 +34,7 @@ const RoleModal = ({ role, onClose, isAddingNew }) => {
         }
         onClose(); // Form başarıyla gönderildikten sonra modal kapatılır
       } catch (error) {
-        console.error("Failed to process role:", error);
+        console.error("Failed to process link:", error);
       }
     },
   });
@@ -42,14 +42,14 @@ const RoleModal = ({ role, onClose, isAddingNew }) => {
   return (
     <div className="flex flex-col justify-start gap-5 p-4 bg-cyan-50 shadow-md rounded-lg">
       <h2 className="text-lg font-bold text-cyan-700">
-        {isAddingNew ? "Add New Role" : "Edit Role"}
+        {isAddingNew ? "Add New Link" : "Edit Link"}
       </h2>
       <form onSubmit={formik.handleSubmit}>
         <div className="mb-4">
           <label
             htmlFor="name"
             className="block mb-2 text-sm font-medium text-gray-900">
-            Role Name:
+            Link Name:
           </label>
           <input
             id="name"
@@ -88,4 +88,4 @@ const RoleModal = ({ role, onClose, isAddingNew }) => {
   );
 };
 
-export default RoleModal;
+export default LinkModal;

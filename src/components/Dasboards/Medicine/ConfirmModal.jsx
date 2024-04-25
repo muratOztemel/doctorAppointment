@@ -6,13 +6,13 @@ const ConfirmModal = ({ onClose, onConfirm, message }) => {
         <button
           onClick={onConfirm}
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          aria-label="Delete medicine">
+          aria-label="Delete role">
           Delete
         </button>
         <button
           onClick={onClose}
           className="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
-          aria-label="Cancel medicine">
+          aria-label="Cancel role">
           Cancel
         </button>
       </div>

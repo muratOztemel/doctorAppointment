@@ -1,31 +1,32 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
-  useAddNewRoleMutation,
-  useUpdateRoleMutation,
+  useAddNewMedicineMutation,
+  useUpdateMedicineMutation,
 } from "../../../redux/features/api/apiSlice";
 
-const RoleModal = ({ role, onClose, isAddingNew }) => {
-  const [addNewRole, { isLoading: isAdding }] = useAddNewRoleMutation();
-  const [updateRole, { isLoading: isUpdating }] = useUpdateRoleMutation();
+const MedicineModal = ({ medicine, onClose, isAddingNew }) => {
+  const [addNewMedicine, { isLoading: isAdding }] = useAddNewMedicineMutation();
+  const [updateMedicine, { isLoading: isUpdating }] =
+    useUpdateMedicineMutation();
 
   // Formik kullanarak form durum yönetimi ve doğrulama kuralları
   const formik = useFormik({
     initialValues: {
-      name: role ? role.name : "",
+      name: medicine ? medicine.name : "",
     },
     validationSchema: Yup.object({
-      name: Yup.string().required("Role name is required"),
+      name: Yup.string().required("Medicine name is required"),
     }),
     onSubmit: async (values) => {
       try {
         if (isAddingNew) {
-          await addNewRole({ name: values.name }).unwrap();
+          await addNewMedicine({ name: values.name }).unwrap();
         } else {
-          await updateRole({
-            id: role.id,
-            updatedRole: {
-              id: role.id,
+          await updateMedicine({
+            id: medicine.id,
+            updatedMedicine: {
+              id: medicine.id,
               name: values.name,
               updatedAt: new Date().toISOString(),
               status: true,
@@ -34,7 +35,7 @@ const RoleModal = ({ role, onClose, isAddingNew }) => {
         }
         onClose(); // Form başarıyla gönderildikten sonra modal kapatılır
       } catch (error) {
-        console.error("Failed to process role:", error);
+        console.error("Failed to process medicine:", error);
       }
     },
   });
@@ -42,14 +43,14 @@ const RoleModal = ({ role, onClose, isAddingNew }) => {
   return (
     <div className="flex flex-col justify-start gap-5 p-4 bg-cyan-50 shadow-md rounded-lg">
       <h2 className="text-lg font-bold text-cyan-700">
-        {isAddingNew ? "Add New Role" : "Edit Role"}
+        {isAddingNew ? "Add New Medicine" : "Edit Medicine"}
       </h2>
       <form onSubmit={formik.handleSubmit}>
         <div className="mb-4">
           <label
             htmlFor="name"
             className="block mb-2 text-sm font-medium text-gray-900">
-            Role Name:
+            Medicine Name:
           </label>
           <input
             id="name"
@@ -88,4 +89,4 @@ const RoleModal = ({ role, onClose, isAddingNew }) => {
   );
 };
 
-export default RoleModal;
+export default MedicineModal;
