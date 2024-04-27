@@ -1,52 +1,58 @@
 import { useState } from "react";
 import {
-  useGetLinksQuery,
-  useDeleteLinkMutation,
+  useGetDoctorWorkingDaysQuery,
+  useDeleteDoctorWorkingDaysMutation,
 } from "../../../redux/features/api/apiSlice";
 import TitleCard from "../../UI/Cards/TitleCard";
 import Card from "../../UI/Cards/Card";
 import { FaUserDoctor } from "react-icons/fa6";
-import LinkModal from "./LinkModal";
+import DoctorWorkingDaysModal from "./DoctorWorkingDaysModal";
 import ConfirmModal from "./ConfirmModal";
 
-const LinksList = () => {
-  const { data: links, isLoading, isError } = useGetLinksQuery();
-  const [deleteLink] = useDeleteLinkMutation();
-  const [selectedLink, setSelectedLink] = useState(null);
+const DoctorWorkingDaysList = () => {
+  const {
+    data: doctorWorkingDays,
+    isLoading,
+    isError,
+  } = useGetDoctorWorkingDaysQuery();
+  const [deleteDoctorWorkingDays] = useDeleteDoctorWorkingDaysMutation();
+  const [selectedDoctorWorkingDay, setSelectedDoctorWorkingDay] =
+    useState(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [linkToDelete, setLinkToDelete] = useState(null);
+  const [doctorWorkingDaysToDelete, setDoctorWorkingDaysToDelete] =
+    useState(null);
 
   const handleDeleteConfirm = async () => {
-    if (linkToDelete) {
-      await deleteLink(linkToDelete).unwrap();
-      setLinkToDelete(null); // ID'yi temizle
+    if (doctorWorkingDaysToDelete) {
+      await deleteDoctorWorkingDays(doctorWorkingDaysToDelete).unwrap();
+      setDoctorWorkingDaysToDelete(null); // ID'yi temizle
       setShowConfirmModal(false); // Modalı kapat
     }
   };
 
   const handleDelete = (id) => {
-    setLinkToDelete(id);
+    setDoctorWorkingDaysToDelete(id);
     setShowConfirmModal(true);
   };
 
-  const handleEdit = (link) => {
-    setSelectedLink(link);
+  const handleEdit = (day) => {
+    setSelectedDoctorWorkingDay(day);
     setIsAddingNew(false);
   };
 
   const handleAddNew = () => {
-    setSelectedLink({ name: "", id: null });
+    setSelectedDoctorWorkingDay({ name: "", id: null });
     setIsAddingNew(true);
   };
 
   if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error loading links.</p>;
+  if (isError) return <p>Error loading doctor working days.</p>;
   return (
     <div className="xl:px-8 px-2 pt-6">
-      <TitleCard title={"L I N K S"} />
+      <TitleCard title={"D O C T O R W O R K I N G D A Y S"} />
       <Card
-        title={"Link List"}
+        title={"Doctor Working Days List"}
         icon={<FaUserDoctor />}
         color={"cyan"}
         className="mt-5">
@@ -56,7 +62,7 @@ const LinksList = () => {
               <button
                 onClick={handleAddNew}
                 className="w-40 h-20 bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-white text-lg">
-                Add New Link
+                Add New Doctor Working Days
               </button>
             </div>
             <div>
@@ -71,19 +77,19 @@ const LinksList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {links?.map((link) => (
+                  {doctorWorkingDays?.map((day) => (
                     <tr
-                      key={link.id}
+                      key={day.id}
                       className="border-b border-cyan-100 hover:bg-cyan-50 transition">
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {link.id}
+                        {day.id}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {link.name}
+                        {day.name}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap flex justify-center items-center">
                         <button
-                          onClick={() => handleEdit(link)}
+                          onClick={() => handleEdit(day)}
                           className="w-28 h-9 text-white bg-amber-300 hover:bg-amber-500 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                           <img
                             src="/images/eye.png"
@@ -93,7 +99,7 @@ const LinksList = () => {
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDelete(link.id)}
+                          onClick={() => handleDelete(day.id)}
                           className="w-28 h-9 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                           <img
                             src="/images/delete.png"
@@ -109,12 +115,12 @@ const LinksList = () => {
               </table>
             </div>
             <div className="flex flex-col gab-6">
-              {(selectedLink || isAddingNew) && (
+              {(selectedDoctorWorkingDay || isAddingNew) && (
                 <div>
-                  <LinkModal
-                    link={selectedLink}
+                  <DoctorWorkingDaysModal
+                    day={selectedDoctorWorkingDay}
                     onClose={() => {
-                      setSelectedLink(null);
+                      setSelectedDoctorWorkingDay(null);
                       setIsAddingNew(false);
                     }}
                     isAddingNew={isAddingNew}
@@ -127,7 +133,7 @@ const LinksList = () => {
                   <ConfirmModal
                     onClose={() => setShowConfirmModal(false)}
                     onConfirm={handleDeleteConfirm}
-                    message="Are you sure you want to delete this link?"
+                    message="Are you sure you want to delete this doctor working day?"
                   />
                 </div>
               )}
@@ -139,4 +145,4 @@ const LinksList = () => {
   );
 };
 
-export default LinksList;
+export default DoctorWorkingDaysList;

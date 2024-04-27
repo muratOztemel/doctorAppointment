@@ -44,7 +44,7 @@ const MedicinesList = () => {
   if (isError) return <p>Error loading medicines.</p>;
   return (
     <div className="xl:px-8 px-2 pt-6">
-      <TitleCard title={"R O L E S"} />
+      <TitleCard title={"M E D I C I N E S"} />
       <Card
         title={"Medicine List"}
         icon={<FaUserDoctor />}

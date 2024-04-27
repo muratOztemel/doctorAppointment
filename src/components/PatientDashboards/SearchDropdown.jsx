@@ -14,6 +14,7 @@ const SearchDropdown = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAll, setShowAll] = useState(false);
   const [branchId, setBranchId] = useState(0);
+  const [branchName, setBranchName] = useState("");
 
   const { data: branches, isError, isLoading } = useGetBranchesQuery();
   const {
@@ -72,6 +73,7 @@ const SearchDropdown = () => {
                 id="default-search"
                 className="block w-full h-14 pl-10 pr-20 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none"
                 placeholder="Search Branches..."
+                value={branchName}
                 required
                 onClick={() => setIsOpen(!isOpen)}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -93,6 +95,7 @@ const SearchDropdown = () => {
                     setIsClick(true);
                     setIsOpen(!isOpen);
                     setBranchId(branch.id);
+                    setBranchName(branch.name);
                   }}>
                   <div className="mr-1">
                     <div className="rounded-md bg-cyan-50 w-7 h-7 flex justify-center items-center">
@@ -115,15 +118,17 @@ const SearchDropdown = () => {
       </Card>
       {isClick && (
         <Card title={"Choise a doctor"} icon={<FaUserDoctor />} color={"cyan"}>
-          <div className="relative my-6 max-w-md mx-auto h-full">
-            {doctors.map((doctor) => {
-              console.log(doctor.branchId);
-              if (doctor.branchId === branchId) {
-                doctor.name;
-              }
-            })}
-            <DoctorList />
-          </div>
+          {doctors.map((doctor) => {
+            // if (doctor.branchId === branchId) {
+            return (
+              <div key={doctor.id} className="container mx-auto px-4">
+                <div className="grid grid-cols-10 gap-4">
+                  <DoctorList doctor={doctor} />
+                </div>
+              </div>
+            );
+            // }
+          })}
         </Card>
       )}
     </>

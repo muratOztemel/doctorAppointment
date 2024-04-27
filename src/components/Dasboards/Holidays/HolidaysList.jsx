@@ -1,70 +1,52 @@
 import { useState } from "react";
 import {
-  useGetUsersQuery,
-  useDeleteUserMutation,
-  useGetRolesQuery,
-  useGetUserRolesQuery,
+  useGetHolidaysQuery,
+  useDeleteHolidayMutation,
 } from "../../../redux/features/api/apiSlice";
 import TitleCard from "../../UI/Cards/TitleCard";
 import Card from "../../UI/Cards/Card";
 import { FaUserDoctor } from "react-icons/fa6";
-import UserModal from "./UserModal1";
+import HolidayModal from "./HolidayModal";
 import ConfirmModal from "./ConfirmModal";
 
-const UsersList = () => {
-  const { data: users, isLoading, isError } = useGetUsersQuery();
-  const {
-    data: roles,
-    error: rolesError,
-    isLoading: rolesLoading,
-  } = useGetRolesQuery();
-  const {
-    data: userRoles,
-    error: userRolesError,
-    isLoading: userRolesLoading,
-  } = useGetUserRolesQuery();
-  const [deleteUser] = useDeleteUserMutation();
-  const [selectedUser, setSelectedUser] = useState(null);
+const HolidaysList = () => {
+  const { data: holidays, isLoading, isError } = useGetHolidaysQuery();
+  const [deleteHoliday] = useDeleteHolidayMutation();
+  const [selectedHoliday, setSelectedHoliday] = useState(null);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
-
-  if (isLoading || rolesLoading || userRolesLoading) return <p>Loading...</p>;
-  if (isError || rolesError || userRolesError)
-    return <p>Error loading data.</p>;
+  const [holidayToDelete, setHolidayToDelete] = useState(null);
 
   const handleDeleteConfirm = async () => {
-    if (userToDelete) {
-      await deleteUser(userToDelete).unwrap();
-      setUserToDelete(null); // Clean ID
-      setShowConfirmModal(false); // Close to Modal
+    if (holidayToDelete) {
+      await deleteHoliday(holidayToDelete).unwrap();
+      setHolidayToDelete(null); // ID'yi temizle
+      setShowConfirmModal(false); // Modalı kapat
     }
   };
 
   const handleDelete = (id) => {
-    setUserToDelete(id);
+    setHolidayToDelete(id);
     setShowConfirmModal(true);
   };
 
-  const handleEdit = (user) => {
-    const userRole = userRoles.find((ur) => ur.userId === user.id);
-    const roleDetails = roles.find((role) => role.id === userRole?.roleId);
-    setSelectedUser({ ...user, role: roleDetails });
+  const handleEdit = (holiday) => {
+    setSelectedHoliday(holiday);
     setIsAddingNew(false);
   };
 
   const handleAddNew = () => {
-    setSelectedUser({ name: "", id: null });
+    setSelectedHoliday({ name: "", id: null });
     setIsAddingNew(true);
   };
 
   if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error loading roles.</p>;
+  if (isError) return <p>Error loading holidays.</p>;
   return (
     <div className="xl:px-8 px-2 pt-6">
-      <TitleCard title={"U S E R S"} />
+      <TitleCard title={"H O L I D A Y S"} />
       <Card
-        title={"User List"}
+        title={"Holiday List"}
         icon={<FaUserDoctor />}
         color={"cyan"}
         className="mt-5">
@@ -74,7 +56,7 @@ const UsersList = () => {
               <button
                 onClick={handleAddNew}
                 className="w-40 h-20 bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-white text-lg">
-                Add New User
+                Add New Holiday
               </button>
             </div>
             <div>
@@ -89,31 +71,19 @@ const UsersList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users?.map((user) => (
+                  {holidays?.map((holiday) => (
                     <tr
-                      key={user.id}
+                      key={holiday.id}
                       className="border-b border-cyan-100 hover:bg-cyan-50 transition">
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {user.id}
+                        {holiday.id}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {user.userName}
-                      </td>
-                      <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {roles && userRoles
-                          ? roles.find(
-                              (role) =>
-                                role.id ===
-                                userRoles.find(
-                                  (userRole) => userRole.userId === user.id
-                                )?.roleId
-                            )?.name || "No role"
-                          : "Loading roles..."}
-                        setRoleId(userRole.roleId)
+                        {holiday.name}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap flex justify-center items-center">
                         <button
-                          onClick={() => handleEdit(user)}
+                          onClick={() => handleEdit(holiday)}
                           className="w-28 h-9 text-white bg-amber-300 hover:bg-amber-500 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                           <img
                             src="/images/eye.png"
@@ -123,7 +93,7 @@ const UsersList = () => {
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDelete(user.id)}
+                          onClick={() => handleDelete(holiday.id)}
                           className="w-28 h-9 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                           <img
                             src="/images/delete.png"
@@ -139,16 +109,15 @@ const UsersList = () => {
               </table>
             </div>
             <div className="flex flex-col gab-6">
-              {(selectedUser || isAddingNew) && (
+              {(selectedHoliday || isAddingNew) && (
                 <div>
-                  <UserModal
-                    user={selectedUser}
+                  <HolidayModal
+                    holiday={selectedHoliday}
                     onClose={() => {
-                      setSelectedUser(null);
+                      setSelectedHoliday(null);
                       setIsAddingNew(false);
                     }}
                     isAddingNew={isAddingNew}
-                    roles={roles}
                   />
                 </div>
               )}
@@ -158,7 +127,7 @@ const UsersList = () => {
                   <ConfirmModal
                     onClose={() => setShowConfirmModal(false)}
                     onConfirm={handleDeleteConfirm}
-                    message="Are you sure you want to delete this user?"
+                    message="Are you sure you want to delete this holiday?"
                   />
                 </div>
               )}
@@ -170,4 +139,4 @@ const UsersList = () => {
   );
 };
 
-export default UsersList;
+export default HolidaysList;

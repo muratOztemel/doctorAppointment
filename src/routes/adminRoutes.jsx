@@ -12,6 +12,9 @@ import RolesList from "../components/Dasboards/Roles/RolesList";
 import UsersList from "../components/Dasboards/User/UsersList";
 import MedicinesList from "../components/Dasboards/Medicine/MedicinesList";
 import LinksList from "../components/Dasboards/Links/LinksList";
+import HolidaysList from "../components/Dasboards/Holidays/HolidaysList";
+import DoctorWorkingDaysList from "../components/Dasboards/DoctorWorkingDays/DoctorWorkingDaysList";
+import BranchesList from "../components/Dasboards/Branches/BranchesList";
 
 export const adminRoutes = [
   {
@@ -66,6 +69,18 @@ export const adminRoutes = [
       {
         path: "links",
         element: <LinksList />,
+      },
+      {
+        path: "holidays",
+        element: <HolidaysList />,
+      },
+      {
+        path: "doctorWorkingDays",
+        element: <DoctorWorkingDaysList />,
+      },
+      {
+        path: "branches",
+        element: <BranchesList />,
       },
     ],
   },

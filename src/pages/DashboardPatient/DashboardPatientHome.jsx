@@ -1,5 +1,5 @@
 import TitleCard from "../../components/UI/Cards/TitleCard";
-import SearchDropdown from "../../components/hooks/SearchDropdown";
+import SearchDropdown from "../../components/PatientDashboards/SearchDropdown";
 
 const DashboardPatientHome = () => {
   return (

@@ -70,6 +70,34 @@ const LeftSide = () => {
       path: "/users",
       icon: <IoSettingsOutline />,
     },
+    {
+      id: 10,
+      name: "Links",
+      pageName: "LinksHome",
+      path: "/links",
+      icon: <IoSettingsOutline />,
+    },
+    {
+      id: 11,
+      name: "Holidays",
+      pageName: "HolidaysHome",
+      path: "/holidays",
+      icon: <IoSettingsOutline />,
+    },
+    {
+      id: 12,
+      name: "doctorWorkingDays",
+      pageName: "doctorWorkingDaysHome",
+      path: "/doctorWorkingDays",
+      icon: <IoSettingsOutline />,
+    },
+    {
+      id: 13,
+      name: "Branches",
+      pageName: "branchesHome",
+      path: "/branches",
+      icon: <IoSettingsOutline />,
+    },
   ];
 
   if (linkDizi === "") {
