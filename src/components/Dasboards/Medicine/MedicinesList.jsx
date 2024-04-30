@@ -65,6 +65,8 @@ const MedicinesList = () => {
                   <tr>
                     <th className="cursor-pointer hover:bg-cyan-300">ID</th>
                     <th className="cursor-pointer hover:bg-cyan-300">Name</th>
+                    <th className="cursor-pointer hover:bg-cyan-300">Type</th>
+                    <th className="cursor-pointer hover:bg-cyan-300">Amount</th>
                     <th className="cursor-pointer hover:bg-cyan-300">
                       Actions
                     </th>
@@ -80,6 +82,12 @@ const MedicinesList = () => {
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         {medicine.name}
+                      </td>
+                      <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
+                        {medicine.type}
+                      </td>
+                      <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
+                        {medicine.amount}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap flex justify-center items-center">
                         <button

@@ -2,15 +2,16 @@ import DashboardPatientLayout from "../layouts/DashboardPatientLayout/DashboardP
 import ErrorPage from "../pages/ErrorPage";
 import DashboardPatientPage from "../pages/DashboardPatient/DashboardPatientPage";
 import PatientProfile from "../components/PatientDashboards/PatientProfile";
+import ProtectedRoute from "../components/Security/ProtectedRoute";
 
 export const patientRoutes = [
   {
-    path: "/",
+    path: "/dashboard/patient/",
     element: <DashboardPatientLayout />,
     elementError: <ErrorPage />,
     children: [
       {
-        path: "dashboardPatient",
+        index: true,
         element: <DashboardPatientPage />,
       },
       {

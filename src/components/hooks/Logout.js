@@ -1,12 +1,13 @@
 import { useDispatch } from "react-redux";
-import { setUserLogin } from "../../redux/slices/usersSlice";
+import { clearUser } from "../../redux/slices/usersSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 export const Logout = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   localStorage.removeItem("token");
-  useDispatch(setUserLogin({ userId: null, username: "", token: "" }));
+  dispatch(clearUser());
 
   useEffect(() => {
     navigate("/auth/login");

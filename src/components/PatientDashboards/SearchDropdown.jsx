@@ -80,7 +80,7 @@ const SearchDropdown = () => {
               />
               <button
                 type="submit"
-                className="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
+                className="text-white absolute right-2.5 bottom-2.5 bg-cyan-500 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
                 Search
               </button>
             </div>
@@ -122,8 +122,8 @@ const SearchDropdown = () => {
             // if (doctor.branchId === branchId) {
             return (
               <div key={doctor.id} className="container mx-auto px-4">
-                <div className="grid grid-cols-10 gap-4">
-                  <DoctorList doctor={doctor} />
+                <div className="grid grid-cols-10 gap-4 border-b border-dashed border-gray-200">
+                  <DoctorList doctor={doctor} branchName={branchName} />
                 </div>
               </div>
             );

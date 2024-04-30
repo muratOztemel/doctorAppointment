@@ -1,12 +1,3 @@
-import { useParams, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router";
-import { useGetDoctorByIdQuery } from "../../../redux/features/api/apiSlice";
-import Spinner from "../../UI/Spinner";
-import { FaRegCalendarDays, FaUser, FaUserDoctor } from "react-icons/fa6";
-import { TbLockAccess } from "react-icons/tb";
-import BloodType from "../Services/BloodType.jsx";
-import { RiLockPasswordLine } from "react-icons/ri";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
@@ -17,13 +8,8 @@ import {
   useAddNewDoctorInfosMutation,
 } from "../../../redux/features/api/apiSlice";
 import { countries } from "../Services/Countries";
-import { format } from "date-fns";
 
-const DoctorProfile = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { id: doctorId } = useParams();
-  const { data: doctor, isError, isLoading } = useGetDoctorByIdQuery(doctorId);
+const AddDoctorForm = ({ onClose, user }) => {
   const [nationality, setNationality] = useState("TC");
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -84,20 +70,25 @@ const DoctorProfile = () => {
       if (file) {
         formData.append("file", file);
       }
+      console.log("branchId", values.branchId);
+      console.log(typeof values.branchId);
+      console.log("userId", user.id);
+      console.log("gender", values.gender);
+      console.log("photo", formData);
       let result = await addNewDoctor({
         branchId: Number(values.branchId),
         name: values.name,
         surname: values.surname,
         title: values.title,
-        userId: doctor.userId,
+        userId: user.id,
       }).unwrap();
-      console.log(result.doctorId, "result");
+      console.log(result, "result");
 
       let infoResult = await addNewDoctorInfos({
         doctorId: result.doctorId,
         email: values.email,
         phoneNumber: values.phoneNumber,
-        userId: doctor.userId,
+        userId: user.id,
         nationality: values.nationality,
         identyType: values.identyType,
         identyNo: values.identyNo,
@@ -120,6 +111,12 @@ const DoctorProfile = () => {
     return <div>Loading...</div>;
   }
 
+  const handleOutsideClick = (event) => {
+    if (event.currentTarget === event.target) {
+      onClose();
+    }
+  };
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFile(file);
@@ -136,132 +133,46 @@ const DoctorProfile = () => {
   const inputClass =
     "block w-60 h-10 pl-4 pr-4 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none";
 
-  if (isError) return <div>Error: {isError.toString()}</div>;
-
-  if (isLoading) return <Spinner />;
-
   return (
-    <>
-      <div className="xl:px-8 px-2">
-        <div className="flex items-center text-center gap-4">
-          <div className="mt-10 flex gap-4 bg-white border border-cyan-500 border-dashed rounded-lg py-3 px-4 text-md w-full">
-            <div className="p-3">
-              <button
-                className="bg-white border border-cyan-500 border-dashed rounded-lg text-md p-3"
-                onClick={() => navigate(-1)}
-                href="/doctors">
-                <img src="/images/leftArrow.png" alt="go back" />
-              </button>
-            </div>
-            <div>
-              <span className="absolute ml-[52px] mt-[88px] font-semibold bg-red-500 rounded-full px-2 py-0.5 text-sm text-white text-center">
-                {doctor.bloodGroup !== null && doctor.bloodGroup !== "" ? (
-                  <BloodType bloodType={doctor.bloodGroup} />
-                ) : (
-                  "--"
-                )}
-              </span>
-            </div>
-            <div className="p-4 ml-36">
-              <h1 className="text-xl font-semibold">
-                {doctor.name} {doctor.surname}
-              </h1>
-              <p className="text-xs text-gray-500">
-                {doctor?.doctorInfo?.phoneNumber}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div>
-          <img
-            src={
-              doctor?.doctorInfo?.photo !== "null" &&
-              doctor?.doctorInfo?.photo !== null &&
-              doctor?.doctorInfo?.photo !== ""
-                ? doctor.doctorInfo.photo
-                : ""
-            }
-            alt={`${doctor.name} ${doctor.surname}`}
-            className="mt-[-120px] ml-[100px] w-36 h-36 rounded-full object-cover border border-dashed border-cyan-500 p-2 items-center"
-          />
-        </div>
-
-        <div className="grid grid-cols-12 gap-6 my-8 items-start">
-          <div className="col-span-12 flex flex-col items-center justify-center gap-6 lg:col-span-4 bg-white rounded-xl border-[1px] border-cyan-500 p-6 lg:sticky top-28 ">
-            <div className="gap-2 flex-col justify-center items-center text-center">
-              <h2 className="text-sm font-semibold">
-                {doctor.name} {doctor.surname}
-              </h2>
-              <p className="text-xs text-gray-500">{doctor.email}</p>
-              <p className="text-xs">{doctor.phone}</p>
-            </div>
-
-            <div className="flex flex-col gap-3 px-2 xl:px-12 w-full">
-              <Link className=" bg-cyan-500  text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaUserDoctor />
-                Personal Information
-              </Link>
-              <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaUser />
-                Patients
-              </button>
-              <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaRegCalendarDays /> Appointments
-              </button>
-              <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <TbLockAccess />
-                Access Control
-              </button>
-              <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <RiLockPasswordLine />
-                Change Password
-              </button>
-            </div>
-          </div>
-          <div className="grid grid-cols-3  gap-3 lg:col-span-8 bg-white rounded-xl border-[1px] border-cyan-500 p-6">
-            <div className="flex gap-3 flex-col w-full col-span-2">
-              <p className="text-sm">Profile Image</p>
-              <div className="w-full text-center grid grid-cols-12 gap-4">
-                <div
-                  className="px-6 lg:col-span-10 sm:col-span-8 col-span-12 pt-5 pb-6 border-2 border-dashed border-cyan-100 rounded-md cursor-pointer"
-                  role="presentation"
-                  tabIndex="0">
-                  <input type="file" name="file" onChange={handleFileChange} />
-
-                  <p className="text-sm mt-2">
-                    Drag your image here or click to select
-                  </p>
-
-                  <em className="text-xs text-gray-400">
-                    (Only *.jpeg and *.png images will be accepted)
-                  </em>
-                </div>
-                <div className="lg:col-span-2 sm:col-span-4 col-span-12">
-                  {preview ? (
-                    <img
-                      src={preview}
-                      alt="Preview"
-                      className="h-full w-full object-cover"
+    <div
+      onClick={handleOutsideClick}
+      className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-cyan-50 p-8 rounded-lg shadow-lg max-w-5xl mx-auto">
+        <form onSubmit={formik.handleSubmit}>
+          <div className="grid grid-cols-4 gap-6">
+            <div className="col-span-3">
+              <div className="flex gap-3 flex-col w-full col-span-6">
+                <p className="text-sm">Profile Image</p>
+                <div className="w-full text-center grid grid-cols-12 gap-4">
+                  <div
+                    className="px-6 lg:col-span-10 sm:col-span-8 col-span-12 pt-5 pb-6 border-2 border-dashed border-cyan-100 rounded-md cursor-pointer"
+                    role="presentation"
+                    tabIndex="0">
+                    <input
+                      type="file"
+                      name="file"
+                      onChange={handleFileChange}
                     />
-                  ) : doctor?.doctorInfo?.photo ? (
-                    <img
-                      src={
-                        doctor?.doctorInfo?.photo !== "null" &&
-                        doctor?.doctorInfo?.photo !== null &&
-                        doctor?.doctorInfo?.photo !== ""
-                          ? doctor.doctorInfo.photo
-                          : ""
-                      }
-                      alt={`${doctor.name} ${doctor.surname}`}
-                      className="w-full h-32 rounded object-cover"
-                    />
-                  ) : (
-                    <img
-                      src="/images/icons/300x300.png"
-                      alt="preview"
-                      className="w-full h-32 rounded object-cover"
-                    />
-                  )}
+
+                    <p className="text-sm mt-2">
+                      Drag your image here or click to select
+                    </p>
+
+                    <em className="text-xs text-gray-400">
+                      (Only *.jpeg and *.png images will be accepted)
+                    </em>
+                  </div>
+                  <div className="lg:col-span-2 sm:col-span-4 col-span-12 bg-gray-200 flex justify-center items-center h-full text-3xl text-gray-400">
+                    {preview ? (
+                      <img
+                        src={preview}
+                        alt="Preview"
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <span>+</span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -364,7 +275,7 @@ const DoctorProfile = () => {
                 type="text"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                defaultValue={doctor.title}
+                value={formik.values.title}
                 className={inputClass}
               />
               {formik.touched.title && formik.errors.title && (
@@ -381,7 +292,7 @@ const DoctorProfile = () => {
                 type="text"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                defaultValue={doctor.name}
+                value={formik.values.name}
                 className={inputClass}
               />
               {formik.touched.name && formik.errors.name && (
@@ -398,7 +309,7 @@ const DoctorProfile = () => {
                 type="text"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                defaultValue={doctor.surname}
+                value={formik.values.surname}
                 className={inputClass}
               />
               {formik.touched.surname && formik.errors.surname && (
@@ -413,8 +324,9 @@ const DoctorProfile = () => {
                 id="gender"
                 name="gender"
                 onChange={formik.handleChange}
-                defaultValue={doctor.gender}
+                value={formik.values.gender}
                 className={inputClass}>
+                <option>Select Gender</option>
                 <option value="1">Female</option>
                 <option value="2">Male</option>
                 <option value="3">Agender</option>
@@ -435,19 +347,13 @@ const DoctorProfile = () => {
                 <option>Select Branch</option>
                 {branches.map((branch) => (
                   <option key={branch.id} value={branch.id}>
-                    {branch.id === 0
-                      ? "Select Branch"
-                      : branch.id === doctor.branchId
-                      ? branch.name
-                      : branch.name}
+                    {branch.name}
                   </option>
                 ))}
-                {formik.touched.branchId && formik.errors.branchId && (
-                  <small className="text-red-600">
-                    {formik.errors.branchId}
-                  </small>
-                )}
               </select>
+              {formik.touched.branchId && formik.errors.branchId && (
+                <small className="text-red-600">{formik.errors.branchId}</small>
+              )}
             </div>
             <div className="col-span-1">
               <label htmlFor="birthDate" className="block text-sm">
@@ -459,7 +365,7 @@ const DoctorProfile = () => {
                 type="text"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                defaultValue={format(doctor.doctorInfo.birthDate, "yyyy-MM-dd")}
+                value={formik.values.birthDate}
                 className={inputClass}
               />
             </div>
@@ -471,7 +377,8 @@ const DoctorProfile = () => {
                 id="email"
                 name="email"
                 type="email"
-                defaultValue={doctor.doctorInfo.email}
+                readOnly
+                value={user.userName}
                 className={inputClass}
               />
             </div>
@@ -485,7 +392,7 @@ const DoctorProfile = () => {
                 type="text"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                defaultValue={doctor.doctorInfo.phoneNumber}
+                value={formik.values.phoneNumber}
                 className={inputClass}
               />
               {formik.touched.phoneNumber && formik.errors.phoneNumber && (
@@ -502,15 +409,12 @@ const DoctorProfile = () => {
                 id="country"
                 name="country"
                 onChange={formik.handleChange}
-                defaultValue={doctor.doctorInfo.country}
+                value={formik.values.country}
                 className={inputClass}>
+                <option>Select Country</option>
                 {countries.map((country) => (
                   <option key={country} value={country}>
-                    {doctor.country === ""
-                      ? "Select Country"
-                      : country === doctor.country
-                      ? country
-                      : country}
+                    {country}
                   </option>
                 ))}
               </select>
@@ -523,129 +427,94 @@ const DoctorProfile = () => {
                 id="language"
                 name="language"
                 onChange={formik.handleChange}
-                defaultValue={doctor.doctorInfo.language}
+                value={formik.values.language}
                 className={inputClass}>
-                {doctor.language === "" ? (
-                  <option>Select Language</option>
-                ) : doctor.language === "Turkce" ? (
-                  <>
-                    <option value="Turkce">Turkce</option>
-                    <option value="English">English</option>
-                  </>
-                ) : (
-                  <>
-                    <option value="English">English</option>
-                    <option value="Turkce">Turkce</option>
-                  </>
-                )}
+                <option>Select Language</option>
+                <option value="Turkish">Turkish</option>
+                <option value="English">English</option>
               </select>
             </div>
-            <div className="col-span-3">
+            <div className="col-span-1">
               <p className="text-sm">Members</p>
-              <textarea
+              <input
                 id="members"
                 name="members"
-                rows="3"
                 type="text"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                defaultValue={doctor.doctorInfo.members}
-                className={`${inputClass} !w-full`}
+                value={formik.values.members}
+                className={inputClass}
               />
               {formik.touched.members && formik.errors.members && (
                 <small className="text-red-600">{formik.errors.members}</small>
               )}
             </div>
-            <div className="col-span-3">
+            <div className="col-span-1">
               <p className="text-sm">Articles</p>
-              <textarea
+              <input
                 id="articles"
                 name="articles"
-                rows="3"
                 type="text"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                defaultValue={doctor.doctorInfo.articles}
-                className={`${inputClass} !w-full`}
+                value={formik.values.articles}
+                className={inputClass}
               />
             </div>
-            <div className="col-span-3">
+            <div className="col-span-1">
               <p className="text-sm">Education</p>
-              <textarea
+              <input
                 id="education"
                 name="education"
-                rows="3"
                 type="text"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                defaultValue={doctor.doctorInfo.education}
-                className={`${inputClass} !w-full`}
+                value={formik.values.education}
+                className={inputClass}
               />
             </div>
-            <div className="col-span-3">
+            <div className="col-span-1">
               <p className="text-sm">Experience</p>
-              <textarea
+              <input
                 id="experience"
                 name="experience"
-                rows="3"
                 type="text"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                defaultValue={doctor.doctorInfo.experience}
-                className={`${inputClass} !w-full`}
+                value={formik.values.experience}
+                className={inputClass}
+              />
+            </div>
+            <div className="col-span-1">
+              <p className="text-sm">About</p>
+              <input
+                id="about"
+                name="about"
+                type="text"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.about}
+                className={inputClass}
               />
             </div>
             <div className="col-span-3">
-              <p className="text-sm">About</p>
-              <textarea
-                id="about"
-                name="about"
-                rows="3"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                defaultValue={doctor.doctorInfo.about}
-                className={`${inputClass} !w-full`}
-              />
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 w-full col-span-3">
-              <button className="w-full flex justify-center items-center flex-rows gap-4 hover:opacity-80 transitions bg-red-500 text-white text-sm font-medium px-2 py-4 rounded">
-                Delete Doctor
-                <svg
-                  stroke="currentColor"
-                  fill="currentColor"
-                  strokeWidth="0"
-                  viewBox="0 0 24 24"
-                  className="text-white text-xl"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path d="M4 8H20V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V8ZM6 10V20H18V10H6ZM9 12H11V18H9V12ZM13 12H15V18H13V12ZM7 5V3C7 2.44772 7.44772 2 8 2H16C16.5523 2 17 2.44772 17 3V5H22V7H2V5H7ZM9 4V5H15V4H9Z"></path>
-                </svg>
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-4">
+                Submit
               </button>
-              <button className="w-full flex justify-center items-center flex-rows gap-4 hover:opacity-80 transitions bg-green-700 text-white text-sm font-medium px-2 py-4 rounded">
-                Save Changes
-                <svg
-                  stroke="currentColor"
-                  fill="none"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  className="text-white text-xl"
-                  height="1em"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
+              <button
+                type="button"
+                onClick={onClose}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Cancel
               </button>
             </div>
           </div>
-        </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 };
 
-export default DoctorProfile;
+export default AddDoctorForm;

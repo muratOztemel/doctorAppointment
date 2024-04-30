@@ -402,7 +402,7 @@ const PatientsHome = () => {
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         <div className="flex justify-end">
                           <Link
-                            to={`/patient/${patient.id}/${patient.name}${patient.surname}`}
+                            to={`/dashboard/admin/patient/${patient.id}/${patient.name}${patient.surname}`}
                             onClick={() => dispatch(setPatientId(patient.id))}
                             className="w-28 h-9 text-white bg-amber-300 hover:bg-amber-500 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                             <img

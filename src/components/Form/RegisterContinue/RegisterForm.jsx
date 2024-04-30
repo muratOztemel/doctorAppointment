@@ -2,10 +2,6 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAddNewPatientMutation } from "../../../redux/features/api/apiSlice";
 import Spinner from "../../UI/Spinner";
-import {
-  setUserRegisterForm,
-  setUserLogin,
-} from "../../../redux/slices/usersSlice";
 import { registerData } from "./registerData";
 import { useFormik } from "formik";
 import { schema } from "./reigisterSchema";
@@ -62,8 +58,6 @@ const RegisterForm = () => {
           Language: "Turkish",
           Nationality: "Turkish",
         };
-
-        dispatch(setUserRegisterForm(newPatientData));
 
         await addNewPatient(newPatientData);
         navigate(`/dashboardPatient`);

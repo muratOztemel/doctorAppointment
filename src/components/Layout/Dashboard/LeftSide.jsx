@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { IoHome, IoSettingsOutline } from "react-icons/io5";
 import { FaUserInjured } from "react-icons/fa";
@@ -6,97 +7,96 @@ import { LuCalendarSearch } from "react-icons/lu";
 import { AiFillMedicineBox } from "react-icons/ai";
 
 const LeftSide = () => {
+  const [activeLinkId, setActiveLinkId] = useState(null);
+
+  const toggleLink = (id) => {
+    if (activeLinkId === id) {
+      setActiveLinkId(null); // If clicked link is already active, close it
+    } else {
+      setActiveLinkId(id); // Else open the new one
+    }
+  };
+
   const linkDizi = [
     {
       id: 1,
       name: "Dashboard",
       pageName: "DashboardHome",
-      path: "/dashboardAdmin",
+      path: "/dashboard/admin/",
       icon: <IoHome />,
     },
     {
       id: 2,
       name: "Patients",
       pageName: "PatientsHome",
-      path: "/patients",
+      path: "/dashboard/admin/patients",
       icon: <FaUserInjured />,
     },
     {
       id: 3,
       name: "Doctors",
       pageName: "DoctorsHome",
-      path: "/doctors",
+      path: "/dashboard/admin/doctors",
       icon: <FaUserDoctor />,
     },
     {
       id: 4,
-      name: "Add Doctor",
-      pageName: "AddDoctor",
-      path: "/addDoctor",
-      icon: <FaUserDoctor />,
-    },
-    {
-      id: 5,
       name: "Appointments",
       pageName: "AppointmentsHome",
-      path: "/appointments",
+      path: "/dashboard/admin/appointments",
       icon: <LuCalendarSearch />,
     },
     {
-      id: 6,
+      id: 5,
       name: "Medicine",
       pageName: "MedicineHome",
-      path: "/medicines",
+      path: "/dashboard/admin/medicines",
       icon: <AiFillMedicineBox />,
     },
     {
-      id: 7,
+      id: 6,
       name: "Settings",
       pageName: "SettingsHome",
-      path: "/settings",
+      path: "/dashboard/admin/settings",
       icon: <IoSettingsOutline />,
-    },
-    {
-      id: 8,
-      name: "Roles",
-      pageName: "RolesHome",
-      path: "/roles",
-      icon: <IoSettingsOutline />,
-    },
-    {
-      id: 9,
-      name: "Users",
-      pageName: "UsersHome",
-      path: "/users",
-      icon: <IoSettingsOutline />,
-    },
-    {
-      id: 10,
-      name: "Links",
-      pageName: "LinksHome",
-      path: "/links",
-      icon: <IoSettingsOutline />,
-    },
-    {
-      id: 11,
-      name: "Holidays",
-      pageName: "HolidaysHome",
-      path: "/holidays",
-      icon: <IoSettingsOutline />,
-    },
-    {
-      id: 12,
-      name: "doctorWorkingDays",
-      pageName: "doctorWorkingDaysHome",
-      path: "/doctorWorkingDays",
-      icon: <IoSettingsOutline />,
-    },
-    {
-      id: 13,
-      name: "Branches",
-      pageName: "branchesHome",
-      path: "/branches",
-      icon: <IoSettingsOutline />,
+      children: [
+        {
+          name: "Users",
+          pageName: "UsersHome",
+          path: "/dashboard/admin/users",
+          icon: <IoSettingsOutline />,
+        },
+        {
+          name: "Roles",
+          pageName: "RolesHome",
+          path: "/dashboard/admin/roles",
+          icon: <IoSettingsOutline />,
+        },
+        {
+          name: "Links",
+          pageName: "LinksHome",
+          path: "/dashboard/admin/links",
+          icon: <IoSettingsOutline />,
+        },
+        {
+          name: "Holidays",
+          pageName: "HolidaysHome",
+          path: "/dashboard/admin/holidays",
+          icon: <IoSettingsOutline />,
+        },
+        {
+          name: "doctorWorkingDays",
+          pageName: "doctorWorkingDaysHome",
+          path: "/dashboard/admin/doctorWorkingDays",
+          icon: <IoSettingsOutline />,
+        },
+        {
+          name: "Branches",
+          pageName: "branchesHome",
+          path: "/dashboard/admin/branches",
+          icon: <IoSettingsOutline />,
+        },
+      ],
     },
   ];
 
@@ -129,23 +129,41 @@ const LeftSide = () => {
             </div>
           </div>
         </li>
-        {linkDizi.map(({ id, path, icon, name }) => (
-          <li key={id}>
+        {linkDizi.map((link) => (
+          <li key={link.id}>
             <NavLink
-              to={path}
+              to={link.path}
+              onClick={() => toggleLink(link.id)}
               className={({ isActive }) =>
-                `relative flex flex-row items-center h-11 focus:outline-none dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-cyan-500 dark:hover:border-gray-800 pr-6 ${
+                `relative flex flex-row items-center h-11 focus:outline-none text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-cyan-500 pr-6 ${
                   isActive ? "bg-cyan-100 border-cyan-500" : "hover:bg-cyan-50 "
                 }`
               }>
               <span className="inline-flex justify-center items-center ml-4">
-                {icon}
+                {link.icon}
               </span>
 
               <span className="ml-2 text-sm tracking-wide truncate">
-                {name}
+                {link.name}
               </span>
             </NavLink>
+            {link.children && activeLinkId === link.id && (
+              <ul className="pl-4">
+                {link.children.map((subLink, index) => (
+                  <li key={index}>
+                    <NavLink
+                      to={subLink.path}
+                      className={({ isActive }) =>
+                        `pl-4 py-1 display-block text-sm ${
+                          isActive ? "text-blue-500" : "text-gray-700"
+                        }`
+                      }>
+                      {subLink.name}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
         ))}
       </ul>

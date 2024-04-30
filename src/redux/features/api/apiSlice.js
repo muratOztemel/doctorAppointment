@@ -13,19 +13,36 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
-  if (result?.error?.status === 401) {
-    // If a 401 error is received, delete the token from localStorage and redirect to the login page
-    localStorage.removeItem("token");
-    // Redirect to login page
-    window.location.href = "/auth/login";
+
+  // If a 401 error is received from the API, refresh token operation is performed.
+  if (result.error && result.error.status === 401) {
+    const refreshToken = localStorage.getItem("refreshToken");
+    // Make a request to the API to get new tokens with Refresh tokens
+    const refreshResult = await baseQuery(
+      { url: "refresh_token", method: "POST", body: { refreshToken } },
+      api,
+      extraOptions
+    );
+
+    if (refreshResult.data) {
+      const { token: newToken } = refreshResult.data;
+      localStorage.setItem("token", newToken);
+      // Make the first request again with the new token
+      result = await baseQuery(args, api, extraOptions);
+    } else {
+      // If refresh token operation fails, redirect user to login page
+      localStorage.clear();
+      window.location.href = "/auth/login";
+    }
   }
+
   return result;
 };
 
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Patients", "Roles", "Doctors", "Users", "Branches"],
+  tagTypes: ["Patients", "Roles", "Doctors", "Users", "Branches", "UserRoles"],
   endpoints: (builder) => ({
     // Get Patients By Page
     // getPatientsPage: builder.query({
@@ -152,6 +169,37 @@ export const apiSlice = createApi({
       query: () => "Doctors",
       providesTags: ["Doctors"],
     }),
+    addNewDoctor: builder.mutation({
+      query(newDoctor) {
+        return {
+          url: `Doctors`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newDoctor,
+        };
+      },
+      invalidatesTags: ["Doctors"],
+    }),
+    updateDoctor: builder.mutation({
+      query: ({ id, updatedDoctor }) => ({
+        url: `Doctors/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedDoctor,
+      }),
+      invalidatesTags: ["Doctors"],
+    }),
+    addNewDoctorInfos: builder.mutation({
+      query(newDoctorInfos) {
+        return {
+          url: `DoctorInfos`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newDoctorInfos,
+        };
+      },
+      invalidatesTags: ["DoctorInfos"],
+    }),
     getBranches: builder.query({
       query: () => "Branches",
       providesTags: ["Branches"],
@@ -220,6 +268,11 @@ export const apiSlice = createApi({
     }),
     getUserRoles: builder.query({
       query: () => "UserRoles",
+      providesTags: ["UserRoles"],
+    }),
+    getUserRolesById: builder.query({
+      query: (id) => `UserRoles/${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
     }),
     addNewUserRole: builder.mutation({
       query(newUserRole) {
@@ -228,6 +281,24 @@ export const apiSlice = createApi({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: newUserRole,
+        };
+      },
+      invalidatesTags: ["UserRoles"],
+    }),
+    updateUserRole: builder.mutation({
+      query: ({ id, updatedUserRole }) => ({
+        url: `UserRoles/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedUserRole,
+      }),
+      invalidatesTags: ["UserRoles"],
+    }),
+    deleteUserRole: builder.mutation({
+      query(id) {
+        return {
+          url: `UserRoles/${id}`,
+          method: "DELETE",
         };
       },
       invalidatesTags: ["UserRoles"],
@@ -468,6 +539,9 @@ export const {
   useGetAppointmentsQuery,
   useAppointmentUpdateMutation,
   useGetDoctorsQuery,
+  useAddNewDoctorMutation,
+  useUpdateDoctorMutation,
+  useAddNewDoctorInfosMutation,
   useGetBranchesQuery,
   useAddNewBranchMutation,
   useUpdateBranchMutation,
@@ -477,7 +551,10 @@ export const {
   useUpdateRoleMutation,
   useDeleteRoleMutation,
   useGetUserRolesQuery,
+  useGetUserRolesByIdQuery,
   useAddNewUserRoleMutation,
+  useUpdateUserRoleMutation,
+  useDeleteUserRoleMutation,
   useGetUsersQuery,
   useAddNewUserMutation,
   useGetUserByIdQuery,

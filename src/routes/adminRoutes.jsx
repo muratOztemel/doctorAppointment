@@ -15,15 +15,17 @@ import LinksList from "../components/Dasboards/Links/LinksList";
 import HolidaysList from "../components/Dasboards/Holidays/HolidaysList";
 import DoctorWorkingDaysList from "../components/Dasboards/DoctorWorkingDays/DoctorWorkingDaysList";
 import BranchesList from "../components/Dasboards/Branches/BranchesList";
+import ProtectedRoute from "../components/Security/ProtectedRoute";
+import Settings from "../components/Dasboards/Settings/Settings";
 
 export const adminRoutes = [
   {
-    path: "/",
+    path: "/dashboard/admin/",
     element: <DashboardAdminLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "dashboardAdmin",
+        index: true,
         element: <DashboardAdminPage />,
       },
       {
@@ -57,6 +59,10 @@ export const adminRoutes = [
       {
         path: "medicines",
         element: <MedicinesList />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
       },
       {
         path: "roles",

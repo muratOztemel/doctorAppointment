@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { format, addDays } from "date-fns";
+import { BsPersonWalking } from "react-icons/bs";
+import { FaUserDoctor } from "react-icons/fa6";
 
 const DoctorAppointment = () => {
   const today = new Date();
@@ -10,8 +12,7 @@ const DoctorAppointment = () => {
   const sliderRef = useRef(null);
 
   const [selectionPath, setSelectionPath] = useState({
-    hastane: "Örnek Hastane",
-    bolum: "Örnek Bölüm",
+    bolum: "Cardiology",
     doktor: "Dr. Örnek",
   });
 
@@ -81,7 +82,7 @@ const DoctorAppointment = () => {
           <div
             ref={sliderRef}
             className="flex overflow-x-auto hide-scrollbar"
-            style={{ width: "550px", height: "105px" }}>
+            style={{ width: "600px", height: "105px" }}>
             {dates.map((date, index) => (
               <div
                 key={index}
@@ -91,7 +92,7 @@ const DoctorAppointment = () => {
                     ? "bg-cyan-500 text-white"
                     : "bg-cyan-200"
                 }`}
-                style={{ minWidth: "100px", marginRight: "10px" }}>
+                style={{ minWidth: "105px", marginRight: "10px" }}>
                 <div className="text-sm font-medium text-cyan-800">
                   {format(date, "eee")}
                 </div>
@@ -106,7 +107,7 @@ const DoctorAppointment = () => {
           </button>
         </div>
         <div className="slots w-full">
-          <h2 className="font-bold text-xl mb-2">
+          <h2 className="font-bold text-xl mb-2 text-cyan-700">
             Available Slots on {format(selectedDate, "eeee, MMMM dd")}
           </h2>
           <div className="grid grid-cols-3 gap-2">
@@ -116,8 +117,8 @@ const DoctorAppointment = () => {
                   key={index}
                   className={`p-2 rounded-lg ${
                     selectedSlot === slot
-                      ? "bg-green-500 text-white"
-                      : "bg-gray-200"
+                      ? "bg-cyan-800 text-white"
+                      : "bg-cyan-100"
                   }`}
                   onClick={() => handleSlotChange(slot)}>
                   {slot}
@@ -127,19 +128,68 @@ const DoctorAppointment = () => {
           </div>
         </div>
       </div>
-      <div className="col-span-2 p-4">
-        {selectedSlot && (
-          <div className="mt-4 p-4 border rounded-lg">
-            <h3 className="font-bold text-lg">Seçiminiz</h3>
-            <div className="text-md mt-2">Hastane: {selectionPath.hastane}</div>
-            <div className="text-md">Bölüm: {selectionPath.bolum}</div>
-            <div className="text-md">Doktor: {selectionPath.doktor}</div>
-            <div className="text-md">
-              Tarih: {format(selectedDate, "eeee, MMMM dd")}
+      <div className="col-span-2">
+        <div className="mt-4 p-4 border rounded-lg border-cyan-500 border-dashed">
+          <h3 className="font-bold text-lg mb-4">Doctor Appointment</h3>
+          <div className="flex gap-4">
+            <div className="rounded-full border w-12 h-12 flex justify-center items-center">
+              <BsPersonWalking className="text-lg text-gray-400" />
             </div>
-            <div className="text-md">Saat: {selectedSlot}</div>
+            <div className="text-md">Branch: {selectionPath.bolum}</div>
           </div>
-        )}
+
+          {selectedSlot && (
+            <>
+              <div className="inline-flex flex-col justify-center items-center">
+                <div>
+                  <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
+                </div>
+                <div></div>
+                <div>
+                  <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
+                </div>
+                <div></div>
+                <div>
+                  <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
+                </div>
+                <div></div>
+              </div>
+              <div className="flex gap-4">
+                <div className="rounded-full border w-12 h-12 flex justify-center items-center">
+                  <FaUserDoctor className="text-lg text-gray-400" />
+                </div>
+                <div className="text-md">Doctor: {selectionPath.doktor}</div>
+              </div>
+              <div className="inline-flex flex-col justify-center items-center">
+                <div>
+                  <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
+                </div>
+                <div></div>
+                <div>
+                  <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
+                </div>
+                <div></div>
+                <div>
+                  <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
+                </div>
+                <div></div>
+              </div>
+              <div className="flex gap-4">
+                <div className="rounded-full border w-12 h-12 flex justify-center items-center bg-green-500 text-white">
+                  {selectedSlot}
+                </div>
+                <div className="text-md">
+                  {format(selectedDate, "eeee, MMMM dd")}
+                </div>
+              </div>
+              <div>
+                <button className="bg-cyan-700 p-2 mt-4 hover:bg-green-600 text-white text-lg rounded">
+                  Create Appointment
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </>
   );

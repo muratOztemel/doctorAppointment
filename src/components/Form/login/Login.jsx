@@ -9,9 +9,9 @@ import { useFormik } from "formik";
 import LoginSchema from "./LoginSchema";
 import { loginData } from "./loginData";
 import { toast } from "react-toastify";
+import Spinner1 from "../../UI/Spinner1";
 
 function Login() {
-  const { userId } = useSelector((state) => state.users.userLogin);
   const [showPassword, setShowPassword] = useState(false);
   const [wrongP, setWrongP] = useState("");
   const dispatch = useDispatch();
@@ -43,17 +43,6 @@ function Login() {
         const token = result.data.accessToken;
 
         if (token) {
-          toast("Giriş Başarılı. Yönetim Paneline Yönlendiriliyorsunuz!", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            type: "success",
-          });
           localStorage.setItem("token", token);
           const decodedToken = jwtDecode(token);
 
@@ -79,9 +68,13 @@ function Login() {
             })
           );
 
-          // Rol bazlı yönlendirme
+          // Role based routing
           navigate(
-            userRole === "Admin" ? "/dashboardAdmin" : "/dashboardPatient"
+            userRole === "Admin"
+              ? "/dashboard/admin"
+              : userRole === "Patient"
+              ? "/dashboard/patient"
+              : "/dashboard/doctor"
           );
         }
       } catch (error) {

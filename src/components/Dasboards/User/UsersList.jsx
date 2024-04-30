@@ -9,6 +9,10 @@ import UserModal from "./UserModal";
 import TitleCard from "../../UI/Cards/TitleCard";
 import Card from "../../UI/Cards/Card";
 import { FaUserDoctor } from "react-icons/fa6";
+import { IoMdAddCircle } from "react-icons/io";
+import ConfirmModal from "./ConfirmModal";
+import AddDoctorModal from "./AddDoctorModal";
+import AddDoctorForm from "./AddDoctorForm";
 
 const UsersList = () => {
   const { data: users, isLoading: isLoadingUsers } = useGetUsersQuery();
@@ -20,6 +24,10 @@ const UsersList = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddingNew, setIsAddingNew] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showAddDoctorModal, setShowAddDoctorModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [userToAddDoctor, setUserToAddDoctor] = useState(null);
 
   if (isLoadingUsers || isLoadingRoles || isLoadingUserRoles) {
     return <div>Loading...</div>;
@@ -31,8 +39,22 @@ const UsersList = () => {
     setIsAddingNew(false);
   };
 
-  const handleDelete = async (id) => {
-    await deleteUser(id).unwrap();
+  const handleDelete = (id) => {
+    setUserToDelete(id);
+    setShowConfirmModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (userToDelete) {
+      await deleteUser(userToDelete).unwrap();
+      setUserToDelete(null); // ID'yi temizle
+      setShowConfirmModal(false); // Modalı kapat
+    }
+  };
+
+  const handleAddDoctor = (user) => {
+    setSelectedUser(user);
+    setShowAddDoctorModal(true);
   };
 
   return (
@@ -42,9 +64,9 @@ const UsersList = () => {
         title={"User List"}
         icon={<FaUserDoctor />}
         color={"cyan"}
-        className="mt-5">
-        <div className="flex gap-4 mt-5">
-          <div className="flex justify-around gap-10">
+        className="mt-5 p-2">
+        <div className="container gap-4 mt-5">
+          <div className="flex flex-col justify-around gap-10">
             <div>
               <button
                 onClick={() => {
@@ -52,7 +74,8 @@ const UsersList = () => {
                   setIsModalOpen(true);
                   setIsAddingNew(true);
                 }}
-                className="w-40 h-20 bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-white text-lg">
+                className="w-40 h-9 bg-red-500 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-white text-lg flex justify-center items-center">
+                <IoMdAddCircle className="mr-2" />
                 Add New User
               </button>
             </div>
@@ -75,13 +98,13 @@ const UsersList = () => {
                     <tr
                       key={user.id}
                       className="border-b border-cyan-100 hover:bg-cyan-50 transition">
-                      <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
+                      <td className="text-center text-sm py-4 px-2 whitespace-nowrap">
                         {user.id}
                       </td>
-                      <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
+                      <td className="text-center text-sm py-4 px-2 whitespace-nowrap">
                         {user.userName}
                       </td>
-                      <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
+                      <td className="text-center text-sm py-4 px-2 whitespace-nowrap">
                         {roles && userRoles
                           ? roles.find(
                               (role) =>
@@ -104,7 +127,7 @@ const UsersList = () => {
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDelete(user.id)}
+                          onClick={() => handleDelete(user)}
                           className="w-28 h-9 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                           <img
                             src="/images/delete.png"
@@ -113,22 +136,39 @@ const UsersList = () => {
                           />
                           Delete
                         </button>
+                        <button
+                          onClick={() => handleAddDoctor(user)}
+                          className="w-28 h-9 text-white bg-green-300 hover:bg-green-500 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
+                          <IoMdAddCircle className="mr-2" />
+                          Add Doctor
+                        </button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div className="flex flex-col gab-6">
-              {isModalOpen && (
-                <UserModal
-                  user={selectedUser}
-                  roles={roles}
-                  onClose={() => setIsModalOpen(false)}
-                  isAddingNew={isAddingNew}
-                />
-              )}
-            </div>
+            {isModalOpen && (
+              <UserModal
+                user={selectedUser}
+                roles={roles}
+                onClose={() => setIsModalOpen(false)}
+                isAddingNew={isAddingNew}
+              />
+            )}
+            {showConfirmModal && (
+              <ConfirmModal
+                onClose={() => setShowConfirmModal(false)}
+                onConfirm={handleDeleteConfirm}
+                message="Are you sure you want to delete this user?"
+              />
+            )}
+            {showAddDoctorModal && (
+              <AddDoctorForm
+                onClose={() => setShowAddDoctorModal(false)}
+                user={selectedUser}
+              />
+            )}
           </div>
         </div>
       </Card>
