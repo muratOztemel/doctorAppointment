@@ -1,5 +1,5 @@
 import AppointmentSlider from "../../PatientDashboards/AppointmentSlider";
-import useDefaultImage from "../../hooks/useDefaultImage";
+import DefaultImage from "../../hooks/DefaultImage";
 
 const DoctorList = ({ doctor, branchName }) => {
   return (
@@ -7,7 +7,7 @@ const DoctorList = ({ doctor, branchName }) => {
       <div className="col-span-2 p-4">
         <div className="flex justify-center items-center">
           <img
-            src={useDefaultImage(doctor.doctorInfo)}
+            src={DefaultImage(doctor.doctorInfo)}
             alt={`${doctor.name} ${doctor.surname}`}
             className="w-36 h-36 rounded-full object-cover border border-dashed border-cyan-500 p-2 items-center"
           />

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { setUserLogin } from "../../../redux/slices/usersSlice";
 import { useGetPatientByIdQuery } from "../../../redux/features/api/apiSlice";
-import useDefaultImage from "../../hooks/useDefaultImage";
+import DefaultImage from "../../hooks/DefaultImage";
 import { FaUser } from "react-icons/fa";
 import { IoLogOut, IoSettings } from "react-icons/io5";
 
@@ -14,7 +14,7 @@ const PatientLoginManager = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { userId } = useSelector((state) => state.users.userLogin);
   const { data: patient, isError, isLoading } = useGetPatientByIdQuery(userId);
-  const defaultImage = useDefaultImage(patient);
+  const defaultImage = DefaultImage(patient);
   const ref = useRef(null);
 
   const handleLogout = () => {

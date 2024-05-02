@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { useGetPatientByIdQuery } from "../../redux/features/api/apiSlice.js";
 import Spinner from "../../components/UI/Spinner.jsx";
-import useDefaultImage from "../../components/hooks/useDefaultImage";
+import useDefaultImage from "../../components/hooks/DefaultImage";
 import {
   FaBoxArchive,
   FaRegCalendarDays,

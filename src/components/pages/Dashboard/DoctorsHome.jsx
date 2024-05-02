@@ -17,15 +17,14 @@ import PatientsDashboard from "../../Layout/Dashboard/PatientsDashboard.jsx";
 import Flags from "../../Dasboards/Flags/Flags.jsx";
 import Modal from "../../UI/Modal.jsx";
 import BloodType from "../../Dasboards/Services/BloodType.jsx";
+import DefaultImage from "../../hooks/DefaultImage";
 
 const DoctorsHome = () => {
   const [page, setPage] = useState(1);
-
   const dispatch = useDispatch();
   const { sortField, sortOrder, searchTerm, filter } = useSelector(
     (state) => state.tableDoctors
   );
-
   const {
     data: doctor,
     error,
@@ -38,6 +37,7 @@ const DoctorsHome = () => {
     sortOrder,
     filter,
   });
+  //const defaultImage = DefaultImage(doctor.doctorInfo);
 
   /*   useEffect(() => {
     const handleScroll = () => {
@@ -297,13 +297,7 @@ const DoctorsHome = () => {
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         <img
-                          src={
-                            doctor.photo !== "null" &&
-                            doctor.photo !== null &&
-                            doctor.photo !== ""
-                              ? doctor.photo
-                              : ""
-                          }
+                          src=""
                           className="w-12 h-12 rounded-full object-cover border-dash border border-cyan-500"
                         />
                       </td>

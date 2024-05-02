@@ -2,6 +2,10 @@ import { useMemo } from "react";
 
 const useDefaultImage = (item) =>
   useMemo(() => {
+    /*     if (!item) {
+      return "/images/agender.png";
+    } */
+    console.log(item);
     if (item?.photo && item.photo !== "null") {
       return item.photo;
     }

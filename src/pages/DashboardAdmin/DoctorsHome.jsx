@@ -17,7 +17,7 @@ import {
 } from "react-icons/fa6";
 import ModalDeleteDoctor from "../../components/UI/Modal/ModalDeleteDoctor.jsx";
 import TitleCard from "../../components/UI/Cards/TitleCard.jsx";
-import useDefaultImage from "../../components/hooks/useDefaultImage.js";
+import DefaultImage from "../../components/hooks/DefaultImage.jsx";
 
 const DoctorsHome = () => {
   const [page, setPage] = useState(1);
@@ -39,6 +39,9 @@ const DoctorsHome = () => {
     sortOrder,
     filter,
   });
+  console.log(doctor);
+
+  const defaultImage = DefaultImage(doctor?.doctorInfo);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error!</div>;
@@ -228,8 +231,18 @@ const DoctorsHome = () => {
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         <img
-                          src={<useDefaultImage doctor={doctor.doctorInfo} />}
-                          className="w-12 h-12 rounded-full object-cover border-dash border border-cyan-500"
+                          src={
+                            doctor?.doctorInfo?.photo !== "null" &&
+                            doctor?.doctorInfo?.photo !== null &&
+                            doctor?.doctorInfo?.photo !== ""
+                              ? doctor?.doctorInfo?.photo
+                              : doctor?.doctorInfo?.gender === 1
+                              ? "/images/male.png"
+                              : doctor?.doctorInfo?.gender === 2
+                              ? "/images/female.png"
+                              : "/images/agender.png"
+                          }
+                          className="w-12 h-12 rounded-full object-cover border border-border"
                         />
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
