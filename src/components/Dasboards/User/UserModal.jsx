@@ -5,6 +5,7 @@ import {
   useUpdateUserRoleMutation,
 } from "../../../redux/features/api/apiSlice";
 import { useFormik } from "formik";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 
 const UserModal = ({ user, roles, onClose, onSubmit, isAddingNew }) => {
@@ -41,12 +42,18 @@ const UserModal = ({ user, roles, onClose, onSubmit, isAddingNew }) => {
 
       try {
         if (isAddingNew) {
-          await addNewUser(payload).unwrap();
+          await addNewUser(payload);
+          toast.success("The user has been created successfully.", {
+            position: "bottom-left",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         } else {
-          console.log("id", user.id);
-          console.log("email", values.userName);
-          console.log("password", user.password);
-
           if (user.email === !values.userName) {
             await updateUser({
               id: user.id,
@@ -56,14 +63,23 @@ const UserModal = ({ user, roles, onClose, onSubmit, isAddingNew }) => {
                 password: user.password,
                 status: true,
               },
-            }).unwrap();
+            });
           }
           await addNewUserRole({
             userId: user.id,
             roleId: values.roleId,
-          }).unwrap();
+          });
+          toast.success("The user has been updated successfully.", {
+            position: "bottom-left",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
         }
-
         onClose();
       } catch (error) {
         console.error("Error updating or adding user", error);

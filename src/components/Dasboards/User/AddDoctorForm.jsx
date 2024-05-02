@@ -8,6 +8,7 @@ import {
   useAddNewDoctorInfosMutation,
 } from "../../../redux/features/api/apiSlice";
 import { countries } from "../Services/Countries";
+import { toast } from "react-toastify";
 
 const AddDoctorForm = ({ onClose, user }) => {
   const [nationality, setNationality] = useState("TC");
@@ -66,44 +67,52 @@ const AddDoctorForm = ({ onClose, user }) => {
       experience: Yup.string(),
     }),
     onSubmit: async (values) => {
-      const formData = new FormData();
-      if (file) {
-        formData.append("file", file);
-      }
-      console.log("branchId", values.branchId);
-      console.log(typeof values.branchId);
-      console.log("userId", user.id);
-      console.log("gender", values.gender);
-      console.log("photo", formData);
-      let result = await addNewDoctor({
-        branchId: Number(values.branchId),
-        name: values.name,
-        surname: values.surname,
-        title: values.title,
-        userId: user.id,
-      }).unwrap();
-      console.log(result, "result");
+      try {
+        const formData = new FormData();
+        if (file) {
+          formData.append("file", file);
+        }
 
-      let infoResult = await addNewDoctorInfos({
-        doctorId: result.doctorId,
-        email: values.email,
-        phoneNumber: values.phoneNumber,
-        userId: user.id,
-        nationality: values.nationality,
-        identyType: values.identyType,
-        identyNo: values.identyNo,
-        country: values.country,
-        language: values.language,
-        birthDate: values.birthDate,
-        gender: Number(values.gender),
-        education: values.education,
-        experience: values.experience,
-        photo: "",
-        about: values.about,
-        members: values.members,
-        articles: values.articles,
-      }).unwrap();
-      console.log("infoResult", infoResult);
+        await addNewDoctor({
+          branchId: Number(values.branchId),
+          name: values.name,
+          surname: values.surname,
+          title: values.title,
+          userId: user.id,
+        });
+
+        await addNewDoctorInfos({
+          doctorId: result.doctorId,
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+          userId: user.id,
+          nationality: values.nationality,
+          identyType: values.identyType,
+          identyNo: values.identyNo,
+          country: values.country,
+          language: values.language,
+          birthDate: values.birthDate,
+          gender: Number(values.gender),
+          education: values.education,
+          experience: values.experience,
+          photo: "",
+          about: values.about,
+          members: values.members,
+          articles: values.articles,
+        });
+        toast.success("Your transaction has been completed successfully.", {
+          position: "bottom-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
   });
 

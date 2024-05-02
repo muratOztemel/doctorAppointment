@@ -13,6 +13,7 @@ import { IoMdAddCircle } from "react-icons/io";
 import ConfirmModal from "./ConfirmModal";
 import AddDoctorModal from "./AddDoctorModal";
 import AddDoctorForm from "./AddDoctorForm";
+import { toast } from "react-toastify";
 
 const UsersList = () => {
   const { data: users, isLoading: isLoadingUsers } = useGetUsersQuery();
@@ -42,11 +43,21 @@ const UsersList = () => {
   const handleDelete = (id) => {
     setUserToDelete(id);
     setShowConfirmModal(true);
+    toast.success("The user has been deleted successfully.", {
+      position: "bottom-left",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
   };
 
   const handleDeleteConfirm = async () => {
     if (userToDelete) {
-      await deleteUser(userToDelete).unwrap();
+      await deleteUser(userToDelete);
       setUserToDelete(null); // ID'yi temizle
       setShowConfirmModal(false); // Modalı kapat
     }
@@ -127,7 +138,7 @@ const UsersList = () => {
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDelete(user)}
+                          onClick={() => handleDelete(user.id)}
                           className="w-28 h-9 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                           <img
                             src="/images/delete.png"

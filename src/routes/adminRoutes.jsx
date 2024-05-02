@@ -17,6 +17,7 @@ import DoctorWorkingDaysList from "../components/Dasboards/DoctorWorkingDays/Doc
 import BranchesList from "../components/Dasboards/Branches/BranchesList";
 import ProtectedRoute from "../components/Security/ProtectedRoute";
 import Settings from "../components/Dasboards/Settings/Settings";
+import UserRolesForm from "../components/Dasboards/UserRoles/UserRolesForm";
 
 export const adminRoutes = [
   {
@@ -71,6 +72,10 @@ export const adminRoutes = [
       {
         path: "users",
         element: <UsersList />,
+      },
+      {
+        path: "userroles",
+        element: <UserRolesForm />,
       },
       {
         path: "links",

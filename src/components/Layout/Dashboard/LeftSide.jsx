@@ -73,6 +73,12 @@ const LeftSide = () => {
           icon: <IoSettingsOutline />,
         },
         {
+          name: "User Roles",
+          pageName: "UserRolesHome",
+          path: "/dashboard/admin/userroles",
+          icon: <IoSettingsOutline />,
+        },
+        {
           name: "Links",
           pageName: "LinksHome",
           path: "/dashboard/admin/links",
@@ -154,8 +160,10 @@ const LeftSide = () => {
                     <NavLink
                       to={subLink.path}
                       className={({ isActive }) =>
-                        `pl-4 py-1 display-block text-sm ${
-                          isActive ? "text-blue-500" : "text-gray-700"
+                        `relative flex flex-row items-center text-sm h-8 focus:outline-none text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-cyan-500 ${
+                          isActive
+                            ? "bg-cyan-100 border-cyan-500"
+                            : "hover:bg-cyan-50 "
                         }`
                       }>
                       {subLink.name}

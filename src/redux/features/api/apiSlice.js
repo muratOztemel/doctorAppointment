@@ -200,6 +200,15 @@ export const apiSlice = createApi({
       },
       invalidatesTags: ["DoctorInfos"],
     }),
+    updateDoctorInfos: builder.mutation({
+      query: ({ id, updatedDoctorInfos }) => ({
+        url: `DoctorInfos/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedDoctorInfos,
+      }),
+      invalidatesTags: ["DoctorInfos"],
+    }),
     getBranches: builder.query({
       query: () => "Branches",
       providesTags: ["Branches"],
@@ -542,6 +551,7 @@ export const {
   useAddNewDoctorMutation,
   useUpdateDoctorMutation,
   useAddNewDoctorInfosMutation,
+  useUpdateDoctorInfosMutation,
   useGetBranchesQuery,
   useAddNewBranchMutation,
   useUpdateBranchMutation,
