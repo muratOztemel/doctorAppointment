@@ -6,23 +6,21 @@ import {
   resetTimer,
   setIsActive,
 } from "../../../redux/slices/modalSlice.js";
-import {
-  setUserRegisterForm,
-  setUserLogin,
-} from "../../../redux/slices/usersSlice";
+import { setUserLogin } from "../../../redux/slices/usersSlice";
 import { registerData } from "./RegisterData.js";
 import { useFormik } from "formik";
 import { schema } from "./RegisterSchema.js";
 import { Link } from "react-router-dom";
 import Spinner from "../../UI/Spinner";
 import ModalConfirmation from "../../UI/Modal/ModalConfirmation.jsx";
+import { toast } from "react-toastify";
 
 const RegisterEmail = () => {
   const dispatch = useDispatch();
   const [authentication, { dataAuth, isErrorAuth, isLoadingAuth }] =
     useCreateAuthenticationMutation();
   const { timer, isActive } = useSelector((state) => state.modal);
-  const { userLogin, userRegisterForm } = useSelector((state) => state.users);
+  const { userLogin } = useSelector((state) => state.users);
 
   const [isOpen, setIsOpen] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -54,6 +52,17 @@ const RegisterEmail = () => {
     validationSchema: schema,
     onSubmit: async (values) => {
       try {
+        toast("Kayıt başarılı. Kayda devama Yönlendiriliyorsunuz!", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          type: "success",
+        });
         let newUserLogin = {
           username: values.email,
         };
@@ -68,7 +77,7 @@ const RegisterEmail = () => {
           email: values.email,
           password: values.password,
         });
-        console.log(result?.data);
+
         setIsShowConfirmation(true);
         newUserLogin = {
           ...newUserLogin,

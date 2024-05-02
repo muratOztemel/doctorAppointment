@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   setPatientId,
   setSortField,
@@ -21,6 +21,8 @@ import TitleCard from "../../components/UI/Cards/TitleCard.jsx";
 const PatientsHome = () => {
   const [page, setPage] = useState(1);
   const [isShowError, setIsShowError] = useState(false);
+  const [bloodGroupFilter, setBloodGroupFilter] = useState("");
+  const [genderFilter, setGenderFilter] = useState("");
 
   const dispatch = useDispatch();
   const { sortField, sortOrder, searchTerm, filter } = useSelector(
@@ -40,7 +42,7 @@ const PatientsHome = () => {
     filter,
   });
 
-  /*   useEffect(() => {
+  useEffect(() => {
     const handleScroll = () => {
       if (
         window.innerHeight + document.documentElement.scrollTop >=
@@ -53,7 +55,7 @@ const PatientsHome = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isFetching]); */
+  }, [isFetching]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error!</div>;
@@ -63,6 +65,18 @@ const PatientsHome = () => {
     if (a[sortField] > b[sortField]) return sortOrder === "asc" ? 1 : -1;
     return 0;
   }); */
+
+  const handleBloodGroupChange = (e) => {
+    const selectedBloodGroup = Number(e.target.value);
+    setBloodGroupFilter(selectedBloodGroup);
+    dispatch(setFilter(selectedBloodGroup));
+  };
+
+  const handleGenderChange = (e) => {
+    const selectedGender = Number(e.target.value);
+    setGenderFilter(selectedGender);
+    dispatch(setFilter(selectedGender)); // Filter state güncellendi
+  };
 
   const sortedPatients = patients?.length
     ? [...patients].sort((a, b) => {
@@ -82,11 +96,17 @@ const PatientsHome = () => {
       })
     : [];
 
-  const filteredAndSortedPatients = sortedPatients.filter(
-    (patient) =>
-      patient.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filter ? patient.bloodGroup === filter : true)
-  );
+  const filteredAndSortedPatients = sortedPatients?.filter((patient) => {
+    const matchesBloodGroup = bloodGroupFilter
+      ? patient.bloodGroup === bloodGroupFilter
+      : true;
+    const matchesGender = genderFilter ? patient.gender === genderFilter : true;
+    return (
+      matchesBloodGroup &&
+      matchesGender &&
+      patient.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
 
   const handleSort = (field) => {
     const order = sortField === field && sortOrder === "asc" ? "desc" : "asc";
@@ -134,7 +154,7 @@ const PatientsHome = () => {
   const handleFilterChange = (e) => {
     dispatch(setFilter(e.target.value));
     setPage(1); // Filter yapıldığında sayfayı sıfırla!
-    dispatch(setFilter(""));
+    dispatch(setFilter("1"));
   };
 
   return (
@@ -171,17 +191,17 @@ const PatientsHome = () => {
               <div className="w-full">
                 <div className="relative h-10 w-full min-w-[200px]">
                   <select
-                    onChange={handleFilterChange}
+                    onChange={handleBloodGroupChange}
                     className="bg-slate-500 text-white  peer h-14 w-full rounded-[7px] p-3">
                     <option value="">All Blood Groups</option>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
+                    <option value="1">A+</option>
+                    <option value="2">A-</option>
+                    <option value="3">B+</option>
+                    <option value="4">B-</option>
+                    <option value="5">AB+</option>
+                    <option value="6">AB-</option>
+                    <option value="7">O+</option>
+                    <option value="8">O-</option>
                   </select>
                 </div>
               </div>
@@ -190,12 +210,13 @@ const PatientsHome = () => {
               <div className="w-full">
                 <div className="relative h-10 w-full min-w-[200px]">
                   <select
-                    onChange={handleFilterChange}
+                    onChange={handleGenderChange}
                     className="bg-slate-700 text-white  peer h-14 w-full rounded-[7px] p-3">
-                    <option value="">Gender</option>
-                    <option value="Female">Female</option>
-                    <option value="Male">Male</option>
-                    <option value="Agender">Other</option>
+                    <option value="">All Gender</option>
+                    <option value="2">Female</option>
+                    <option value="1">Male</option>
+                    <option value="3">Other</option>
+                    <option value="4">Other</option>
                   </select>
                 </div>
               </div>
@@ -381,7 +402,7 @@ const PatientsHome = () => {
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         <div className="flex justify-end">
                           <Link
-                            to={`/patient/${patient.id}/${patient.name}${patient.surname}`}
+                            to={`/dashboard/admin/patient/${patient.id}/${patient.name}${patient.surname}`}
                             onClick={() => dispatch(setPatientId(patient.id))}
                             className="w-28 h-9 text-white bg-amber-300 hover:bg-amber-500 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                             <img
@@ -418,7 +439,7 @@ const PatientsHome = () => {
                 </tbody>
               </table>
               {/* Pagination Controls */}
-              {/*                     {!isFetching && <p>Loading more users...</p>} */}
+              {!isFetching && <p>Loading more users...</p>}
               {isLoading ? (
                 <div>Loading...</div>
               ) : (

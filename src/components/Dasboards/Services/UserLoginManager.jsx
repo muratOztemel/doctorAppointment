@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import { useGetPatientByIdQuery } from "../../../redux/features/api/apiSlice";
 import { setUserLogin } from "../../../redux/slices/usersSlice";
 import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
@@ -10,6 +11,8 @@ const UserLoginManager = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { userId } = useSelector((state) => state.users);
+  const { data: patient, isError, isLoading } = useGetPatientByIdQuery(userId);
 
   const handleLogout = () => {
     // User token delete in localstorage
@@ -18,6 +21,7 @@ const UserLoginManager = () => {
     // User information clear in Redux
     dispatch(
       setUserLogin({
+        userId: 0,
         username: "",
         token: "",
       })
@@ -37,7 +41,7 @@ const UserLoginManager = () => {
           alt="user"
           className="w-12 h-12 rounded-full border border-border object-cover"
         />
-        <span className="mr-9">Manager</span>
+        <span className="mr-9">{/* {patient.name} {patient.surname} */}</span>
       </button>
       {dropdownOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">

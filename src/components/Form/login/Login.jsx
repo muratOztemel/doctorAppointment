@@ -1,20 +1,21 @@
-import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useAuthenticationMutation } from "../../../redux/features/api/apiSlice";
-import usersSlice, { setUserLogin } from "../../../redux/slices/usersSlice";
+import { setUserLogin } from "../../../redux/slices/usersSlice";
 import Spinner from "../../UI/Spinner";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useFormik } from "formik";
 import LoginSchema from "./LoginSchema";
 import { loginData } from "./loginData";
-import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import Spinner1 from "../../UI/Spinner1";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [wrongP, setWrongP] = useState("");
   const dispatch = useDispatch();
-  const [authentication, { data, isError, isLoading }] =
-    useAuthenticationMutation();
+  const [authentication, { isLoading }] = useAuthenticationMutation();
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
@@ -39,34 +40,42 @@ function Login() {
           return;
         }
 
-        const accessToken = result.data.accessToken;
+        const token = result.data.accessToken;
 
-        if (accessToken) {
-          localStorage.setItem("token", accessToken);
-          // Kullanıcı giriş bilgilerini Redux state'ine kaydet
-          const decodedToken = jwtDecode(accessToken);
-          const role =
+        if (token) {
+          localStorage.setItem("token", token);
+          const decodedToken = jwtDecode(token);
+
+          const userRole =
             decodedToken[
               "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
             ];
 
+          const adminUserId =
+            decodedToken[
+              "http://schemas.microsoft.com/ws/2008/06/identity/claims/sid"
+            ];
+          const patientUserId =
+            decodedToken[
+              "http://schemas.microsoft.com/ws/2008/06/identity/claims/groupsid"
+            ];
+
           dispatch(
             setUserLogin({
-              username: values.username,
-              token: accessToken,
-              userRole: role,
+              token,
+              userRole,
+              userId: userRole === "Admin" ? adminUserId : patientUserId,
             })
           );
 
-          if (role === "Admin") {
-            navigate("/dashboardAdmin");
-          } else if (role === "Patient") {
-            navigate("/dashboardPatient");
-          }
-
-          // Giriş başarılı, anasayfaya yönlendir
-          // formik'in onSubmit içinde başarılı giriş sonrası
-          // navigate("/dashboardPatient");
+          // Role based routing
+          navigate(
+            userRole === "Admin"
+              ? "/dashboard/admin"
+              : userRole === "Patient"
+              ? "/dashboard/patient"
+              : "/dashboard/doctor"
+          );
         }
       } catch (error) {
         console.error("Error user login:", error);
@@ -80,23 +89,6 @@ function Login() {
       <p className="text-red-500 text-center">{formik.errors.general}</p>
     );
   }
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      const role =
-        decodedToken[
-          "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-        ];
-
-      if (role === "Admin") {
-        navigate("/dashboardAdmin");
-      } else if (role === "Patient") {
-        navigate("/dashboardPatient");
-      }
-    }
-  }, [navigate]);
 
   if (isLoading) return <Spinner />;
 
@@ -164,7 +156,9 @@ function Login() {
           Login
         </button>
         <p>
-          <Link className="text-purple-500">Forgot Password?</Link>
+          <Link to="/auth/forgotPassword" className="text-purple-500">
+            Forgot Password?
+          </Link>
         </p>
         <p>Haven&apos;t you registered yet?</p>
       </form>

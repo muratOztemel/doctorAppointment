@@ -13,19 +13,36 @@ const baseQuery = fetchBaseQuery({
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
-  if (result?.error?.status === 401) {
-    // If a 401 error is received, delete the token from localStorage and redirect to the login page
-    localStorage.removeItem("token");
-    // Redirect to login page
-    window.location.href = "/auth/login";
+
+  // If a 401 error is received from the API, refresh token operation is performed.
+  if (result.error && result.error.status === 401) {
+    const refreshToken = localStorage.getItem("refreshToken");
+    // Make a request to the API to get new tokens with Refresh tokens
+    const refreshResult = await baseQuery(
+      { url: "refresh_token", method: "POST", body: { refreshToken } },
+      api,
+      extraOptions
+    );
+
+    if (refreshResult.data) {
+      const { token: newToken } = refreshResult.data;
+      localStorage.setItem("token", newToken);
+      // Make the first request again with the new token
+      result = await baseQuery(args, api, extraOptions);
+    } else {
+      // If refresh token operation fails, redirect user to login page
+      localStorage.clear();
+      window.location.href = "/auth/login";
+    }
   }
+
   return result;
 };
 
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Patients"],
+  tagTypes: ["Patients", "Roles", "Doctors", "Users", "Branches", "UserRoles"],
   endpoints: (builder) => ({
     // Get Patients By Page
     // getPatientsPage: builder.query({
@@ -152,31 +169,185 @@ export const apiSlice = createApi({
       query: () => "Doctors",
       providesTags: ["Doctors"],
     }),
+    addNewDoctor: builder.mutation({
+      query(newDoctor) {
+        return {
+          url: `Doctors`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newDoctor,
+        };
+      },
+      invalidatesTags: ["Doctors"],
+    }),
+    updateDoctor: builder.mutation({
+      query: ({ id, updatedDoctor }) => ({
+        url: `Doctors/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedDoctor,
+      }),
+      invalidatesTags: ["Doctors"],
+    }),
+    addNewDoctorInfos: builder.mutation({
+      query(newDoctorInfos) {
+        return {
+          url: `DoctorInfos`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newDoctorInfos,
+        };
+      },
+      invalidatesTags: ["DoctorInfos"],
+    }),
+    updateDoctorInfos: builder.mutation({
+      query: ({ id, updatedDoctorInfos }) => ({
+        url: `DoctorInfos/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedDoctorInfos,
+      }),
+      invalidatesTags: ["DoctorInfos"],
+    }),
     getBranches: builder.query({
       query: () => "Branches",
+      providesTags: ["Branches"],
+    }),
+    addNewBranch: builder.mutation({
+      query(newBranch) {
+        return {
+          url: `Branches`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newBranch,
+        };
+      },
+      invalidatesTags: ["Branches"],
+    }),
+    updateBranch: builder.mutation({
+      query: ({ id, updatedBranch }) => ({
+        url: `Branches/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedBranch,
+      }),
+      invalidatesTags: ["Branches"],
+    }),
+    deleteBranch: builder.mutation({
+      query(id) {
+        return {
+          url: `Branches/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Branches"],
     }),
     getRoles: builder.query({
-      query: () => "roles",
+      query: () => "Roles",
+      providesTags: ["Roles"],
     }),
-    getUsersRoles: builder.query({
-      query: () => "UsersRoles",
+    addNewRole: builder.mutation({
+      query(newRole) {
+        return {
+          url: `Roles`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newRole,
+        };
+      },
+      invalidatesTags: ["Roles"],
+    }),
+    updateRole: builder.mutation({
+      query: ({ id, updatedRole }) => ({
+        url: `Roles/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedRole,
+      }),
+      invalidatesTags: ["Roles"],
+    }),
+    deleteRole: builder.mutation({
+      query(id) {
+        return {
+          url: `Roles/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Roles"],
+    }),
+    getUserRoles: builder.query({
+      query: () => "UserRoles",
+      providesTags: ["UserRoles"],
+    }),
+    getUserRolesById: builder.query({
+      query: (id) => `UserRoles/${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
+    addNewUserRole: builder.mutation({
+      query(newUserRole) {
+        return {
+          url: `UserRoles`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newUserRole,
+        };
+      },
+      invalidatesTags: ["UserRoles"],
+    }),
+    updateUserRole: builder.mutation({
+      query: ({ id, updatedUserRole }) => ({
+        url: `UserRoles/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedUserRole,
+      }),
+      invalidatesTags: ["UserRoles"],
+    }),
+    deleteUserRole: builder.mutation({
+      query(id) {
+        return {
+          url: `UserRoles/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["UserRoles"],
     }),
     getUsers: builder.query({
       query: () => "Users",
+      providesTags: ["Users"],
     }),
     addNewUser: builder.mutation({
       query(newUser) {
         return {
-          url: `Users/`,
+          url: `Users`,
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: newUser,
         };
       },
+      invalidatesTags: ["Users"],
     }),
     getUserById: builder.query({
       query: (id) => `Users/${id}`,
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
+    updateUser: builder.mutation({
+      query: ({ id, updatedUser }) => ({
+        url: `Users/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedUser,
+      }),
+      invalidatesTags: ["Users"],
+    }),
+    deleteUser: builder.mutation({
+      query(id) {
+        return {
+          url: `Users/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Users"], // Silme işlemi sonrası rolleri yenile
     }),
     getExaminations: builder.query({
       query: () => "examinations",
@@ -185,7 +356,41 @@ export const apiSlice = createApi({
       query: () => "examMedicines",
     }),
     getMedicines: builder.query({
-      query: () => "medicines",
+      query: () => "Medicines",
+      providesTags: ["Medicines"],
+    }),
+    getMedicineById: builder.query({
+      query: (id) => `Medicines/${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
+    addNewMedicine: builder.mutation({
+      query(newMedicine) {
+        return {
+          url: `Medicines`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newMedicine,
+        };
+      },
+      invalidatesTags: ["Medicines"],
+    }),
+    updateMedicine: builder.mutation({
+      query: ({ id, updatedMedicine }) => ({
+        url: `Medicines/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedMedicine,
+      }),
+      invalidatesTags: ["Medicines"],
+    }),
+    deleteMedicine: builder.mutation({
+      query(id) {
+        return {
+          url: `Medicines/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Medicines"],
     }),
     getMedicinesPage: builder.query({
       query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
@@ -197,10 +402,69 @@ export const apiSlice = createApi({
       query: () => "authority",
     }),
     getHolidays: builder.query({
-      query: () => "holidays",
+      query: () => "Holidays",
+    }),
+    addNewHoliday: builder.mutation({
+      query(newHoliday) {
+        return {
+          url: `Holidays`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newHoliday,
+        };
+      },
+      invalidatesTags: ["Holidays"],
+    }),
+    updateHoliday: builder.mutation({
+      query: ({ id, updatedHoliday }) => ({
+        url: `Holidays/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedHoliday,
+      }),
+      invalidatesTags: ["Holidays"],
+    }),
+    deleteHoliday: builder.mutation({
+      query(id) {
+        return {
+          url: `Holidays/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Holidays"],
     }),
     getLinks: builder.query({
       query: () => "links",
+      providesTags: ["Links"],
+    }),
+    addNewLink: builder.mutation({
+      query(newLink) {
+        return {
+          url: `Links`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newLink,
+        };
+      },
+      invalidatesTags: ["Links"],
+    }),
+    updateLink: builder.mutation({
+      query: ({ id, updatedLink }) => ({
+        url: `Links/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedLink,
+      }),
+      invalidatesTags: ["Links"],
+    }),
+    deleteLink: builder.mutation({
+      query(id) {
+        return {
+          url: `Links/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Links"],
     }),
     getMonthlyAppointmentCount: builder.query({
       query: () =>
@@ -221,6 +485,43 @@ export const apiSlice = createApi({
     GetAppointmentCountByDoctor: builder.query({
       query: () =>
         "Dashboard/appointment-count-by-doctor?startDate=2024-04-01&endDate=2024-05-01",
+    }),
+    getDoctorWorkingDays: builder.query({
+      query: () => "DoctorWorkingDays",
+      providesTags: ["DoctorWorkingDays"],
+    }),
+    addNewDoctorWorkingDays: builder.mutation({
+      query(newDoctorWorkingDays) {
+        return {
+          url: `DoctorWorkingDays`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newDoctorWorkingDays,
+        };
+      },
+      invalidatesTags: ["DoctorWorkingDays"],
+    }),
+    getDoctorWorkingDaysById: builder.query({
+      query: (id) => `DoctorWorkingDays/${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
+    updateDoctorWorkingDays: builder.mutation({
+      query: ({ id, updatedDoctorWorkingDays }) => ({
+        url: `DoctorWorkingDays/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedDoctorWorkingDays,
+      }),
+      invalidatesTags: ["DoctorWorkingDays"],
+    }),
+    deleteDoctorWorkingDays: builder.mutation({
+      query(id) {
+        return {
+          url: `DoctorWorkingDays/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["DoctorWorkingDays"], // Silme işlemi sonrası rolleri yenile
     }),
   }),
   /*   keepUnusedDataFor: 30,
@@ -247,21 +548,53 @@ export const {
   useGetAppointmentsQuery,
   useAppointmentUpdateMutation,
   useGetDoctorsQuery,
+  useAddNewDoctorMutation,
+  useUpdateDoctorMutation,
+  useAddNewDoctorInfosMutation,
+  useUpdateDoctorInfosMutation,
   useGetBranchesQuery,
+  useAddNewBranchMutation,
+  useUpdateBranchMutation,
+  useDeleteBranchMutation,
   useGetRolesQuery,
-  useGetUsersRolesQuery,
+  useAddNewRoleMutation,
+  useUpdateRoleMutation,
+  useDeleteRoleMutation,
+  useGetUserRolesQuery,
+  useGetUserRolesByIdQuery,
+  useAddNewUserRoleMutation,
+  useUpdateUserRoleMutation,
+  useDeleteUserRoleMutation,
   useGetUsersQuery,
   useAddNewUserMutation,
   useGetUserByIdQuery,
+  useUpdateUserMutation,
+  useDeleteUserMutation,
   useGetExaminationsQuery,
   useGetExamMedicinesQuery,
+  useGetMedicinesQuery,
+  useGetMedicineByIdQuery,
+  useAddNewMedicineMutation,
+  useUpdateMedicineMutation,
+  useDeleteMedicineMutation,
   useGetMedicinesPageQuery,
   useGetAuthorityQuery,
   useGetHolidaysQuery,
+  useAddNewHolidayMutation,
+  useUpdateHolidayMutation,
+  useDeleteHolidayMutation,
   useGetLinksQuery,
+  useAddNewLinkMutation,
+  useUpdateLinkMutation,
+  useDeleteLinkMutation,
   useGetMonthlyAppointmentCountQuery,
   useGetMonthlyPatientCountQuery,
   useGetDailyAppointmentCountQuery,
   useGetDailyPatientCountQuery,
   useGetAppointmentCountByDoctorQuery,
+  useGetDoctorWorkingDaysByIdQuery,
+  useAddNewDoctorWorkingDaysMutation,
+  useGetDoctorWorkingDaysQuery,
+  useUpdateDoctorWorkingDaysMutation,
+  useDeleteDoctorWorkingDaysMutation,
 } = apiSlice;

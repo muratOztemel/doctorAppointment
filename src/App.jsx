@@ -4,7 +4,11 @@ import { authRoutes } from "./routes/authRoutes";
 import { adminRoutes } from "./routes/adminRoutes";
 import { doctorRoutes } from "./routes/doctorRoutes";
 import { patientRoutes } from "./routes/patientRoutes";
+import { useAuthChecker } from "./components/hooks/AuthChecker";
+
 const App = () => {
+  useAuthChecker();
+
   const router = createBrowserRouter([
     ...mainRoutes,
     ...authRoutes,
@@ -12,10 +16,12 @@ const App = () => {
     ...doctorRoutes,
     ...patientRoutes,
   ]);
+
   return (
-    <div>
+    <div className="app">
       <RouterProvider router={router} />
     </div>
   );
 };
+
 export default App;

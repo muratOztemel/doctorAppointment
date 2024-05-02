@@ -2,13 +2,10 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAddNewPatientMutation } from "../../../redux/features/api/apiSlice";
 import Spinner from "../../UI/Spinner";
-import {
-  setUserRegisterForm,
-  setUserLogin,
-} from "../../../redux/slices/usersSlice";
 import { registerData } from "./registerData";
 import { useFormik } from "formik";
 import { schema } from "./reigisterSchema";
+import { toast } from "react-toastify";
 
 const RegisterForm = () => {
   const dispatch = useDispatch();
@@ -35,8 +32,20 @@ const RegisterForm = () => {
     validationSchema: schema,
     onSubmit: async (values) => {
       try {
+        toast("Giriş Başarılı. Yönetim Paneline Yönlendiriliyorsunuz!", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          type: "success",
+        });
         const ip = await addIpAddress();
         const newPatientData = {
+          id: 0,
           userId: userId,
           name: values.name,
           surname: values.surname,
@@ -49,8 +58,6 @@ const RegisterForm = () => {
           Language: "Turkish",
           Nationality: "Turkish",
         };
-
-        dispatch(setUserRegisterForm(newPatientData));
 
         await addNewPatient(newPatientData);
         navigate(`/dashboardPatient`);

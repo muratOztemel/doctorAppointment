@@ -4,38 +4,28 @@ export const usersSlice = createSlice({
   name: "users",
   initialState: {
     userLogin: {
-      userId: 0,
-      username: "",
-      token: "",
-      userRole: "Patient",
-    },
-    userRegisterForm: {
-      name: "",
-      surname: "",
-      idNumber: "",
-      birthDate: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      phoneNumber: "",
-      terms: false,
-      ipAddress: 0,
+      userId: null,
+      username: null,
+      token: null,
+      userRole: null,
     },
   },
   reducers: {
     setUserId: (state, action) => {
-      state.userId = action.payload;
+      state.userLogin.userId = action.payload;
     },
     setUserLogin: (state, action) => {
       state.userLogin = action.payload;
     },
-    setUserRegisterForm: (state, action) => {
-      state.userRegisterForm = action.payload;
+    clearUser: (state) => {
+      state.userId = null;
+      state.username = null;
+      state.token = null;
+      state.userRole = null;
     },
   },
 });
 
-export const { setUserId, setUserLogin, setUserRegisterForm } =
-  usersSlice.actions;
+export const { setUserId, setUserLogin, clearUser } = usersSlice.actions;
 
 export default usersSlice.reducer;

@@ -1,6 +1,5 @@
-import Card from "../../components/UI/Cards/Card";
 import TitleCard from "../../components/UI/Cards/TitleCard";
-import { FaUserInjured } from "react-icons/fa";
+import SearchDropdown from "../../components/PatientDashboards/SearchDropdown";
 
 const DashboardPatientHome = () => {
   return (
@@ -9,10 +8,7 @@ const DashboardPatientHome = () => {
         <TitleCard title={"D A S H B O A R D"} />
         <div className="w-full my-6 grid xl:grid-cols-8 grid-cols-1 gap-6">
           <div className="xl:col-span-12 w-full">
-            <Card
-              title={"Patient dashboard"}
-              icon={<FaUserInjured />}
-              color={"cyan"}></Card>
+            <SearchDropdown />
           </div>
           <div className="xl:col-span-2 xl:block grid sm:grid-cols-2 gap-6"></div>
         </div>

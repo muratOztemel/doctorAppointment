@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useConfirmActivationCodeMutation } from "../../../redux/features/api/apiSlice.js";
 import Spinner from "../Spinner.jsx";
 import OTPInput from "../../Dasboards/Services/OtpInput.jsx";
+import { toast } from "react-toastify";
 
 const Modal = (props) => {
   const dispatch = useDispatch();
@@ -43,6 +44,20 @@ const Modal = (props) => {
 
       // API yanıtının başarılı olup olmadığını kontrol etmek için `data.success` kullanın
       if (result.data.accessToken) {
+        toast(
+          "Kayıt işleminiz başarıyla tamamlandı. Yönetim Paneline Yönlendiriliyorsunuz!",
+          {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            type: "success",
+          }
+        );
         localStorage.setItem("token", result.data.accessToken);
         // Kullanıcı giriş bilgilerini Redux state'ine kaydet
         dispatch(

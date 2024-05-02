@@ -7,16 +7,26 @@ import DashboardAdminDoctorsPage from "../pages/DashboardAdmin/DashboardAdminDoc
 import DashboardAdminAppointmentsPage from "../pages/DashboardAdmin/DashboardAdminAppointmentsPage";
 import DoctorProfile from "../components/Dasboards/Doctors/DoctorProfile";
 import AppointmentProfile from "../components/Dasboards/Appointments/AppointmentProfile";
-import MedicinesHome from "../pages/DashboardAdmin/MedicinesHome";
+import AddDoctor from "../components/Dasboards/Doctors/AddDoctor";
+import RolesList from "../components/Dasboards/Roles/RolesList";
+import UsersList from "../components/Dasboards/User/UsersList";
+import MedicinesList from "../components/Dasboards/Medicine/MedicinesList";
+import LinksList from "../components/Dasboards/Links/LinksList";
+import HolidaysList from "../components/Dasboards/Holidays/HolidaysList";
+import DoctorWorkingDaysList from "../components/Dasboards/DoctorWorkingDays/DoctorWorkingDaysList";
+import BranchesList from "../components/Dasboards/Branches/BranchesList";
+import ProtectedRoute from "../components/Security/ProtectedRoute";
+import Settings from "../components/Dasboards/Settings/Settings";
+import UserRolesForm from "../components/Dasboards/UserRoles/UserRolesForm";
 
 export const adminRoutes = [
   {
-    path: "/",
+    path: "/dashboard/admin/",
     element: <DashboardAdminLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "dashboardAdmin",
+        index: true,
         element: <DashboardAdminPage />,
       },
       {
@@ -36,6 +46,10 @@ export const adminRoutes = [
         element: <DoctorProfile />,
       },
       {
+        path: "addDoctor",
+        element: <AddDoctor />,
+      },
+      {
         path: "appointments",
         element: <DashboardAdminAppointmentsPage />,
       },
@@ -45,7 +59,39 @@ export const adminRoutes = [
       },
       {
         path: "medicines",
-        element: <MedicinesHome />,
+        element: <MedicinesList />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
+      },
+      {
+        path: "roles",
+        element: <RolesList />,
+      },
+      {
+        path: "users",
+        element: <UsersList />,
+      },
+      {
+        path: "userroles",
+        element: <UserRolesForm />,
+      },
+      {
+        path: "links",
+        element: <LinksList />,
+      },
+      {
+        path: "holidays",
+        element: <HolidaysList />,
+      },
+      {
+        path: "doctorWorkingDays",
+        element: <DoctorWorkingDaysList />,
+      },
+      {
+        path: "branches",
+        element: <BranchesList />,
       },
     ],
   },

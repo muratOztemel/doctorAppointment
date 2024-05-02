@@ -16,9 +16,9 @@ const LeftSidePatient = () => {
     },
     {
       id: 2,
-      name: "Patients",
-      pageName: "PatientsHome",
-      path: "/patients",
+      name: "Profile",
+      pageName: "PatientProfile",
+      path: "/dashboardPatientProfile",
       icon: <FaUserInjured />,
     },
     {

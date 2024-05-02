@@ -17,6 +17,7 @@ import {
 } from "react-icons/fa6";
 import ModalDeleteDoctor from "../../components/UI/Modal/ModalDeleteDoctor.jsx";
 import TitleCard from "../../components/UI/Cards/TitleCard.jsx";
+import DefaultImage from "../../components/hooks/DefaultImage.jsx";
 
 const DoctorsHome = () => {
   const [page, setPage] = useState(1);
@@ -38,6 +39,9 @@ const DoctorsHome = () => {
     sortOrder,
     filter,
   });
+  console.log(doctor);
+
+  const defaultImage = DefaultImage(doctor?.doctorInfo);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error!</div>;
@@ -228,17 +232,17 @@ const DoctorsHome = () => {
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         <img
                           src={
-                            doctor?.doctorInfo?.photo
-                              ? doctor.doctorInfo.photo
-                              : doctor?.doctorInfo?.gender
-                              ? "/images/agender.png"
-                              : doctor.doctorInfo.gender === 1
+                            doctor?.doctorInfo?.photo !== "null" &&
+                            doctor?.doctorInfo?.photo !== null &&
+                            doctor?.doctorInfo?.photo !== ""
+                              ? doctor?.doctorInfo?.photo
+                              : doctor?.doctorInfo?.gender === 1
                               ? "/images/male.png"
-                              : doctor.doctorInfo.gender === 2
+                              : doctor?.doctorInfo?.gender === 2
                               ? "/images/female.png"
                               : "/images/agender.png"
                           }
-                          className="w-12 h-12 rounded-full object-cover border-dash border border-cyan-500"
+                          className="w-12 h-12 rounded-full object-cover border border-border"
                         />
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
@@ -248,7 +252,7 @@ const DoctorsHome = () => {
                         {doctor.surname}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {doctor.doctorInfo.phoneNumber}
+                        {doctor?.doctorInfo?.phoneNumber}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         {formatDate(doctor.createdAt)}
@@ -256,7 +260,7 @@ const DoctorsHome = () => {
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         <div className="flex justify-end">
                           <Link
-                            to={`/doctor/${doctor.id}/${doctor.name}${doctor.surname}`}
+                            to={`/dashboard/admin/doctor/${doctor.id}/${doctor.name}${doctor.surname}`}
                             onClick={() => dispatch(setDoctorId(doctor.id))}
                             className="w-28 h-9 text-white bg-amber-300 hover:bg-amber-500 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                             <img
