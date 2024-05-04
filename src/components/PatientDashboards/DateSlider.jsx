@@ -1,9 +1,21 @@
 import { useState, useEffect, useRef } from "react";
-import { format, addDays } from "date-fns";
+import {
+  format,
+  addDays,
+  parseISO,
+  setHours,
+  setMinutes,
+  addMinutes,
+} from "date-fns";
 import { BsPersonWalking } from "react-icons/bs";
 import { FaUserDoctor } from "react-icons/fa6";
+import {
+  useGetDoctorWorkingDayByDoctorIdQuery,
+  useGetDailySlotsQuery,
+} from "../../redux/features/api/apiSlice";
+import { GiConsoleController } from "react-icons/gi";
 
-const DoctorAppointment = () => {
+const DoctorAppointment = ({ doctor, branchName }) => {
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(today);
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -11,44 +23,66 @@ const DoctorAppointment = () => {
   const [slots, setSlots] = useState({});
   const sliderRef = useRef(null);
 
+  const formattedSlotsDate = format(selectedDate, "yyyy-MM-dd");
+
+  const { data: doctorData, isLoading: isLoadingDoctorData } =
+    useGetDoctorWorkingDayByDoctorIdQuery(doctor.id);
+  const { data: dailySlots, isLoading: isLoadingDailySlots } =
+    useGetDailySlotsQuery({ doctorId: doctor.id, date: formattedSlotsDate });
+
   const [selectionPath, setSelectionPath] = useState({
-    bolum: "Cardiology",
-    doktor: "Dr. Örnek",
+    bolum: branchName,
+    doktor: `${doctor.name} ${doctor.surname}`,
   });
 
   useEffect(() => {
-    setDates(generateDates(today, 10));
-    fetchSlots(today, 10);
-  }, []);
+    if (doctorData) {
+      setDates(generateDates(today, 10));
+      fetchSlots(today, 10, doctorData);
+    }
+  }, [doctorData]);
+
+  useEffect(() => {
+    if (dailySlots) {
+      fetchSlots(selectedDate, 1, doctorData);
+    } else {
+      // Eğer dailySlots verisi yoksa, setSlots ile bir boş dizi ataması yapın
+      setSlots({});
+    }
+  }, [dailySlots]);
 
   const generateDates = (startDate, numDays) => {
     return Array.from({ length: numDays }, (_, i) => addDays(startDate, i));
   };
 
-  const fetchSlots = (startDate, numDays) => {
-    let newSlots = {};
+  const fetchSlots = (startDate, numDays, schedule) => {
+    let newSlots = { ...slots }; // Mevcut slots durumunu kopyalayın
     for (let i = 0; i < numDays; i++) {
       const date = addDays(startDate, i);
-      newSlots[format(date, "yyyy-MM-dd")] = [
-        "09:00",
-        "09:15",
-        "09:30",
-        "09:45",
-        "10:00",
-        "10:15",
-        "10:30",
-        "10:45",
-        "11:00",
-        "11:15",
-        "11:30",
-        "11:45",
-        "01:30",
-        "13:45",
-        "02:00",
-        "03:00",
-      ];
+      const dayOfWeek = date.getDay();
+      if (schedule.days.includes(dayOfWeek)) {
+        const formattedDate = format(date, "yyyy-MM-dd");
+        const slotsForDay = dailySlots?.slots || []; // dailySlots varsa slots'ı kullan, yoksa boş bir dizi kullan
+        newSlots[formattedDate] = slotsForDay;
+      } else {
+        newSlots[format(date, "yyyy-MM-dd")] = []; // Store an empty array for days without slots
+      }
     }
     setSlots(newSlots);
+  };
+
+  const generateTimeSlots = (startTime, endTime, duration) => {
+    const [hours, minutes] = duration.split(":").map((x) => parseInt(x, 10));
+    let start = parseISO(`2024-01-01T${startTime}`);
+    const end = parseISO(`2024-01-01T${endTime}`);
+    let slots = [];
+
+    while (start < end) {
+      slots.push(format(start, "HH:mm"));
+      start = addMinutes(start, hours * 60 + minutes);
+    }
+
+    return slots;
   };
 
   const handleDateChange = (date) => {
@@ -70,6 +104,45 @@ const DoctorAppointment = () => {
     }
   };
 
+  const selectedSlots = slots[format(selectedDate, "yyyy-MM-dd")] || [];
+
+  // Tüm tarihleri oluşturun
+  const allDates = generateDates(today, 10);
+
+  // Doktorun çalışma günlerini alın
+  const workingDays = doctorData ? doctorData.days : [];
+
+  // Tüm tarihleri dönüp rengini belirleyin
+  const dateElements = allDates.map((date, index) => {
+    const isWorkingDay = workingDays.includes(date.getDay());
+    const isSelectedDate = selectedDate.toDateString() === date.toDateString();
+    const hasSlots = slots[format(date, "yyyy-MM-dd")]?.length > 0;
+    let dateClassName = "bg-red-300 text-white";
+
+    if (isWorkingDay) {
+      dateClassName = hasSlots ? "bg-cyan-500 text-white" : "bg-cyan-200";
+    }
+
+    if (isSelectedDate) {
+      dateClassName = hasSlots
+        ? "bg-cyan-500 text-white"
+        : "bg-red-500 text-white";
+    }
+
+    return (
+      <div
+        key={index}
+        onClick={() => handleDateChange(date)}
+        className={`cursor-pointer p-2 rounded-lg text-center ${dateClassName}`}
+        style={{ minWidth: "105px", marginRight: "10px" }}>
+        <div className="text-sm font-medium text-cyan-800">
+          {format(date, "eee")}
+        </div>
+        <div className="text-5xl font-medium">{format(date, "dd")}</div>
+      </div>
+    );
+  });
+
   return (
     <>
       <div className="col-span-6 p-4">
@@ -80,25 +153,10 @@ const DoctorAppointment = () => {
             {"<"}
           </button>
           <div
-            ref={sliderRef}
             className="flex overflow-x-auto hide-scrollbar"
-            style={{ width: "600px", height: "105px" }}>
-            {dates.map((date, index) => (
-              <div
-                key={index}
-                onClick={() => handleDateChange(date)}
-                className={`cursor-pointer p-2 rounded-lg text-center ${
-                  selectedDate.toDateString() === date.toDateString()
-                    ? "bg-cyan-500 text-white"
-                    : "bg-cyan-200"
-                }`}
-                style={{ minWidth: "105px", marginRight: "10px" }}>
-                <div className="text-sm font-medium text-cyan-800">
-                  {format(date, "eee")}
-                </div>
-                <div className="text-5xl font-medium">{format(date, "dd")}</div>
-              </div>
-            ))}
+            style={{ width: "600px", height: "105px" }}
+            ref={sliderRef}>
+            {dateElements}
           </div>
           <button
             onClick={() => scroll("right")}
@@ -110,9 +168,9 @@ const DoctorAppointment = () => {
           <h2 className="font-bold text-xl mb-2 text-cyan-700">
             Available Slots on {format(selectedDate, "eeee, MMMM dd")}
           </h2>
-          <div className="grid grid-cols-3 gap-2">
-            {(slots[format(selectedDate, "yyyy-MM-dd")] || []).map(
-              (slot, index) => (
+          {selectedSlots.length > 0 ? (
+            <div className="grid grid-cols-3 gap-2">
+              {selectedSlots.map((slot, index) => (
                 <button
                   key={index}
                   className={`p-2 rounded-lg ${
@@ -121,11 +179,13 @@ const DoctorAppointment = () => {
                       : "bg-cyan-100"
                   }`}
                   onClick={() => handleSlotChange(slot)}>
-                  {slot}
+                  {slot.time} {/* slot nesnesinden sadece zamanı al */}
                 </button>
-              )
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-red-500">No slots available on this day.</div>
+          )}
         </div>
       </div>
       <div className="col-span-2">

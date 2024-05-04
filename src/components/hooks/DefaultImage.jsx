@@ -5,7 +5,6 @@ const useDefaultImage = (item) =>
     /*     if (!item) {
       return "/images/agender.png";
     } */
-    console.log(item);
     if (item?.photo && item.photo !== "null") {
       return item.photo;
     }

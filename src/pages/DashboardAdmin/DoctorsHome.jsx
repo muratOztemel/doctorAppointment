@@ -39,7 +39,6 @@ const DoctorsHome = () => {
     sortOrder,
     filter,
   });
-  console.log(doctor);
 
   const defaultImage = DefaultImage(doctor?.doctorInfo);
 

@@ -19,7 +19,7 @@ const DoctorList = ({ doctor, branchName }) => {
           {branchName}
         </div>
       </div>
-      <AppointmentSlider />
+      <AppointmentSlider doctor={doctor} branchName={branchName} />
     </>
   );
 };

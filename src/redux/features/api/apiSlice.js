@@ -490,6 +490,10 @@ export const apiSlice = createApi({
       query: () => "DoctorWorkingDays",
       providesTags: ["DoctorWorkingDays"],
     }),
+    getDailySlots: builder.query({
+      query: ({ doctorId, date }) =>
+        `DoctorWorkingDays/daily-slots?doctorId=${doctorId}&date=${date}`,
+    }),
     addNewDoctorWorkingDays: builder.mutation({
       query(newDoctorWorkingDays) {
         return {
@@ -500,6 +504,11 @@ export const apiSlice = createApi({
         };
       },
       invalidatesTags: ["DoctorWorkingDays"],
+    }),
+    getDoctorWorkingDayByDoctorId: builder.query({
+      query: (id) =>
+        `DoctorWorkingDays/GetDoctorWorkingDayByDoctorId?doctorId=${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
     }),
     getDoctorWorkingDaysById: builder.query({
       query: (id) => `DoctorWorkingDays/${id}`,
@@ -593,7 +602,9 @@ export const {
   useGetDailyPatientCountQuery,
   useGetAppointmentCountByDoctorQuery,
   useGetDoctorWorkingDaysByIdQuery,
+  useGetDailySlotsQuery,
   useAddNewDoctorWorkingDaysMutation,
+  useGetDoctorWorkingDayByDoctorIdQuery,
   useGetDoctorWorkingDaysQuery,
   useUpdateDoctorWorkingDaysMutation,
   useDeleteDoctorWorkingDaysMutation,

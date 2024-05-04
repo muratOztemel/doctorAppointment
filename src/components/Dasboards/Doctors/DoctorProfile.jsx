@@ -102,7 +102,7 @@ const DoctorProfile = () => {
           name: values.name,
           surname: values.surname,
           title: values.title,
-          userId: 0,
+          userId: doctor.userId,
         },
       });
 

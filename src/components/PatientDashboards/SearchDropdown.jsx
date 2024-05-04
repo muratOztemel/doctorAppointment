@@ -76,7 +76,10 @@ const SearchDropdown = () => {
                 value={branchName}
                 required
                 onClick={() => setIsOpen(!isOpen)}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setBranchName(e.target.value);
+                  setSearchTerm(e.target.value);
+                }}
               />
               <button
                 type="submit"
@@ -119,15 +122,15 @@ const SearchDropdown = () => {
       {isClick && (
         <Card title={"Choise a doctor"} icon={<FaUserDoctor />} color={"cyan"}>
           {doctors.map((doctor) => {
-            // if (doctor.branchId === branchId) {
-            return (
-              <div key={doctor.id} className="container mx-auto px-4">
-                <div className="grid grid-cols-10 gap-4 border-b border-dashed border-gray-200">
-                  <DoctorList doctor={doctor} branchName={branchName} />
+            if (doctor.branchId === branchId) {
+              return (
+                <div key={doctor.id} className="container mx-auto px-4">
+                  <div className="grid grid-cols-10 gap-4 border-b border-dashed border-gray-200">
+                    <DoctorList doctor={doctor} branchName={branchName} />
+                  </div>
                 </div>
-              </div>
-            );
-            // }
+              );
+            }
           })}
         </Card>
       )}
