@@ -14,12 +14,20 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  // If a 401 error is received from the API, refresh token operation is performed.
+  // Eğer API'den 401 hatası alınırsa, token yenileme işlemi yapılır.
   if (result.error && result.error.status === 401) {
     const refreshToken = localStorage.getItem("refreshToken");
-    // Make a request to the API to get new tokens with Refresh tokens
+    // Refresh token ile yeni token almak için API'ye istek yapılır
     const refreshResult = await baseQuery(
-      { url: "refresh_token", method: "POST", body: { refreshToken } },
+      {
+        url: "refresh_token",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${refreshToken}`,
+        },
+        body: JSON.stringify({ refreshToken }),
+      },
       api,
       extraOptions
     );
@@ -27,10 +35,10 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     if (refreshResult.data) {
       const { token: newToken } = refreshResult.data;
       localStorage.setItem("token", newToken);
-      // Make the first request again with the new token
+      // Yeni token ile ilk isteği tekrar yap
       result = await baseQuery(args, api, extraOptions);
     } else {
-      // If refresh token operation fails, redirect user to login page
+      // Refresh token işlemi başarısız olursa, kullanıcıyı login sayfasına yönlendir
       localStorage.clear();
       window.location.href = "/auth/login";
     }
