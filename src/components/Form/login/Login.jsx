@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useAuthenticationMutation } from "../../../redux/features/api/apiSlice";
 import { setUserLogin } from "../../../redux/slices/usersSlice";
+import { setPatientId } from "../../../redux/slices/patientSlice";
 import Spinner from "../../UI/Spinner";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -59,7 +60,9 @@ function Login() {
             decodedToken[
               "http://schemas.microsoft.com/ws/2008/06/identity/claims/groupsid"
             ];
-
+          if (patientUserId) {
+            dispatch(setPatientId(patientUserId));
+          }
           dispatch(
             setUserLogin({
               token,

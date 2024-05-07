@@ -16,6 +16,7 @@ import doctorsReducer from "./slices/doctorsSlice";
 import tableMedicinesReducer from "./slices/tableMedicinesSlice";
 import tableDoctorAppointmentReducer from "./slices/tableDoctorAppointmentSlice";
 import modalReducer from "./slices/modalSlice";
+import patientReducer from "./slices/patientSlice.js";
 
 const store = configureStore({
   reducer: {
@@ -35,6 +36,7 @@ const store = configureStore({
     tableMedicines: tableMedicinesReducer,
     tableDoctorAppointment: tableDoctorAppointmentReducer,
     modal: modalReducer,
+    patient: patientReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),

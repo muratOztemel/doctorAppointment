@@ -1,26 +1,25 @@
 import { useState, useEffect, useRef } from "react";
-import {
-  format,
-  addDays,
-  parseISO,
-  setHours,
-  setMinutes,
-  addMinutes,
-} from "date-fns";
+import { format, addDays } from "date-fns";
 import { BsPersonWalking } from "react-icons/bs";
 import { FaUserDoctor } from "react-icons/fa6";
 import {
   useGetDoctorWorkingDayByDoctorIdQuery,
   useGetDailySlotsQuery,
 } from "../../redux/features/api/apiSlice";
-import { GiConsoleController } from "react-icons/gi";
+import ConfirmAppointmentModal from "./ConfirmAppointmentModal";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { ImCancelCircle } from "react-icons/im";
 
 const DoctorAppointment = ({ doctor, branchName }) => {
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(today);
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedAvailable, setSelectedAvailable] = useState(null);
   const [dates, setDates] = useState([]);
   const [slots, setSlots] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   const sliderRef = useRef(null);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false); // Veri yükleniyor mu?
 
@@ -37,43 +36,41 @@ const DoctorAppointment = ({ doctor, branchName }) => {
   });
 
   useEffect(() => {
-    if (doctorData) {
-      setDates(generateDates(today, 10));
-      fetchSlots(today, 10, doctorData);
-    }
-  }, [doctorData]);
-
-  useEffect(() => {
     const fetchData = async () => {
-      if (dailySlots) {
+      if (dailySlots && doctorData) {
+        // doctorData da burada kontrol ediliyor
         fetchSlots(selectedDate, 1, doctorData);
       } else {
         setSlots({});
       }
     };
 
-    setIsLoadingSlots(true); // Verinin yüklendiği kontrolünü sağlamak için isLoadingSlots'u true yapın
-    fetchData(); // fetchData fonksiyonunu çağırarak veriyi yükle
-  }, [dailySlots]);
+    setIsLoadingSlots(true);
+    fetchData();
+  }, [dailySlots, doctorData]);
 
   const generateDates = (startDate, numDays) => {
     return Array.from({ length: numDays }, (_, i) => addDays(startDate, i));
   };
 
   const fetchSlots = (startDate, numDays, schedule) => {
-    let newSlots = { ...slots }; // Mevcut slots durumunu kopyalayın
-    for (let i = 0; i < numDays; i++) {
-      const date = addDays(startDate, i);
-      const dayOfWeek = date.getDay();
-      if (schedule.days.includes(dayOfWeek)) {
-        const formattedDate = format(date, "yyyy-MM-dd");
-        const slotsForDay = dailySlots?.slots || []; // dailySlots varsa slots'ı kullan, yoksa boş bir dizi kullan
-        newSlots[formattedDate] = slotsForDay;
-      } else {
-        newSlots[format(date, "yyyy-MM-dd")] = []; // Store an empty array for days without slots
+    if (schedule) {
+      let newSlots = { ...slots };
+      for (let i = 0; i < numDays; i++) {
+        const date = addDays(startDate, i);
+        const dayOfWeek = date.getDay();
+        if (schedule.days.includes(dayOfWeek)) {
+          const formattedDate = format(date, "yyyy-MM-dd");
+          const slotsForDay = dailySlots?.slots || [];
+          newSlots[formattedDate] = slotsForDay;
+        } else {
+          newSlots[format(date, "yyyy-MM-dd")] = [];
+        }
       }
+      setSlots(newSlots);
+    } else {
+      console.error("Error: Schedule is undefined.");
     }
-    setSlots(newSlots);
   };
 
   const handleDateChange = (date) => {
@@ -99,7 +96,7 @@ const DoctorAppointment = ({ doctor, branchName }) => {
   const selectedSlots = slots[format(selectedDate, "yyyy-MM-dd")] || [];
 
   // Tüm tarihleri oluşturun
-  const allDates = generateDates(today, 10);
+  const allDates = generateDates(today, 15);
 
   // Doktorun çalışma günlerini alın
   const workingDays = doctorData ? doctorData.days : [];
@@ -112,7 +109,7 @@ const DoctorAppointment = ({ doctor, branchName }) => {
     let dateClassName = "bg-red-300 text-white";
 
     if (isWorkingDay) {
-      dateClassName = hasSlots ? "bg-cyan-500 text-white" : "bg-cyan-200";
+      dateClassName = hasSlots ? "bg-cyan-300 text-black" : "bg-cyan-200";
     }
 
     if (isSelectedDate) {
@@ -126,11 +123,11 @@ const DoctorAppointment = ({ doctor, branchName }) => {
         key={index}
         onClick={() => handleDateChange(date)}
         className={`cursor-pointer p-2 rounded-lg text-center ${dateClassName}`}
-        style={{ minWidth: "105px", marginRight: "10px" }}>
-        <div className="text-sm font-medium text-cyan-800">
+        style={{ minWidth: "78px", marginRight: "6px" }}>
+        <div className="text-sm font-medium text-black">
           {format(date, "eee")}
         </div>
-        <div className="text-5xl font-medium">{format(date, "dd")}</div>
+        <div className="text-4xl font-medium">{format(date, "dd")}</div>
       </div>
     );
   });
@@ -141,42 +138,52 @@ const DoctorAppointment = ({ doctor, branchName }) => {
         <div className="flex items-center space-x-2 mb-4">
           <button
             onClick={() => scroll("left")}
-            className="p-2 bg-cyan-500 text-white rounded-full w-8 h-8 flex justify-center items-center">
-            {"<"}
+            className="p-2 bg-gray-300 hover:bg-cyan-500 delay-100	 text-white rounded-full w-8 h-8 flex justify-center items-center">
+            <IoIosArrowBack />
           </button>
           <div
             className="flex overflow-x-auto hide-scrollbar"
-            style={{ width: "600px", height: "105px" }}
+            style={{ width: "600px", height: "78px" }}
             ref={sliderRef}>
             {dateElements}
           </div>
           <button
             onClick={() => scroll("right")}
-            className="p-2 bg-cyan-500 text-white rounded-full w-8 h-8 flex justify-center items-center">
-            {">"}
+            className="p-2 bg-gray-300 hover:bg-cyan-500 delay-100 text-white rounded-full w-8 h-8 flex justify-center items-center">
+            <IoIosArrowForward />
           </button>
         </div>
         <div className="slots w-full">
-          <h2 className="font-bold text-xl mb-2 text-cyan-700">
-            Available Slots on {format(selectedDate, "eeee, MMMM dd")}
-          </h2>
           {selectedSlots.length > 0 ? (
-            <div className="grid grid-cols-3 gap-2">
-              {selectedSlots.map((slot, index) => (
-                <button
-                  key={index}
-                  className={`p-2 rounded-lg ${
-                    selectedSlot === slot.time
-                      ? "bg-cyan-800 text-white"
-                      : "bg-cyan-100"
-                  }`}
-                  onClick={() => handleSlotChange(slot.time)}>
-                  {slot.time} {/* slot nesnesinden sadece zamanı al */}
-                </button>
-              ))}
-            </div>
+            <>
+              <h2 className="font-bold text-xl mb-2 text-cyan-700 text-center">
+                Available Slots on {format(selectedDate, "eeee, MMMM dd")}
+              </h2>
+              <div className="grid grid-cols-3 gap-2">
+                {selectedSlots.map((slot, index) => {
+                  return (
+                    <button
+                      key={index}
+                      disabled={!slot.available}
+                      className={`p-2 rounded-lg ${
+                        slot.available
+                          ? selectedSlot === slot.time
+                            ? "bg-cyan-800 text-white"
+                            : "bg-cyan-100"
+                          : "bg-red-200"
+                      }`}
+                      onClick={() => handleSlotChange(slot.time)}>
+                      {slot.time} {/* slot nesnesinden sadece zamanı al */}
+                    </button>
+                  );
+                })}
+              </div>
+            </>
           ) : (
-            <div className="text-red-500">No slots available on this day.</div>
+            <div className="flex flex-col justify-center items-center font-bold text-xl mb-2 text-red-500 text-center">
+              No slots available on {format(selectedDate, "eeee, MMMM dd")}
+              <ImCancelCircle className="text-4xl mt-3" />
+            </div>
           )}
         </div>
       </div>
@@ -235,9 +242,19 @@ const DoctorAppointment = ({ doctor, branchName }) => {
                 </div>
               </div>
               <div>
-                <button className="bg-cyan-700 p-2 mt-4 hover:bg-green-600 text-white text-lg rounded">
+                <button
+                  onClick={openModal}
+                  className="bg-cyan-700 p-2 mt-4 hover:bg-green-600 text-white text-lg rounded">
                   Create Appointment
                 </button>
+                <ConfirmAppointmentModal
+                  isOpen={isModalOpen}
+                  onClose={closeModal}
+                  doctor={doctor}
+                  selectedDate={selectedDate}
+                  selectedSlot={selectedSlot}
+                  branchName={branchName}
+                />
               </div>
             </>
           )}

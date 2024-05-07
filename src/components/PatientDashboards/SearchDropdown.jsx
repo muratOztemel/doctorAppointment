@@ -69,9 +69,9 @@ const SearchDropdown = () => {
                 </svg>
               </div>
               <input
-                type="text"
+                type="search"
                 id="default-search"
-                className="block w-full h-14 pl-10 pr-20 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none"
+                className="block w-full h-14 pl-10 pr-24 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none search-cancel"
                 placeholder="Search Branches..."
                 value={branchName}
                 required

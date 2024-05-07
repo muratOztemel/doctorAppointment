@@ -163,7 +163,19 @@ export const apiSlice = createApi({
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
     }),
     getAppointments: builder.query({
-      query: () => "Appointments",
+      query: () => "Appointments?page=1&pageSize=150",
+      providesTags: ["Appointments"],
+    }),
+    addNewAppointment: builder.mutation({
+      query(newAppointment) {
+        return {
+          url: `Appointments`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newAppointment,
+        };
+      },
+      invalidatesTags: ["Appointments"],
     }),
     AppointmentUpdate: builder.mutation({
       query: ({ id, updatedAppointment }) => ({
@@ -563,6 +575,7 @@ export const {
   useGetByDoctorAndDateQuery,
   useGetAppointmentByIdQuery,
   useGetAppointmentsQuery,
+  useAddNewAppointmentMutation,
   useAppointmentUpdateMutation,
   useGetDoctorsQuery,
   useAddNewDoctorMutation,

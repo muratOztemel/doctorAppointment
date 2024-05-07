@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const tablePatientsSlice = createSlice({
   name: "tablePatients",
   initialState: {
-    patientId: 0,
+    patientId: null,
     sortField: "id",
     sortOrder: "asc",
     searchTerm: "",

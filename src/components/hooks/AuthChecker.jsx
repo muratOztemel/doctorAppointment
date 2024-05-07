@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { clearUser, setUserLogin } from "../../redux/slices/usersSlice";
 import { jwtDecode } from "jwt-decode";
+import { setPatientId } from "../../redux/slices/patientSlice";
 
 export function useAuthChecker() {
   const dispatch = useDispatch();
@@ -24,6 +25,10 @@ export function useAuthChecker() {
           decodedToken[
             "http://schemas.microsoft.com/ws/2008/06/identity/claims/groupsid"
           ];
+
+        if (patientUserId) {
+          dispatch(setPatientId(patientUserId));
+        }
 
         dispatch(
           setUserLogin({
