@@ -1,15 +1,15 @@
 import ErrorPage from "../pages/ErrorPage";
-import DashboardDoctorLayout from "../layouts/DashboardDoctorLayout";
+import DashboardDoctorLayout from "../layouts/DashboardDoctorLayout/DashboardDoctorLayout";
 import DashboardDoctorPage from "../pages/DashboardDoctor/DashboardDoctorPage";
 import ProtectedRoute from "../components/Security/ProtectedRoute";
 
 export const doctorRoutes = [
   {
-    path: "/dashboard/doctor/doctorDashboard",
+    path: "/dashboard/doctor/",
     element: (
-      <ProtectedRoute allowedRoles={["Doctor"]}>
-        <DashboardDoctorLayout />
-      </ProtectedRoute>
+      // <ProtectedRoute allowedRoles={["Doctor"]}>
+      <DashboardDoctorLayout />
+      // </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,
     children: [

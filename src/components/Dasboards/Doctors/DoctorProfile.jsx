@@ -106,7 +106,7 @@ const DoctorProfile = () => {
         },
       });
 
-      await updateDoctorInfos({
+      const result = await updateDoctorInfos({
         id: doctorInfo.id,
         updatedDoctorInfos: {
           id: doctorInfo.id,
@@ -130,6 +130,7 @@ const DoctorProfile = () => {
           articles: values.articles,
         },
       });
+      console.log(result);
       toast.success("Your transaction has been completed successfully.", {
         position: "bottom-left",
         autoClose: 2000,

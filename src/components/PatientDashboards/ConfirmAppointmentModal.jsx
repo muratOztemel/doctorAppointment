@@ -61,14 +61,13 @@ const ConfirmAppointmentModal = ({
       console.error("Error add appointment", error);
     }
 
-    onClose(); // Modalı kapat
+    onClose();
   };
 
   const doctorFullName = `${doctor.title} ${doctor.name} ${doctor.surname}`;
 
   const handleCancel = () => {
-    console.log("Randevu İptal Edildi");
-    onClose(); // Modalı kapat
+    onClose();
   };
 
   const handleOutsideClick = (event) => {

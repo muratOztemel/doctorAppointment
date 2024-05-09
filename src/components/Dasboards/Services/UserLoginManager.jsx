@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { useGetPatientByIdQuery } from "../../../redux/features/api/apiSlice";
+import { useGetUserByIdQuery } from "../../../redux/features/api/apiSlice";
 import { setUserLogin } from "../../../redux/slices/usersSlice";
 import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
@@ -11,8 +11,8 @@ const UserLoginManager = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { userId } = useSelector((state) => state.users);
-  const { data: patient, isError, isLoading } = useGetPatientByIdQuery(userId);
+  const { userId } = useSelector((state) => state.users.userLogin);
+  const { data: user, isError, isLoading } = useGetUserByIdQuery(userId);
 
   const handleLogout = () => {
     // User token delete in localstorage

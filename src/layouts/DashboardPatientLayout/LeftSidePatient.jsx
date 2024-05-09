@@ -4,6 +4,7 @@ import { FaUserInjured } from "react-icons/fa";
 import { FaUserDoctor } from "react-icons/fa6";
 import { LuCalendarSearch } from "react-icons/lu";
 import { AiFillMedicineBox } from "react-icons/ai";
+import { TbClockRecord } from "react-icons/tb";
 
 const LeftSidePatient = () => {
   const linkDizi = [
@@ -11,15 +12,15 @@ const LeftSidePatient = () => {
       id: 1,
       name: "Dashboard",
       pageName: "DashboardHome",
-      path: "/dashboardAdmin",
+      path: "/dashboard/patient",
       icon: <IoHome />,
     },
     {
       id: 2,
       name: "My Appointments",
       pageName: "myAppointments",
-      path: "/dashboardPatientProfile",
-      icon: <FaUserInjured />,
+      path: "/dashboard/patient/appointments",
+      icon: <TbClockRecord />,
     },
     {
       id: 3,
@@ -39,14 +40,14 @@ const LeftSidePatient = () => {
       id: 5,
       name: "My Profile",
       pageName: "PatientProfile",
-      path: "/dashboardPatientProfile",
+      path: "/dashboard/patient/profile",
       icon: <FaUserInjured />,
     },
     {
       id: 6,
       name: "My Settings",
       pageName: "SettingsHome",
-      path: "/settings",
+      path: "/dashboard/patient/settings",
       icon: <IoSettingsOutline />,
     },
   ];

@@ -12,31 +12,48 @@ export function useAuthChecker() {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        const userRole =
+        let userRole =
           decodedToken[
             "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
           ];
-        const adminUserId =
-          decodedToken[
-            "http://schemas.microsoft.com/ws/2008/06/identity/claims/sid"
-          ];
 
-        const patientUserId =
+        const groupSid =
           decodedToken[
             "http://schemas.microsoft.com/ws/2008/06/identity/claims/groupsid"
           ];
 
-        if (patientUserId) {
-          dispatch(setPatientId(patientUserId));
+        const userId =
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"
+          ];
+
+        const username =
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+          ];
+
+        if (userRole === "Patient") {
+          dispatch(setPatientId(groupSid));
+          dispatch(
+            setUserLogin({
+              userId,
+              username,
+              token,
+              userRole,
+            })
+          );
         }
 
-        dispatch(
-          setUserLogin({
-            token,
-            userRole,
-            userId: userRole === "Admin" ? adminUserId : patientUserId,
-          })
-        );
+        if (userRole === "Admin") {
+          dispatch(
+            setUserLogin({
+              userId,
+              username,
+              token,
+              userRole,
+            })
+          );
+        }
       } catch (error) {
         console.error("Session restore failed:", error);
       }

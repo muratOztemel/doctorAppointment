@@ -12,8 +12,12 @@ const PatientLoginManager = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { userId } = useSelector((state) => state.users.userLogin);
-  const { data: patient, isError, isLoading } = useGetPatientByIdQuery(userId);
+  const { patientId } = useSelector((state) => state.patient);
+  const {
+    data: patient,
+    isError,
+    isLoading,
+  } = useGetPatientByIdQuery(patientId);
   const defaultImage = DefaultImage(patient);
   const ref = useRef(null);
 
@@ -61,14 +65,14 @@ const PatientLoginManager = () => {
       {dropdownOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
           <Link
-            to="/dashboardPatientProfile"
+            to="/dashboard/patient/profile"
             onClick={toggleDropdown}
             className="flex justify-start items-center px-4 py-2 font-semibold text-sm text-gray-700 hover:bg-gray-100">
             <FaUser className="ml-0.5 mr-2 text-slate-500 w-4 h-4" />
             Profile
           </Link>
           <Link
-            to="/settings"
+            to="settings"
             onClick={toggleDropdown}
             className="flex justify-start items-center px-4 py-2 font-semibold text-sm text-gray-700 hover:bg-gray-100">
             <IoSettings className="mr-2 text-slate-500 w-5 h-5" />

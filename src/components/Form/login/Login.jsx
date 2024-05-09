@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useAuthenticationMutation } from "../../../redux/features/api/apiSlice";
 import { setUserLogin } from "../../../redux/slices/usersSlice";
 import { setPatientId } from "../../../redux/slices/patientSlice";
+import { setDoctorId } from "../../../redux/slices/doctorsSlice";
 import Spinner from "../../UI/Spinner";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -13,6 +14,7 @@ import { toast } from "react-toastify";
 import Spinner1 from "../../UI/Spinner1";
 
 function Login() {
+  // const { userId } = useSelector((state) => state.users.userLogin);
   const [showPassword, setShowPassword] = useState(false);
   const [wrongP, setWrongP] = useState("");
   const dispatch = useDispatch();
@@ -46,37 +48,73 @@ function Login() {
         if (token) {
           localStorage.setItem("token", token);
           const decodedToken = jwtDecode(token);
-
-          const userRole =
+          console.log(decodedToken);
+          let userRole =
             decodedToken[
               "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
             ];
 
-          const adminUserId =
+          const primarysid =
             decodedToken[
-              "http://schemas.microsoft.com/ws/2008/06/identity/claims/sid"
+              "http://schemas.microsoft.com/ws/2008/06/identity/claims/primarysid"
             ];
-          const patientUserId =
+
+          const groupSid =
             decodedToken[
               "http://schemas.microsoft.com/ws/2008/06/identity/claims/groupsid"
             ];
-          if (patientUserId) {
-            dispatch(setPatientId(patientUserId));
+
+          const userId =
+            decodedToken[
+              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"
+            ];
+
+          const username =
+            decodedToken[
+              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+            ];
+
+          if (userRole === "Patient") {
+            dispatch(setPatientId(groupSid));
+            dispatch(
+              setUserLogin({
+                userId,
+                username,
+                token,
+                userRole,
+              })
+            );
           }
-          dispatch(
-            setUserLogin({
-              token,
-              userRole,
-              userId: userRole === "Admin" ? adminUserId : patientUserId,
-            })
-          );
+
+          if (userRole === "Doctor") {
+            dispatch(setDoctorId(primarysid));
+            dispatch(
+              setUserLogin({
+                userId,
+                username,
+                token,
+                userRole,
+              })
+            );
+          }
+
+          if (userRole === "Admin") {
+            dispatch(
+              setUserLogin({
+                userId,
+                username,
+                token,
+                userRole,
+              })
+            );
+          }
 
           // Role based routing
           navigate(
             userRole === "Admin"
               ? "/dashboard/admin"
               : userRole === "Patient"
-              ? "/dashboard/patient"
+              ? `/dashboard/patient/`
               : "/dashboard/doctor"
           );
         }
@@ -85,7 +123,6 @@ function Login() {
       }
     },
   });
-
   // Form içinde genel hata mesajını göstermek için
   {
     formik.errors.general && (

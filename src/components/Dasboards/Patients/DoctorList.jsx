@@ -1,5 +1,6 @@
 import AppointmentSlider from "../../PatientDashboards/AppointmentSlider";
 import DefaultImage from "../../hooks/DefaultImage";
+import { MdOutlineFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
 
 const DoctorList = ({ doctor, branchName }) => {
   return (
@@ -17,6 +18,14 @@ const DoctorList = ({ doctor, branchName }) => {
         </div>
         <div className="flex justify-center items-center text-gray-500">
           {branchName}
+        </div>
+        <div>Doctor Work Days</div>
+        <div>Mon Tue Wed Thu Fri</div>
+        <div className="text-sm flex justify-center items-center">
+          <div className="mr-2">Add to Favorites</div>
+          <div>
+            <MdOutlineFavoriteBorder />
+          </div>
         </div>
       </div>
       <AppointmentSlider doctor={doctor} branchName={branchName} />

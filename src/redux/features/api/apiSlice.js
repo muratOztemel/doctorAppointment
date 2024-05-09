@@ -14,33 +14,37 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  // Eğer API'den 401 hatası alınırsa, token yenileme işlemi yapılır.
+  // Eğer API'den 401 hatası alınırsa, token yenileme işlemi yapılır
   if (result.error && result.error.status === 401) {
     const refreshToken = localStorage.getItem("refreshToken");
-    // Refresh token ile yeni token almak için API'ye istek yapılır
-    const refreshResult = await baseQuery(
-      {
-        url: "refresh_token",
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${refreshToken}`,
+    if (refreshToken) {
+      // Refresh token ile yeni token almak için API'ye istek yapılır
+      const refreshResult = await baseQuery(
+        {
+          url: "refresh_token",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ refreshToken }),
         },
-        body: JSON.stringify({ refreshToken }),
-      },
-      api,
-      extraOptions
-    );
+        api,
+        extraOptions
+      );
 
-    if (refreshResult.data) {
-      const { token: newToken } = refreshResult.data;
-      localStorage.setItem("token", newToken);
-      // Yeni token ile ilk isteği tekrar yap
-      result = await baseQuery(args, api, extraOptions);
-    } else {
-      // Refresh token işlemi başarısız olursa, kullanıcıyı login sayfasına yönlendir
-      localStorage.clear();
-      window.location.href = "/auth/login";
+      if (refreshResult.data) {
+        const { token: newToken } = refreshResult.data;
+        localStorage.setItem("token", newToken);
+        // Yeni token ile ilk isteği tekrar yap
+        return await baseQuery(args, api, extraOptions);
+      } else {
+        // Refresh token işlemi başarısız olursa, kullanıcıyı login sayfasına yönlendir
+        localStorage.clear();
+        window.location.href = "/auth/login";
+        return {
+          error: { status: "AUTH_ERROR", data: "Authentication failed" },
+        };
+      }
     }
   }
 

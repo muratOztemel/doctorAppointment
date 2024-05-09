@@ -3,6 +3,7 @@ import ErrorPage from "../pages/ErrorPage";
 import DashboardPatientPage from "../pages/DashboardPatient/DashboardPatientPage";
 import PatientProfile from "../components/PatientDashboards/PatientProfile";
 import ProtectedRoute from "../components/Security/ProtectedRoute";
+import PatientSettings from "../components/PatientDashboards/PatientSettings";
 
 export const patientRoutes = [
   {
@@ -15,8 +16,12 @@ export const patientRoutes = [
         element: <DashboardPatientPage />,
       },
       {
-        path: "dashboardPatientProfile",
+        path: "profile",
         element: <PatientProfile />,
+      },
+      {
+        path: "settings",
+        element: <PatientSettings />,
       },
     ],
   },
