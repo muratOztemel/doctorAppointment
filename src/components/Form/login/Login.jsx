@@ -48,7 +48,7 @@ function Login() {
         if (token) {
           localStorage.setItem("token", token);
           const decodedToken = jwtDecode(token);
-          console.log(decodedToken);
+
           let userRole =
             decodedToken[
               "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"

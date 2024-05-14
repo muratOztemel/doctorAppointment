@@ -1,9 +1,10 @@
 import { Outlet } from "react-router-dom";
+import HeaderMainLayout from "./HeaderMainLayout";
 
 const MainLayout = () => {
   return (
     <div>
-      MainLayout
+      <HeaderMainLayout />
       <Outlet />
     </div>
   );

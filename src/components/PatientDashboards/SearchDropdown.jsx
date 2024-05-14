@@ -1,20 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   useGetBranchesQuery,
   useGetDoctorsQuery,
-} from "../../redux/features/api/apiSlice.js";
+} from "../../redux/features/api/apiSlice";
 import { FaUserDoctor } from "react-icons/fa6";
 import { FaUserInjured } from "react-icons/fa";
-import Card from "../UI/Cards/Card.jsx";
-import DoctorList from "../Dasboards/Patients/DoctorList.jsx";
+import Card from "../UI/Cards/Card";
+import DoctorList from "../Dasboards/Patients/DoctorList";
+import { format, isValid, parse } from "date-fns";
 
 const SearchDropdown = () => {
+  const today = format(new Date(), "yyyy-MM-dd");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const branchIdFromUrl = parseInt(searchParams.get("branchId"), 10);
+  const branchNameFromUrl = searchParams.get("branch") || "";
+  const dayFromUrl = searchParams.get("day");
+
+  let initialDate = today;
+  if (dayFromUrl) {
+    const parsedDate = parse(dayFromUrl, "yyyy-MM-dd", new Date());
+    if (isValid(parsedDate)) {
+      initialDate = parsedDate;
+    }
+  }
+  const [branchId, setBranchId] = useState(branchIdFromUrl || 0);
+  const [day, setDay] = useState(initialDate);
+  const [branchName, setBranchName] = useState(branchNameFromUrl);
   const [isOpen, setIsOpen] = useState(false);
   const [isClick, setIsClick] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAll, setShowAll] = useState(false);
-  const [branchId, setBranchId] = useState(0);
-  const [branchName, setBranchName] = useState("");
+  const [doctorsToShow, setDoctorsToShow] = useState([]);
+  const dropdownRef = useRef(null);
 
   const { data: branches, isError, isLoading } = useGetBranchesQuery();
   const {
@@ -22,6 +40,28 @@ const SearchDropdown = () => {
     isErrorDoctors,
     isLoadingDoctors,
   } = useGetDoctorsQuery();
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsClick(!!branchIdFromUrl && !!branchNameFromUrl);
+    setSearchParams({
+      branch: branchName,
+      branchId,
+      day: format(day, "yyyy-MM-dd"),
+    });
+  }, [branchId, branchName, day, setSearchParams]);
 
   if (isLoading || isLoadingDoctors) return <p>Loading...</p>;
   if (isError || isErrorDoctors) return <p>Error loading data.</p>;
@@ -31,10 +71,6 @@ const SearchDropdown = () => {
     branch.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // const filteredDoctors = doctors.filter(
-  //   (doctor) => doctor.branchId === branchId
-  // );
-
   const displayBranches = showAll
     ? filteredBranches
     : filteredBranches.slice(0, 5);
@@ -42,15 +78,17 @@ const SearchDropdown = () => {
   return (
     <>
       <Card
-        title={"Patient dashboard"}
+        title={"Patient Dashboard"}
         icon={<FaUserInjured />}
         color={"cyan"}
         className={"mb-6"}>
-        <div className="relative my-6 max-w-md mx-auto h-full">
-          <form className="w-full">
+        <div
+          className="relative my-6 max-w-md mx-auto h-full"
+          ref={dropdownRef}>
+          <form className="w-full" onSubmit={(e) => e.preventDefault()}>
             <label
               htmlFor="default-search"
-              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
+              className="mb-2 text-sm font-medium text-gray-900 sr-only">
               Search
             </label>
             <div className="relative">
@@ -71,10 +109,9 @@ const SearchDropdown = () => {
               <input
                 type="search"
                 id="default-search"
-                className="block w-full h-14 pl-10 pr-24 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none search-cancel"
+                className="block w-full h-14 pl-10 pr-24 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none"
                 placeholder="Search Branches..."
                 value={branchName}
-                required
                 onClick={() => setIsOpen(!isOpen)}
                 onChange={(e) => {
                   setBranchName(e.target.value);
@@ -82,7 +119,7 @@ const SearchDropdown = () => {
                 }}
               />
               <button
-                type="submit"
+                type="button"
                 className="text-white absolute right-2.5 bottom-2.5 bg-cyan-500 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
                 Search
               </button>
@@ -99,6 +136,7 @@ const SearchDropdown = () => {
                     setIsOpen(!isOpen);
                     setBranchId(branch.id);
                     setBranchName(branch.name);
+                    setDay(today);
                   }}>
                   <div className="mr-1">
                     <div className="rounded-md bg-cyan-50 w-7 h-7 flex justify-center items-center">
@@ -120,13 +158,18 @@ const SearchDropdown = () => {
         </div>
       </Card>
       {isClick && (
-        <Card title={"Choise a doctor"} icon={<FaUserDoctor />} color={"cyan"}>
-          {doctors.map((doctor) => {
+        <Card title={"Choose a Doctor"} icon={<FaUserDoctor />} color={"cyan"}>
+          {doctors?.map((doctor) => {
             if (doctor.branchId === branchId) {
               return (
                 <div key={doctor.id} className="container mx-auto px-4">
                   <div className="grid grid-cols-10 gap-4 border-b border-dashed border-gray-200">
-                    <DoctorList doctor={doctor} branchName={branchName} />
+                    <DoctorList
+                      doctor={doctor}
+                      branchName={branchName}
+                      setDay={setDay}
+                      day={day}
+                    />
                   </div>
                 </div>
               );

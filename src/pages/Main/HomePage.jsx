@@ -1,12 +1,9 @@
-import { Link } from "react-router-dom";
+import ImageSlider from "./ImageSlider";
 
 const HomePage = () => {
   return (
-    <div>
-      HomePage
-      <Link to={"/auth/login"} className="text-red-500">
-        Login
-      </Link>
+    <div className="mt-10">
+      <ImageSlider />
     </div>
   );
 };

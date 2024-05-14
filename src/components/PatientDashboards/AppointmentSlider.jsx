@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { days } from "./days"; // days.js dosyasından import edildi
 import DateSlider from "./DateSlider";
 
-const AppointmentSlider = ({ doctor, branchName }) => {
+const AppointmentSlider = ({ doctor, branchName, setDay, day }) => {
   const sliderRef = useRef(null);
 
   const scroll = (direction) => {
@@ -15,7 +15,14 @@ const AppointmentSlider = ({ doctor, branchName }) => {
     }
   };
 
-  return <DateSlider doctor={doctor} branchName={branchName} />;
+  return (
+    <DateSlider
+      doctor={doctor}
+      branchName={branchName}
+      setDay={setDay}
+      day={day}
+    />
+  );
 };
 
 export default AppointmentSlider;

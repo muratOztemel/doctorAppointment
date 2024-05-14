@@ -1,8 +1,91 @@
+import { useState, useEffect } from "react";
 import AppointmentSlider from "../../PatientDashboards/AppointmentSlider";
 import DefaultImage from "../../hooks/DefaultImage";
-import { MdOutlineFavorite, MdOutlineFavoriteBorder } from "react-icons/md";
+import {
+  useGetDoctorWorkingDayByDoctorIdQuery,
+  useGetFavoritesQuery,
+  useUpdateFavoriteMutation,
+} from "../../../redux/features/api/apiSlice";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
-const DoctorList = ({ doctor, branchName }) => {
+const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const DoctorList = ({ doctor, branchName, setDay, day }) => {
+  const { userId } = useSelector((state) => state.users.userLogin);
+  const { data: doctorData, isLoading: isLoadingDoctorData } =
+    useGetDoctorWorkingDayByDoctorIdQuery(doctor.id);
+  const { data: favoritesData, isLoading: isLoadingFavorites } =
+    useGetFavoritesQuery(userId);
+  const [favorites, setFavorites] = useState([]);
+  const [updateFavorite, { isLoading: isUpdatingFavorite }] =
+    useUpdateFavoriteMutation();
+
+  useEffect(() => {
+    if (favoritesData) {
+      setFavorites(favoritesData);
+    }
+  }, [favoritesData]);
+
+  const isFavorited = favorites.some(
+    (fav) => fav.doctorId === doctor.id && fav.status
+  );
+
+  const toggleFavorite = async () => {
+    try {
+      const currentFavorite = favorites.find(
+        (fav) => fav.doctorId === doctor.id
+      );
+      const newStatus = !isFavorited;
+
+      const updatedFavorites = favorites.map((fav) =>
+        fav.doctorId === doctor.id ? { ...fav, status: newStatus } : fav
+      );
+      setFavorites(updatedFavorites);
+
+      const result = await updateFavorite({
+        id: currentFavorite?.id,
+        updatedFavorite: {
+          id: currentFavorite?.id,
+          doctorId: doctor.id,
+          userId,
+          status: newStatus,
+        },
+      });
+
+      console.log(result);
+
+      toast.success(
+        `Doctor ${newStatus ? "added to" : "removed from"} favorites.`
+      );
+    } catch (error) {
+      toast.error("Failed to update favorites.");
+    }
+  };
+
+  if (isLoadingDoctorData || isLoadingFavorites) {
+    return <div>Loading...</div>;
+  }
+
+  const workingDays = doctorData?.days
+    ?.split(",")
+    .map((day) => parseInt(day.trim()))
+    .filter((day) => day >= 0 && day <= 6);
+
+  const workingDayElements =
+    workingDays?.length > 0 ? (
+      workingDays.map((day) => (
+        <div
+          key={day}
+          className="w-9 h-9 bg-amber-500 text-white rounded-full flex items-center justify-center m-1">
+          {dayNames[day]}
+        </div>
+      ))
+    ) : (
+      <div>No working days set</div>
+    );
+
   return (
     <>
       <div className="col-span-2 p-4">
@@ -19,16 +102,30 @@ const DoctorList = ({ doctor, branchName }) => {
         <div className="flex justify-center items-center text-gray-500">
           {branchName}
         </div>
-        <div>Doctor Work Days</div>
-        <div>Mon Tue Wed Thu Fri</div>
-        <div className="text-sm flex justify-center items-center">
-          <div className="mr-2">Add to Favorites</div>
+        <div className="text-center text-gray-300">Doctor Work Days</div>
+        <div className="flex justify-center items-center">
+          {workingDayElements}
+        </div>
+        <div className="text-sm flex flex-col justify-center items-center">
+          <div className="mr-2 text-gray-300">Add to Favorites</div>
           <div>
-            <MdOutlineFavoriteBorder />
+            {isFavorited ? (
+              <FaHeart
+                className="text-red-500 text-3xl"
+                onClick={toggleFavorite}
+              />
+            ) : (
+              <FaRegHeart className="text-3xl" onClick={toggleFavorite} />
+            )}
           </div>
         </div>
       </div>
-      <AppointmentSlider doctor={doctor} branchName={branchName} />
+      <AppointmentSlider
+        doctor={doctor}
+        branchName={branchName}
+        setDay={setDay}
+        day={day}
+      />
     </>
   );
 };

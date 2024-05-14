@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { format, addDays } from "date-fns";
+import { format, addDays, isValid, parse } from "date-fns";
 import { BsPersonWalking } from "react-icons/bs";
 import { FaUserDoctor } from "react-icons/fa6";
 import {
@@ -9,10 +9,22 @@ import {
 import ConfirmAppointmentModal from "./ConfirmAppointmentModal";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { ImCancelCircle } from "react-icons/im";
+import { useSearchParams } from "react-router-dom";
 
-const DoctorAppointment = ({ doctor, branchName }) => {
-  const today = new Date();
-  const [selectedDate, setSelectedDate] = useState(today);
+const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
+  const today = format(new Date(), "yyyy-MM-dd");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const dayFromUrl = searchParams.get("day");
+
+  let initialDate = today;
+  if (dayFromUrl) {
+    const parsedDate = parse(dayFromUrl, "yyyy-MM-dd", new Date());
+    if (isValid(parsedDate)) {
+      initialDate = parsedDate;
+    }
+  }
+
+  const [selectedDate, setSelectedDate] = useState(initialDate);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [selectedAvailable, setSelectedAvailable] = useState(null);
   const [dates, setDates] = useState([]);
@@ -75,6 +87,7 @@ const DoctorAppointment = ({ doctor, branchName }) => {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
+    setDay(format(date, "yyyy-MM-dd"));
     setSelectedSlot(null); // Tarih değiştiğinde seçili slota null atın
     setIsLoadingSlots(true); // Yeni tarih seçildiğinde veri yükleniyor olarak işaretleyin
   };

@@ -54,7 +54,15 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  tagTypes: ["Patients", "Roles", "Doctors", "Users", "Branches", "UserRoles"],
+  tagTypes: [
+    "Patients",
+    "Roles",
+    "Doctors",
+    "Users",
+    "Branches",
+    "Favorites",
+    "UserRoles",
+  ],
   endpoints: (builder) => ({
     // Get Patients By Page
     // getPatientsPage: builder.query({
@@ -265,6 +273,39 @@ export const apiSlice = createApi({
         };
       },
       invalidatesTags: ["Branches"],
+    }),
+    getFavorites: builder.query({
+      query: () => "Favorites",
+      providesTags: ["Favorites"],
+    }),
+    addNewFavorite: builder.mutation({
+      query(newFavorite) {
+        return {
+          url: `Favorites`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newFavorite,
+        };
+      },
+      invalidatesTags: ["Favorites"],
+    }),
+    updateFavorite: builder.mutation({
+      query: ({ id, updatedFavorite }) => ({
+        url: `Favorites/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedFavorite,
+      }),
+      invalidatesTags: ["Favorites"],
+    }),
+    deleteFavorite: builder.mutation({
+      query(id) {
+        return {
+          url: `Favorites/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Favorites"],
     }),
     getRoles: builder.query({
       query: () => "Roles",
@@ -590,6 +631,10 @@ export const {
   useAddNewBranchMutation,
   useUpdateBranchMutation,
   useDeleteBranchMutation,
+  useGetFavoritesQuery,
+  useAddNewFavoriteMutation,
+  useUpdateFavoriteMutation,
+  useDeleteFavoriteMutation,
   useGetRolesQuery,
   useAddNewRoleMutation,
   useUpdateRoleMutation,
