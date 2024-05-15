@@ -14,6 +14,7 @@ const ConfirmAppointmentModal = ({
   selectedDate,
   selectedSlot,
   branchName,
+  onConfirm,
 }) => {
   const { patientId } = useSelector((state) => state.patient);
   const [addNewAppointment, { isLoading: isAdding }] =
@@ -39,7 +40,7 @@ const ConfirmAppointmentModal = ({
 
   const handleConfirm = async () => {
     try {
-      await addNewAppointment({
+      const result = await addNewAppointment({
         doctorId: doctor.id,
         patientId,
         appointmentDate: formattedDate,
@@ -47,16 +48,34 @@ const ConfirmAppointmentModal = ({
         status: 1,
       });
 
-      toast.success("The appointment has been created successfully.", {
-        position: "bottom-left",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+      console.log(result);
+      if (result.error.originalStatus === 400) {
+        toast.error(
+          "You have another appointment at this date with this doctor!",
+          {
+            position: "bottom-left",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          }
+        );
+      } else {
+        toast.success("The appointment has been created successfully.", {
+          position: "bottom-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        onConfirm(selectedSlot); // Slotu onayla ve durumu bildir
+      }
     } catch (error) {
       console.error("Error add appointment", error);
     }

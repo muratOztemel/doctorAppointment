@@ -170,6 +170,11 @@ export const apiSlice = createApi({
         `Appointments/GetByDoctorAndDate/1/${date}`,
       method: "GET",
     }),
+    getAppointmentsByPatientAndDate: builder.query({
+      query: ({ date = null, patientId = null }) =>
+        `Appointments/GetByPatientAndDate?patientId=${patientId}&date=${date}&page=1&pageSize=20`,
+      method: "GET",
+    }),
     getAppointmentById: builder.query({
       query: (id) => `Appointments/${id}`,
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
@@ -618,6 +623,7 @@ export const {
   useGetPatientsQuery,
   useGetAppointmentsPageQuery,
   useGetByDoctorAndDateQuery,
+  useGetAppointmentsByPatientAndDateQuery,
   useGetAppointmentByIdQuery,
   useGetAppointmentsQuery,
   useAddNewAppointmentMutation,

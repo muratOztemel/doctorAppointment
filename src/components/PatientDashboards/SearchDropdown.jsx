@@ -63,6 +63,16 @@ const SearchDropdown = () => {
     });
   }, [branchId, branchName, day, setSearchParams]);
 
+  const clearBranchSelection = () => {
+    setBranchId(0);
+    setBranchName("");
+    setSearchParams({
+      branch: "",
+      branchId: 0,
+      day: format(day, "yyyy-MM-dd"),
+    });
+  };
+
   if (isLoading || isLoadingDoctors) return <p>Loading...</p>;
   if (isError || isErrorDoctors) return <p>Error loading data.</p>;
   if (!branches) return <p>No data available.</p>;
@@ -120,8 +130,9 @@ const SearchDropdown = () => {
               />
               <button
                 type="button"
+                onClick={clearBranchSelection}
                 className="text-white absolute right-2.5 bottom-2.5 bg-cyan-500 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">
-                Search
+                Clear
               </button>
             </div>
           </form>

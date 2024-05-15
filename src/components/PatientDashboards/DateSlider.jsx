@@ -5,13 +5,16 @@ import { FaUserDoctor } from "react-icons/fa6";
 import {
   useGetDoctorWorkingDayByDoctorIdQuery,
   useGetDailySlotsQuery,
+  useGetAppointmentsByPatientAndDateQuery,
 } from "../../redux/features/api/apiSlice";
 import ConfirmAppointmentModal from "./ConfirmAppointmentModal";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { ImCancelCircle } from "react-icons/im";
 import { useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
+  const { patientId } = useSelector((state) => state.patient);
   const today = format(new Date(), "yyyy-MM-dd");
   const [searchParams, setSearchParams] = useSearchParams();
   const dayFromUrl = searchParams.get("day");
@@ -27,6 +30,7 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
   const [selectedDate, setSelectedDate] = useState(initialDate);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [selectedAvailable, setSelectedAvailable] = useState(null);
+  const [confirmedSlots, setConfirmedSlots] = useState([]);
   const [dates, setDates] = useState([]);
   const [slots, setSlots] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,6 +45,11 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
     useGetDoctorWorkingDayByDoctorIdQuery(doctor.id);
   const { data: dailySlots, isLoading: isLoadingDailySlots } =
     useGetDailySlotsQuery({ doctorId: doctor.id, date: formattedSlotsDate });
+  const { data: appointments, isLoading: isLoadingAppointments } =
+    useGetAppointmentsByPatientAndDateQuery({
+      patientId,
+      date: formattedSlotsDate,
+    }); // Randevuları alın
 
   const [selectionPath, setSelectionPath] = useState({
     bolum: branchName,
@@ -60,6 +69,16 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
     setIsLoadingSlots(true);
     fetchData();
   }, [dailySlots, doctorData]);
+
+  useEffect(() => {
+    if (appointments) {
+      const confirmed = appointments.map((appointment) => ({
+        slot: appointment.appointmentTime,
+        doctorId: appointment.doctorId,
+      }));
+      setConfirmedSlots(confirmed);
+    }
+  }, [appointments]);
 
   const generateDates = (startDate, numDays) => {
     return Array.from({ length: numDays }, (_, i) => addDays(startDate, i));
@@ -96,6 +115,11 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
     setSelectedSlot(slot === selectedSlot ? null : slot);
   };
 
+  const handleConfirmSlot = (slot) => {
+    setConfirmedSlots([...confirmedSlots, slot]);
+    closeModal();
+  };
+
   const scroll = (direction) => {
     if (sliderRef.current) {
       const scrollAmount =
@@ -108,13 +132,13 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
 
   const selectedSlots = slots[format(selectedDate, "yyyy-MM-dd")] || [];
 
-  // Tüm tarihleri oluşturun
-  const allDates = generateDates(today, 15);
+  // Tüm tarihleri oluştur
+  const allDates = generateDates(today, 30);
 
-  // Doktorun çalışma günlerini alın
+  // Doktorun çalışma günlerini al
   const workingDays = doctorData ? doctorData.days : [];
 
-  // Tüm tarihleri dönüp rengini belirleyin
+  // Tüm tarihleri dönüp rengini belirle
   const dateElements = allDates.map((date, index) => {
     const isWorkingDay = workingDays.includes(date.getDay());
     const isSelectedDate = selectedDate.toDateString() === date.toDateString();
@@ -174,16 +198,25 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
               </h2>
               <div className="grid grid-cols-3 gap-2">
                 {selectedSlots.map((slot, index) => {
+                  // Slot zamanını "HH:mm:ss" formatına dönüştür
+                  const formattedSlotTime = `${slot.time}:00`;
+                  // Slotun alınmış olup olmadığını kontrol edin
+                  const isConfirmed = confirmedSlots.some(
+                    (cs) =>
+                      cs.slot === formattedSlotTime && cs.doctorId === doctor.id
+                  );
                   return (
                     <button
                       key={index}
-                      disabled={!slot.available}
+                      disabled={isConfirmed || !slot.available}
                       className={`p-2 rounded-lg ${
-                        slot.available
+                        isConfirmed
+                          ? "bg-green-200 cursor-not-allowed"
+                          : slot.available
                           ? selectedSlot === slot.time
                             ? "bg-cyan-800 text-white"
                             : "bg-cyan-100"
-                          : "bg-red-200"
+                          : "bg-red-200 cursor-not-allowed"
                       }`}
                       onClick={() => handleSlotChange(slot.time)}>
                       {slot.time} {/* slot nesnesinden sadece zamanı al */}
@@ -267,6 +300,7 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
                   selectedDate={selectedDate}
                   selectedSlot={selectedSlot}
                   branchName={branchName}
+                  onConfirm={handleConfirmSlot} // Confirm handler
                 />
               </div>
             </>
