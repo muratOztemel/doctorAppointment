@@ -5,6 +5,7 @@ import {
   useGetDoctorWorkingDayByDoctorIdQuery,
   useGetFavoritesQuery,
   useUpdateFavoriteMutation,
+  useAddNewFavoriteMutation,
 } from "../../../redux/features/api/apiSlice";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useSelector } from "react-redux";
@@ -21,6 +22,7 @@ const DoctorList = ({ doctor, branchName, setDay, day }) => {
   const [favorites, setFavorites] = useState([]);
   const [updateFavorite, { isLoading: isUpdatingFavorite }] =
     useUpdateFavoriteMutation();
+  const [addNewFavorite, { isLoading: isAdding }] = useAddNewFavoriteMutation();
 
   useEffect(() => {
     if (favoritesData) {
@@ -44,22 +46,31 @@ const DoctorList = ({ doctor, branchName, setDay, day }) => {
       );
       setFavorites(updatedFavorites);
 
-      const result = await updateFavorite({
-        id: currentFavorite?.id,
-        updatedFavorite: {
-          id: currentFavorite?.id,
-          doctorId: doctor.id,
-          userId,
-          status: newStatus,
-        },
-      });
+      if (currentFavorite) {
+        const result = await updateFavorite({
+          id: currentFavorite.id,
+          updatedFavorite: {
+            id: currentFavorite.id,
+            doctorId: doctor.id,
+            userId,
+            status: newStatus,
+          },
+        });
 
-      console.log(result);
-
-      toast.success(
-        `Doctor ${newStatus ? "added to" : "removed from"} favorites.`
-      );
+        if (result.error?.data?.status === 400) {
+          await addNewFavorite({ doctorId: doctor.id });
+        }
+        if (newStatus) {
+          toast.success(`Doctor added to favorites.`);
+        } else {
+          toast.error("Doctor removed from favorites.");
+        }
+      } else {
+        await addNewFavorite({ doctorId: doctor.id });
+        toast.success(`Doctor added to favorites.`);
+      }
     } catch (error) {
+      setFavorites(favorites);
       toast.error("Failed to update favorites.");
     }
   };
