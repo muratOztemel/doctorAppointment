@@ -1,9 +1,11 @@
 import DashboardPatientLayout from "../layouts/DashboardPatientLayout/DashboardPatientLayout";
 import ErrorPage from "../pages/ErrorPage";
 import DashboardPatientPage from "../pages/DashboardPatient/DashboardPatientPage";
+import DashboardPatientAppointments from "../pages/DashboardPatient/DashboardPatientAppointments";
 import PatientProfile from "../components/PatientDashboards/PatientProfile";
 import ProtectedRoute from "../components/Security/ProtectedRoute";
 import PatientSettings from "../components/PatientDashboards/PatientSettings";
+import PatientAppointments from "../components/PatientDashboards/PatientAppointments";
 
 export const patientRoutes = [
   {
@@ -18,6 +20,10 @@ export const patientRoutes = [
       {
         path: "profile",
         element: <PatientProfile />,
+      },
+      {
+        path: "appointments",
+        element: <DashboardPatientAppointments />,
       },
       {
         path: "settings",

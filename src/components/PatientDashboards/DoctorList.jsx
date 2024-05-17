@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import AppointmentSlider from "../../PatientDashboards/AppointmentSlider";
-import DefaultImage from "../../hooks/DefaultImage";
+import AppointmentSlider from "./AppointmentSlider";
+import DefaultImage from "../hooks/DefaultImage";
 import {
   useGetDoctorWorkingDayByDoctorIdQuery,
   useGetFavoritesQuery,
   useUpdateFavoriteMutation,
   useAddNewFavoriteMutation,
-} from "../../../redux/features/api/apiSlice";
+} from "../../redux/features/api/apiSlice";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";

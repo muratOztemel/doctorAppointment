@@ -7,7 +7,7 @@ import {
 import { FaUserDoctor } from "react-icons/fa6";
 import { FaUserInjured } from "react-icons/fa";
 import Card from "../UI/Cards/Card";
-import DoctorList from "../Dasboards/Patients/DoctorList";
+import DoctorList from "./DoctorList";
 import { format, isValid, parse } from "date-fns";
 
 const SearchDropdown = () => {

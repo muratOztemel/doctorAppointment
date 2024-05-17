@@ -171,8 +171,10 @@ export const apiSlice = createApi({
       method: "GET",
     }),
     getAppointmentsByPatientAndDate: builder.query({
-      query: ({ date = null, patientId = null }) =>
-        `Appointments/GetByPatientAndDate?patientId=${patientId}&date=${date}&page=1&pageSize=20`,
+      query: ({ patientId, date }) =>
+        date
+          ? `Appointments/GetByPatientAndDate?patientId=${patientId}&date=${date}&page=1&pageSize=20`
+          : `Appointments/GetByPatientAndDate?patientId=${patientId}&page=1&pageSize=20`,
       method: "GET",
     }),
     getAppointmentById: builder.query({
@@ -249,6 +251,10 @@ export const apiSlice = createApi({
     getBranches: builder.query({
       query: () => "Branches",
       providesTags: ["Branches"],
+    }),
+    getBranchById: builder.query({
+      query: (id) => `Branches/${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
     }),
     addNewBranch: builder.mutation({
       query(newBranch) {
@@ -634,6 +640,7 @@ export const {
   useAddNewDoctorInfosMutation,
   useUpdateDoctorInfosMutation,
   useGetBranchesQuery,
+  useGetBranchByIdQuery,
   useAddNewBranchMutation,
   useUpdateBranchMutation,
   useDeleteBranchMutation,
