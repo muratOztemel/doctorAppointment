@@ -5,7 +5,6 @@ import DashboardPatientAppointments from "../pages/DashboardPatient/DashboardPat
 import PatientProfile from "../components/PatientDashboards/PatientProfile";
 import ProtectedRoute from "../components/Security/ProtectedRoute";
 import PatientSettings from "../components/PatientDashboards/PatientSettings";
-import PatientAppointments from "../components/PatientDashboards/PatientAppointments";
 
 export const patientRoutes = [
   {

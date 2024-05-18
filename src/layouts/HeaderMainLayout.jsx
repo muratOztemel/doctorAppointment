@@ -65,7 +65,11 @@ const HeaderMainLayout = () => {
           <nav className="bg-white py-4">
             <div className="container mx-auto px-4 flex justify-between items-center">
               <a href="#" className="flex items-center">
-                <img src="icon.png" className="h-8 mr-2" alt="Flowbite Logo" />
+                <img
+                  src="icon.png"
+                  className="h-8 mr-2"
+                  alt="Doctor Appointment"
+                />
                 <span className="text-xl font-bold text-red-500">Doctor</span>
                 <span className="text-xl text-gray-700">Appointment</span>
               </a>

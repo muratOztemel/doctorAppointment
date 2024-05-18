@@ -74,7 +74,7 @@ function AdvancedDoctorSlider() {
         &#10095;
       </button>
       <div className="absolute inset-0 flex flex-col items-end justify-end">
-        <div className="bg-white bg-opacity-30 mb-10 mr-10 rounded-md p-2">
+        <div className="bg-white bg-opacity-50 mb-10 mr-10 rounded-md p-2">
           <h1 className="text-3xl font-bold">
             Committed to Excellence in{" "}
             <span className="text-[#1A76D1]">Healthcare.</span>
