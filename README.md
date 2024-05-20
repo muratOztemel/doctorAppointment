@@ -3,6 +3,20 @@
 ## Overview
 
 The Doctor Appointment Project is a comprehensive web application designed to facilitate easy and efficient appointment scheduling for patients with their preferred doctors. It includes dedicated dashboards for patients, doctors, and administrators, providing a seamless user experience tailored to each role.
+![Screenshot 2024-05-18 223242](https://github.com/muratOztemel/doctorAppointment/assets/31402706/d15e3abd-813a-403d-91a4-6bf3147e2546)
+![Screenshot 2024-05-18 223351](https://github.com/muratOztemel/doctorAppointment/assets/31402706/4da73259-5e16-4706-81da-7c2ed3c2e9c6)
+![Screenshot 2024-05-18 223501](https://github.com/muratOztemel/doctorAppointment/assets/31402706/92fc334c-e986-482c-aee1-301866761c79)
+![Screenshot 2024-05-18 223602](https://github.com/muratOztemel/doctorAppointment/assets/31402706/9f970a41-f802-43c5-af9e-490a58c2a539)
+![Screenshot 2024-05-18 223632](https://github.com/muratOztemel/doctorAppointment/assets/31402706/0c0ea9df-dfae-45ef-8782-392a768895aa)
+![Screenshot 2024-05-18 223717](https://github.com/muratOztemel/doctorAppointment/assets/31402706/ed69d0fe-ea00-4235-a547-58229c956a5d)
+![Screenshot 2024-05-18 223812](https://github.com/muratOztemel/doctorAppointment/assets/31402706/a4a3c1b6-55c6-4d9f-842c-7bac240baf08)
+![Screenshot 2024-05-18 223853](https://github.com/muratOztemel/doctorAppointment/assets/31402706/9bfbfec0-536a-43b3-ba8b-db6ec5f20495)
+![Screenshot 2024-05-18 223933](https://github.com/muratOztemel/doctorAppointment/assets/31402706/a5465939-a5e9-45b3-ab88-b1d56cdadcc2)
+![Screenshot 2024-05-18 224003](https://github.com/muratOztemel/doctorAppointment/assets/31402706/076a284d-15e8-43f1-99ce-6bd6a594ce96)
+![Screenshot 2024-05-20 160206](https://github.com/muratOztemel/doctorAppointment/assets/31402706/d7b923f6-1ea1-4117-ac26-ba8f199ad2ce)
+![Screenshot 2024-05-20 160416](https://github.com/muratOztemel/doctorAppointment/assets/31402706/060a1865-b11e-443c-9e57-ef922d0179d7)
+![Uploading Screenshot 2024-05-20 160524.png…]()
+
 
 ## Features
 
