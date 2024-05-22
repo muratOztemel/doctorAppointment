@@ -3,6 +3,8 @@
 ## Overview
 
 The Doctor Appointment Project is a comprehensive web application designed to facilitate easy and efficient appointment scheduling for patients with their preferred doctors. It includes dedicated dashboards for patients, doctors, and administrators, providing a seamless user experience tailored to each role.
+
+![Screenshot 2024-05-22 201057](https://github.com/muratOztemel/doctorAppointment/assets/31402706/c2bc887b-b92b-4de6-bb9a-bcc0488eb6ef)
 ![Screenshot 2024-05-18 223242](https://github.com/muratOztemel/doctorAppointment/assets/31402706/d15e3abd-813a-403d-91a4-6bf3147e2546)
 ![Screenshot 2024-05-18 223351](https://github.com/muratOztemel/doctorAppointment/assets/31402706/4da73259-5e16-4706-81da-7c2ed3c2e9c6)
 ![Screenshot 2024-05-18 223501](https://github.com/muratOztemel/doctorAppointment/assets/31402706/92fc334c-e986-482c-aee1-301866761c79)
