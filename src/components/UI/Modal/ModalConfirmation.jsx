@@ -2,11 +2,7 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { object } from "prop-types";
 import { createPortal } from "react-dom";
-import {
-  decreaseTimer,
-  resetTimer,
-  setIsActive,
-} from "../../../redux/slices/modalSlice.js";
+import { resetTimer } from "../../../redux/slices/modalSlice.js";
 import { setUserLogin } from "../../../redux/slices/usersSlice.js";
 import { useNavigate } from "react-router-dom";
 import { useConfirmActivationCodeMutation } from "../../../redux/features/api/apiSlice.js";

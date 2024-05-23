@@ -15,6 +15,6 @@ export const DoctorsSlice = createSlice({
   },
 });
 
-export const { setDoctorId } = DoctorsSlice.actions;
+export const { setDoctorId, clearDoctor } = DoctorsSlice.actions;
 
 export default DoctorsSlice.reducer;

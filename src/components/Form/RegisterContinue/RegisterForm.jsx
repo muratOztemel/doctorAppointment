@@ -60,7 +60,7 @@ const RegisterForm = () => {
         };
 
         await addNewPatient(newPatientData);
-        navigate(`/dashboardPatient`);
+        navigate(`/dashboard/patient`);
       } catch (err) {
         console.error("Error adding new product:", err);
       }

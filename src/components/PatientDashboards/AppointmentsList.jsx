@@ -2,13 +2,19 @@ import DefaultImage from "../hooks/DefaultImage";
 import {
   useGetDoctorByIdQuery,
   useGetBranchByIdQuery,
+  useDeleteAppointmentMutation,
 } from "../../redux/features/api/apiSlice";
 import { format, parse } from "date-fns";
 import { useState } from "react";
 import { MdCancel } from "react-icons/md";
+import ConfirmDeleteAppointment from "./ConfirmDeleteAppointment";
+import { toast } from "react-toastify";
 
 const AppointmentList = ({ appointment }) => {
-  const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [appointmentToDelete, setAppointmentToDelete] = useState(null);
+  const [deleteAppointment] = useDeleteAppointmentMutation();
+  const [updateDoctorSlot] = useDeleteAppointmentMutation();
   const {
     data: doctor,
     isLoading: isLoadingDoctor,
@@ -61,6 +67,29 @@ const AppointmentList = ({ appointment }) => {
     return statusName;
   }
 
+  const handleDelete = (id) => {
+    setAppointmentToDelete(id);
+    setShowConfirmModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (appointmentToDelete) {
+      await deleteAppointment(appointmentToDelete).unwrap();
+      setAppointmentToDelete(null); // ID'yi temizle
+      setShowConfirmModal(false); // Modalı kapat
+      toast.error("The appointment has been removed.", {
+        position: "bottom-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  };
+
   const useStatus = appointment.status;
   // Render the component only if the appointment date is in the future
   return (
@@ -91,7 +120,7 @@ const AppointmentList = ({ appointment }) => {
               <td className="text-center flex flex-col justify-center items-center">
                 <img
                   src={DefaultImage(doctor?.doctorInfo)}
-                  alt={`Dr. ${appointment.doctorFullName}`}
+                  alt={`${appointment.title} ${appointment.doctorFullName}`}
                   className="w-20 h-20 rounded-full bg-white object-cover border border-dashed border-cyan-500 p-1 text-center"
                 />
                 {doctor?.title} {appointment.doctorFullName}
@@ -109,9 +138,7 @@ const AppointmentList = ({ appointment }) => {
               {useStatus === 1 || useStatus === 0 ? (
                 <td className="text-center">
                   <button
-                    onClick={() => {
-                      setShowModal(!showModal);
-                    }}
+                    onClick={() => handleDelete(appointment.id)}
                     className="w-52 h-9 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                     <MdCancel className="mr-2" />
                     Cancel Appointment
@@ -124,6 +151,15 @@ const AppointmentList = ({ appointment }) => {
           </tbody>
         </table>
       </div>
+      {showConfirmModal && (
+        <div>
+          <ConfirmDeleteAppointment
+            onClose={() => setShowConfirmModal(false)}
+            onConfirm={handleDeleteConfirm}
+            message="Are you sure you want to cancel this appointment?"
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -66,13 +66,6 @@ const RegisterEmail = () => {
         let newUserLogin = {
           username: values.email,
         };
-        const newUserData = {
-          createdAt: new Date().toISOString(),
-          updatedAt: null,
-          status: false,
-          userRoles: null,
-        };
-        dispatch(setUserRegisterForm(newUserData));
         let result = await authentication({
           email: values.email,
           password: values.password,
@@ -89,7 +82,7 @@ const RegisterEmail = () => {
           return;
         }
       } catch (err) {
-        console.error("Error adding new product:", err);
+        console.error("Error adding new user:", err);
       }
     },
   });

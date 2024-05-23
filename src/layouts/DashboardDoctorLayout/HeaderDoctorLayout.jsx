@@ -1,8 +1,8 @@
 import { CiSearch } from "react-icons/ci";
-import PatientNotification from "../../components/Dasboards/Services/PatientNotification";
-import PatientLoginManager from "../../components/Dasboards/Services/PatientLoginManager";
+import DoctorNotification from "../../components/DoctorDashboard/DoctorNotification";
+import DoctorLoginManager from "../../components/DoctorDashboard/DoctorLoginManager";
 
-const HeaderPatientLayout = () => {
+const HeaderDoctorLayout = () => {
   return (
     <div className="fixed w-full flex items-center justify-between h-14 bg-white text-black z-10 ">
       <div className="flex items-center justify-start md:justify-center pl-3 w-14 md:w-64 h-14 ">
@@ -30,17 +30,17 @@ const HeaderPatientLayout = () => {
         </div>
         <ul className="flex items-center">
           <li>
-            <PatientNotification />
+            <DoctorNotification />
           </li>
           <li>
             <div className="block w-px h-6 mx-3 bg-gray-400 dark:bg-gray-700"></div>
           </li>
           <li>
-            <PatientLoginManager />
+            <DoctorLoginManager />
           </li>
         </ul>
       </div>
     </div>
   );
 };
-export default HeaderPatientLayout;
+export default HeaderDoctorLayout;

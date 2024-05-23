@@ -26,7 +26,7 @@ const LeftSidePatient = () => {
       id: 3,
       name: "My Doctors",
       pageName: "DoctorsHome",
-      path: "/doctors",
+      path: "/dashboard/patient/mydoctors",
       icon: <FaUserDoctor />,
     },
     {

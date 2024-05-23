@@ -56,6 +56,7 @@ export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: [
     "Patients",
+    "Appointments",
     "Roles",
     "Doctors",
     "Users",
@@ -176,6 +177,7 @@ export const apiSlice = createApi({
           ? `Appointments/GetByPatientAndDate?patientId=${patientId}&date=${date}&page=1&pageSize=20`
           : `Appointments/GetByPatientAndDate?patientId=${patientId}&page=1&pageSize=20`,
       method: "GET",
+      providesTags: ["Appointments"],
     }),
     getAppointmentById: builder.query({
       query: (id) => `Appointments/${id}`,
@@ -203,6 +205,15 @@ export const apiSlice = createApi({
         headers: { "Content-Type": "application/json" },
         body: updatedAppointment,
       }),
+    }),
+    deleteAppointment: builder.mutation({
+      query(id) {
+        return {
+          url: `Appointments/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["Appointments"],
     }),
     getDoctors: builder.query({
       query: () => "Doctors",
@@ -288,6 +299,10 @@ export const apiSlice = createApi({
     getFavorites: builder.query({
       query: () => "Favorites",
       providesTags: ["Favorites"],
+    }),
+    getFavoritesById: builder.query({
+      query: (id) => `Favorites/${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
     }),
     addNewFavorite: builder.mutation({
       query(newFavorite) {
@@ -634,6 +649,7 @@ export const {
   useGetAppointmentsQuery,
   useAddNewAppointmentMutation,
   useAppointmentUpdateMutation,
+  useDeleteAppointmentMutation,
   useGetDoctorsQuery,
   useAddNewDoctorMutation,
   useUpdateDoctorMutation,
@@ -645,6 +661,7 @@ export const {
   useUpdateBranchMutation,
   useDeleteBranchMutation,
   useGetFavoritesQuery,
+  useGetFavoritesByIdQuery,
   useAddNewFavoriteMutation,
   useUpdateFavoriteMutation,
   useDeleteFavoriteMutation,

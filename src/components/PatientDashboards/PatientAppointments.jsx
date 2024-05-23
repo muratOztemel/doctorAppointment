@@ -57,14 +57,17 @@ const PatientAppointments = () => {
               {futureAppointments?.length === 0 ? (
                 <p>No future appointments found.</p>
               ) : (
-                futureAppointments.map((appointment) => {
-                  return (
+                <>
+                  <p className="flex justify-center items-center text-3xl">
+                    Future Appointments
+                  </p>
+                  {futureAppointments.map((appointment) => (
                     <AppointmentsList
                       key={appointment.id}
                       appointment={appointment}
                     />
-                  );
-                })
+                  ))}
+                </>
               )}
             </div>
           )}
@@ -73,14 +76,17 @@ const PatientAppointments = () => {
               {pastAppointments?.length === 0 ? (
                 <p>No past appointments found.</p>
               ) : (
-                pastAppointments.map((appointment) => {
-                  return (
+                <>
+                  <p className="flex justify-center items-center text-3xl">
+                    History of Appointments
+                  </p>
+                  {pastAppointments.map((appointment) => (
                     <AppointmentsList
                       key={appointment.id}
                       appointment={appointment}
                     />
-                  );
-                })
+                  ))}
+                </>
               )}
             </div>
           )}

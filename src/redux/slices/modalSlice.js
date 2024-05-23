@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const modalSlice = createSlice({
   name: "modal",
   initialState: {
-    timer: 180,
+    timer: 30,
     isActive: true,
   },
   reducers: {
@@ -17,7 +17,7 @@ export const modalSlice = createSlice({
       }
     },
     resetTimer: (state) => {
-      state.timer = 180;
+      state.timer = 30;
       state.isActive = true;
     },
     setIsActive: (state, action) => {

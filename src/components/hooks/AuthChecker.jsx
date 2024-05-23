@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { clearUser, setUserLogin } from "../../redux/slices/usersSlice";
 import { jwtDecode } from "jwt-decode";
 import { setPatientId } from "../../redux/slices/patientSlice";
+import { setDoctorId } from "../../redux/slices/doctorsSlice";
 
 export function useAuthChecker() {
   const dispatch = useDispatch();
@@ -15,6 +16,11 @@ export function useAuthChecker() {
         let userRole =
           decodedToken[
             "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+          ];
+
+        const primarysid =
+          decodedToken[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/primarysid"
           ];
 
         const groupSid =
@@ -32,8 +38,26 @@ export function useAuthChecker() {
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
           ];
 
+        console.log("User Role:", userRole); // Add this line for debugging
+        console.log("Primary SID:", primarysid); // Add this line for debugging
+        console.log("Group SID:", groupSid); // Add this line for debugging
+        console.log("User ID:", userId); // Add this line for debugging
+        console.log("Username:", username); // Add this line for debugging
+
         if (userRole === "Patient") {
           dispatch(setPatientId(groupSid));
+          dispatch(
+            setUserLogin({
+              userId,
+              username,
+              token,
+              userRole,
+            })
+          );
+        }
+
+        if (userRole === "Doctor") {
+          dispatch(setDoctorId(primarysid));
           dispatch(
             setUserLogin({
               userId,
