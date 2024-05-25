@@ -1,17 +1,28 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { clearUser, setUserLogin } from "../../redux/slices/usersSlice";
-import { jwtDecode } from "jwt-decode";
 import { setPatientId } from "../../redux/slices/patientSlice";
 import { setDoctorId } from "../../redux/slices/doctorsSlice";
+import { jwtDecode } from "jwt-decode"; // Corrected import statement
+import { useVerifyToken } from "./useVerifyToken";
 
 export function useAuthChecker() {
   const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
+
+  const { isError, isLoading } = useVerifyToken(token);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    console.log("token", token);
-    if (token) {
+    if (token && !isLoading) {
+      if (isError) {
+        // If token verification failed, clear the user and redirect to login
+        console.error("Token verification failed");
+        dispatch(clearUser());
+        localStorage.removeItem("token");
+        window.location.href = "/auth/login";
+        return;
+      }
+
       try {
         const decodedToken = jwtDecode(token);
         let userRole =
@@ -38,12 +49,6 @@ export function useAuthChecker() {
           decodedToken[
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
           ];
-
-        console.log("User Role:", userRole); // Add this line for debugging
-        console.log("Primary SID:", primarysid); // Add this line for debugging
-        console.log("Group SID:", groupSid); // Add this line for debugging
-        console.log("User ID:", userId); // Add this line for debugging
-        console.log("Username:", username); // Add this line for debugging
 
         if (userRole === "Patient") {
           dispatch(setPatientId(groupSid));
@@ -81,13 +86,14 @@ export function useAuthChecker() {
         }
       } catch (error) {
         console.error("Session restore failed:", error);
+        dispatch(clearUser());
+        localStorage.removeItem("token");
+        window.location.href = "/auth/login";
       }
     } else {
       dispatch(clearUser());
     }
-
-    return () => token;
-  }, [dispatch]);
+  }, [dispatch, token, isLoading, isError]);
 
   return null;
 }

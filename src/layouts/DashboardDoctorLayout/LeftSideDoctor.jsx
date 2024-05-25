@@ -16,7 +16,7 @@ const LeftSideDoctor = () => {
     },
     {
       id: 2,
-      name: "My Appointments",
+      name: "My Appointments List",
       pageName: "myAppointments",
       path: "/dashboard/doctor/appointments",
       icon: <TbClockRecord />,
@@ -25,7 +25,7 @@ const LeftSideDoctor = () => {
       id: 3,
       name: "My Patients",
       pageName: "DoctorsHome",
-      path: "/dashboard/doctor/mypatients",
+      path: "/dashboard/doctor/patients",
       icon: <FaUserDoctor />,
     },
     {

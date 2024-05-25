@@ -41,9 +41,9 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
         // Refresh token işlemi başarısız olursa, kullanıcıyı login sayfasına yönlendir
         localStorage.clear();
         window.location.href = "/auth/login";
-        return {
+        /*         return {
           error: { status: "AUTH_ERROR", data: "Authentication failed" },
-        };
+        }; */
       }
     }
   }
@@ -65,6 +65,9 @@ export const apiSlice = createApi({
     "UserRoles",
   ],
   endpoints: (builder) => ({
+    verifyToken: builder.query({
+      query: () => "Authentication",
+    }),
     // Get Patients By Page
     // getPatientsPage: builder.query({
     //   query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
@@ -160,16 +163,10 @@ export const apiSlice = createApi({
       method: "GET",
     }),
     getByDoctorAndDate: builder.query({
-      query: ({
-        date = "2024-04-21",
-        page = 1,
-        searchTerm,
-        sortField,
-        sortOrder,
-      }) =>
-        // `Appointments/GetByDoctorAndDate/1/${date}&page=${page}&pageSize=20&q=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
-        `Appointments/GetByDoctorAndDate/1/${date}`,
+      query: ({ doctorId }) =>
+        `Appointments/GetByDoctorAndDate?doctorId=${doctorId}&page=1&pageSize=20`,
       method: "GET",
+      providesTags: ["Appointments"],
     }),
     getAppointmentsByPatientAndDate: builder.query({
       query: ({ patientId, date }) =>
@@ -629,6 +626,7 @@ export const apiSlice = createApi({
 });
 
 export const {
+  useVerifyTokenQuery,
   useGetDashboardDataQuery,
   useGetPatientsPageQuery,
   useDeletePatientMutation,

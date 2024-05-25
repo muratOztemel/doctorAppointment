@@ -8,21 +8,16 @@ import {
   useGetDailySlotsQuery,
   useGetDoctorWorkingDayByDoctorIdQuery,
   useGetByDoctorAndDateQuery,
+  useGetPatientByIdQuery,
 } from "../../redux/features/api/apiSlice";
-import useFetchPatientNames from "../hooks/FetchPatientNames"; // Import the custom hook
 
 const DoctorCalendar = () => {
   const { doctorId } = useSelector((state) => state.doctors);
   const [events, setEvents] = useState([]);
-
-  const {
-    data: dailySlotsData,
-    isLoading: isLoadingSlots,
-    isError: isErrorSlots,
-  } = useGetDailySlotsQuery(
-    { doctorId, date: new Date().toISOString().split("T")[0] },
-    { skip: !doctorId }
-  );
+  const [isTodayInDatabaseDays, setIsTodayInDatabaseDays] = useState(false);
+  const [appointmentsData, setAppointmentsData] = useState([]);
+  const [dailySlotsData, setDailySlotsData] = useState([]);
+  const [patientNames, setPatientNames] = useState({});
 
   const {
     data: workingDaysData,
@@ -32,36 +27,85 @@ const DoctorCalendar = () => {
     skip: !doctorId,
   });
 
-  const {
-    data: appointmentsData,
-    isLoading: isLoadingAppointments,
-    isError: isErrorAppointments,
-  } = useGetByDoctorAndDateQuery(
-    {
-      doctorId,
-      date: new Date().toISOString().split("T")[0],
-    },
-    {
-      skip: !doctorId,
+  useEffect(() => {
+    if (workingDaysData) {
+      const databaseDays = workingDaysData.days.split(",").map(Number);
+      const today = new Date();
+      const weekday = today.getDay();
+      const adjustedWeekday = ((weekday + 6) % 7) + 1;
+      const isInDatabaseDays = databaseDays.includes(adjustedWeekday);
+      setIsTodayInDatabaseDays(isInDatabaseDays);
     }
-  );
-
-  const patientNames = useFetchPatientNames(appointmentsData || []);
+  }, [workingDaysData]);
 
   useEffect(() => {
-    const formattedEvents = (appointmentsData || []).map((appointment) => ({
-      title: patientNames[appointment.patientId] || "Unknown Patient",
-      date: `${appointment.appointmentDate}T${appointment.appointmentTime}`,
-    }));
+    if (isTodayInDatabaseDays && doctorId) {
+      console.log("I'm here");
+      const fetchAppointmentsAndSlots = async () => {
+        try {
+          const today = new Date().toISOString().split("T")[0];
 
-    setEvents(formattedEvents);
-  }, [appointmentsData, patientNames]);
+          // Fetch appointments
+          const { data: fetchedAppointments } =
+            await useGetByDoctorAndDateQuery(
+              { doctorId, date: today },
+              { skip: !doctorId }
+            );
+          setAppointmentsData(fetchedAppointments || []);
 
-  if (isLoadingSlots || isLoadingWorkingDays || isLoadingAppointments) {
+          // Fetch daily slots
+          const { data: fetchedDailySlots } = await useGetDailySlotsQuery(
+            { doctorId, date: today },
+            { skip: !doctorId }
+          );
+          setDailySlotsData(fetchedDailySlots || []);
+
+          // Fetch patient names
+          const patientNamePromises = (fetchedAppointments || []).map(
+            async (appointment) => {
+              const { data: patientData } = await useGetPatientByIdQuery(
+                appointment.patientId
+              );
+              return {
+                id: appointment.patientId,
+                name: `${patientData.name} ${patientData.surname}`,
+              };
+            }
+          );
+
+          const fetchedPatientNames = await Promise.all(patientNamePromises);
+          const patientNamesMap = fetchedPatientNames.reduce(
+            (acc, { id, name }) => {
+              acc[id] = name;
+              return acc;
+            },
+            {}
+          );
+          setPatientNames(patientNamesMap);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+
+      fetchAppointmentsAndSlots();
+    }
+  }, [isTodayInDatabaseDays, doctorId]);
+
+  useEffect(() => {
+    if (isTodayInDatabaseDays && appointmentsData.length > 0) {
+      const formattedEvents = appointmentsData.map((appointment) => ({
+        title: patientNames[appointment.patientId] || "Empty Appointment",
+        date: `${appointment.appointmentDate}T${appointment.appointmentTime}`,
+      }));
+      setEvents(formattedEvents);
+    }
+  }, [appointmentsData, patientNames, isTodayInDatabaseDays]);
+
+  if (isLoadingWorkingDays) {
     return <p>Loading...</p>;
   }
 
-  if (isErrorSlots || isErrorWorkingDays || isErrorAppointments) {
+  if (isErrorWorkingDays) {
     return <p>Error loading data.</p>;
   }
 
