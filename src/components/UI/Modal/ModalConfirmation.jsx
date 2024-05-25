@@ -5,7 +5,10 @@ import { createPortal } from "react-dom";
 import { resetTimer } from "../../../redux/slices/modalSlice.js";
 import { setUserLogin } from "../../../redux/slices/usersSlice.js";
 import { useNavigate } from "react-router-dom";
-import { useConfirmActivationCodeMutation } from "../../../redux/features/api/apiSlice.js";
+import {
+  useConfirmActivationCodeMutation,
+  useCreateAuthenticationMutation,
+} from "../../../redux/features/api/apiSlice.js";
 import Spinner from "../Spinner.jsx";
 import OTPInput from "../../Dasboards/Services/OtpInput.jsx";
 import { toast } from "react-toastify";
@@ -15,6 +18,8 @@ const Modal = (props) => {
   const navigate = useNavigate();
   const [confirmActivationCode, { data, isError, isLoading }] =
     useConfirmActivationCodeMutation();
+  const [createAuthentication, { dataCreate, isErrorCreate, isLoadingCreate }] =
+    useConfirmActivationCodeMutation();
   const { timer, isActive } = useSelector((state) => state.modal);
   const [otpInputs, setOtpInputs] = useState("");
 
@@ -22,8 +27,8 @@ const Modal = (props) => {
     return null;
   }
 
-  if (isError) return <div>Error: {isError.toString()}</div>;
-  if (isLoading) return <Spinner />;
+  if (isLoading || isLoadingCreate) return <Spinner />;
+  if (isError || isErrorCreate) return <div>Error: {isError.toString()}</div>;
 
   const handleSendData = async () => {
     try {
@@ -76,9 +81,8 @@ const Modal = (props) => {
 
   const reSendOTP = async () => {
     try {
-      let result = await confirmActivationCode({
+      let result = await createAuthentication({
         email: props.email,
-        activationCode: otpInputs,
         sendAgain: true,
       });
       console.log("otpInputs", otpInputs);

@@ -6,6 +6,7 @@ import { doctorRoutes } from "./routes/doctorRoutes";
 import { patientRoutes } from "./routes/patientRoutes";
 import { useAuthChecker } from "./components/hooks/AuthChecker";
 import useTokenExpirationHandler from "./components/hooks/useTokenExpirationHandler";
+import "tippy.js/dist/tippy.css";
 
 const App = () => {
   useTokenExpirationHandler();

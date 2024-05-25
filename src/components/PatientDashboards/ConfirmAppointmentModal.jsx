@@ -50,19 +50,16 @@ const ConfirmAppointmentModal = ({
 
       console.log(result);
       if (result.error.originalStatus === 400) {
-        toast.error(
-          "You have another appointment at this date with this doctor!",
-          {
-            position: "bottom-left",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          }
-        );
+        toast.error(result.error.data, {
+          position: "bottom-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       } else {
         toast.success("The appointment has been created successfully.", {
           position: "bottom-left",

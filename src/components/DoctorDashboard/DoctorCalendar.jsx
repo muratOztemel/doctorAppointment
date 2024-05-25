@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -8,16 +8,17 @@ import {
   useGetDailySlotsQuery,
   useGetDoctorWorkingDayByDoctorIdQuery,
   useGetByDoctorAndDateQuery,
-  useGetPatientByIdQuery,
 } from "../../redux/features/api/apiSlice";
+import { format } from "date-fns";
+import tippy from "tippy.js";
+import "tippy.js/dist/tippy.css"; // Tippy.js CSS dosyasını import edin
+import "./tooltipStyles.css";
 
 const DoctorCalendar = () => {
   const { doctorId } = useSelector((state) => state.doctors);
   const [events, setEvents] = useState([]);
-  const [isTodayInDatabaseDays, setIsTodayInDatabaseDays] = useState(false);
-  const [appointmentsData, setAppointmentsData] = useState([]);
-  const [dailySlotsData, setDailySlotsData] = useState([]);
-  const [patientNames, setPatientNames] = useState({});
+  const [backgroundEvents, setBackgroundEvents] = useState([]);
+  const today = new Date().toISOString().split("T")[0];
 
   const {
     data: workingDaysData,
@@ -27,94 +28,113 @@ const DoctorCalendar = () => {
     skip: !doctorId,
   });
 
+  const {
+    data: appointmentsData,
+    isLoading: isLoadingAppointments,
+    isError: isErrorAppointments,
+  } = useGetByDoctorAndDateQuery(
+    { doctorId, date: today },
+    { skip: !doctorId }
+  );
+
+  const {
+    data: dailySlotsData,
+    isLoading: isLoadingSlots,
+    isError: isErrorSlots,
+  } = useGetDailySlotsQuery({ doctorId, date: today }, { skip: !doctorId });
+
   useEffect(() => {
     if (workingDaysData) {
       const databaseDays = workingDaysData.days.split(",").map(Number);
-      const today = new Date();
-      const weekday = today.getDay();
-      const adjustedWeekday = ((weekday + 6) % 7) + 1;
-      const isInDatabaseDays = databaseDays.includes(adjustedWeekday);
-      setIsTodayInDatabaseDays(isInDatabaseDays);
+      const startDate = new Date(today);
+      startDate.setMonth(startDate.getMonth() - 1);
+      const endDate = new Date(today);
+      endDate.setMonth(endDate.getMonth() + 1);
+
+      const workDays = [];
+      for (
+        let date = new Date(startDate);
+        date <= endDate;
+        date.setDate(date.getDate() + 1)
+      ) {
+        const weekday = date.getDay();
+        const adjustedWeekday = ((weekday + 6) % 7) + 1;
+        if (databaseDays.includes(adjustedWeekday)) {
+          workDays.push(new Date(date));
+        }
+      }
+
+      const backgroundEvents = workDays.map((date) => ({
+        start: date.toISOString().split("T")[0],
+        end: date.toISOString().split("T")[0],
+        display: "background",
+        backgroundColor: "#99ffff",
+      }));
+      setBackgroundEvents(backgroundEvents);
     }
   }, [workingDaysData]);
 
   useEffect(() => {
-    if (isTodayInDatabaseDays && doctorId) {
-      console.log("I'm here");
-      const fetchAppointmentsAndSlots = async () => {
-        try {
-          const today = new Date().toISOString().split("T")[0];
-
-          // Fetch appointments
-          const { data: fetchedAppointments } =
-            await useGetByDoctorAndDateQuery(
-              { doctorId, date: today },
-              { skip: !doctorId }
-            );
-          setAppointmentsData(fetchedAppointments || []);
-
-          // Fetch daily slots
-          const { data: fetchedDailySlots } = await useGetDailySlotsQuery(
-            { doctorId, date: today },
-            { skip: !doctorId }
-          );
-          setDailySlotsData(fetchedDailySlots || []);
-
-          // Fetch patient names
-          const patientNamePromises = (fetchedAppointments || []).map(
-            async (appointment) => {
-              const { data: patientData } = await useGetPatientByIdQuery(
-                appointment.patientId
-              );
-              return {
-                id: appointment.patientId,
-                name: `${patientData.name} ${patientData.surname}`,
-              };
-            }
-          );
-
-          const fetchedPatientNames = await Promise.all(patientNamePromises);
-          const patientNamesMap = fetchedPatientNames.reduce(
-            (acc, { id, name }) => {
-              acc[id] = name;
-              return acc;
-            },
-            {}
-          );
-          setPatientNames(patientNamesMap);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-
-      fetchAppointmentsAndSlots();
-    }
-  }, [isTodayInDatabaseDays, doctorId]);
-
-  useEffect(() => {
-    if (isTodayInDatabaseDays && appointmentsData.length > 0) {
+    if (appointmentsData && dailySlotsData) {
       const formattedEvents = appointmentsData.map((appointment) => ({
-        title: patientNames[appointment.patientId] || "Empty Appointment",
-        date: `${appointment.appointmentDate}T${appointment.appointmentTime}`,
+        title: appointment.patientFullName,
+        start: `${format(appointment.appointmentDate, "yyyy-MM-dd")}T${
+          appointment.appointmentTime
+        }`,
+        end: `${format(appointment.appointmentDate, "yyyy-MM-dd")}T${addTime(
+          appointment.appointmentTime,
+          workingDaysData?.slotDuration
+        )}`,
+        url: `/dashboard/doctor/patient/${appointment.patientId}/${appointment.patientFullName}`,
       }));
       setEvents(formattedEvents);
     }
-  }, [appointmentsData, patientNames, isTodayInDatabaseDays]);
+  }, [appointmentsData, dailySlotsData]);
 
-  if (isLoadingWorkingDays) {
+  function addTime(time, duration) {
+    const [hours, minutes, seconds] = time.split(":").map(Number);
+    const [dHours, dMinutes, dSeconds] = duration.split(":").map(Number);
+
+    const date = new Date();
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    date.setSeconds(seconds);
+
+    date.setHours(date.getHours() + dHours);
+    date.setMinutes(date.getMinutes() + dMinutes);
+    date.setSeconds(date.getSeconds() + dSeconds);
+
+    const newTime = date.toTimeString().split(" ")[0];
+    return newTime;
+  }
+
+  if (isLoadingWorkingDays || isLoadingAppointments || isLoadingSlots) {
     return <p>Loading...</p>;
   }
 
-  if (isErrorWorkingDays) {
+  if (isErrorWorkingDays || isErrorAppointments || isErrorSlots) {
     return <p>Error loading data.</p>;
   }
+
+  const handleEventMount = (info) => {
+    if (info.event.extendedProps.isWorkday) {
+      info.el.style.backgroundColor = "green";
+    }
+
+    tippy(info.el, {
+      content: `<div>${info.event.title}</div>`,
+      allowHTML: true,
+      placement: "top",
+      theme: "light-border",
+    });
+  };
 
   return (
     <div className="container mx-auto p-4">
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
-        events={events}
+        events={[...events, ...backgroundEvents]}
         headerToolbar={{
           left: "prev,next today",
           center: "title",
@@ -126,6 +146,8 @@ const DoctorCalendar = () => {
         selectable={true}
         selectMirror={true}
         dayMaxEvents={true}
+        eventBackgroundColor="#00b2b2"
+        eventDidMount={handleEventMount}
       />
     </div>
   );

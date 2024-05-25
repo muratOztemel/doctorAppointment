@@ -1,0 +1,8 @@
+/* tooltipStyles.css */
+.tippy-box {
+  max-width: 800px; /* Tooltip genişliğini ayarlayın */
+}
+
+.tippy-content {
+  font-size: 2em; /* İçerik boyutunu ayarlayın */
+}
