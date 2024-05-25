@@ -69,7 +69,7 @@ const DoctorAppointmentList = () => {
                 <p className="flex justify-center items-center text-3xl">
                   Future Appointments
                 </p>
-                {futureAppointments.map((appointment) => (
+                {futureAppointments?.map((appointment) => (
                   <ListAppointments
                     key={appointment.id}
                     appointment={appointment}

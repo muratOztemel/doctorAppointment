@@ -4,6 +4,7 @@ import DashboardDoctorPage from "../pages/DashboardDoctor/DashboardDoctorPage";
 import ProtectedRoute from "../components/Security/ProtectedRoute";
 import DashboardDoctorAppointmentList from "../pages/DashboardDoctor/DashboardDoctorAppointmentList";
 import DashboardDoctorPatientList from "../pages/DashboardDoctor/DashboardDoctorPatientList";
+import DashboardDoctorPatientProfile from "../pages/DashboardDoctor/DashboardDoctorPatientProfile";
 
 export const doctorRoutes = [
   {
@@ -26,6 +27,10 @@ export const doctorRoutes = [
       {
         path: "patients",
         element: <DashboardDoctorPatientList />,
+      },
+      {
+        path: "patient/:id/:name",
+        element: <DashboardDoctorPatientProfile />,
       },
     ],
   },

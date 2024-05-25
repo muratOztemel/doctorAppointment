@@ -24,6 +24,7 @@ const LeftSide = () => {
       pageName: "DashboardHome",
       path: "/dashboard/admin/",
       icon: <IoHome />,
+      end: true,
     },
     {
       id: 2,
@@ -139,6 +140,7 @@ const LeftSide = () => {
           <li key={link.id}>
             <NavLink
               to={link.path}
+              end={link.end}
               onClick={() => toggleLink(link.id)}
               className={({ isActive }) =>
                 `relative flex flex-row items-center h-11 focus:outline-none text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-cyan-500 pr-6 ${

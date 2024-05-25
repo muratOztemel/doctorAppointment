@@ -14,14 +14,21 @@ const baseQuery = fetchBaseQuery({
 const baseQueryWithReauth = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
 
-  // Eğer API'den 401 hatası alınırsa, token yenileme işlemi yapılır
   if (result.error && result.error.status === 401) {
+    return handleTokenRefresh(args, api, extraOptions);
+  }
+
+  return result;
+};
+
+const handleTokenRefresh = async (args, api, extraOptions) => {
+  try {
     const refreshToken = localStorage.getItem("refreshToken");
+    console.log("Refresh token:", refreshToken);
     if (refreshToken) {
-      // Refresh token ile yeni token almak için API'ye istek yapılır
       const refreshResult = await baseQuery(
         {
-          url: "refresh_token",
+          url: "Authentication/refresh-web-token",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -32,23 +39,22 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
         extraOptions
       );
 
+      console.log("Refresh token result:", refreshResult);
+
       if (refreshResult.data) {
         const { token: newToken } = refreshResult.data;
         localStorage.setItem("token", newToken);
-        // Yeni token ile ilk isteği tekrar yap
         return await baseQuery(args, api, extraOptions);
       } else {
-        // Refresh token işlemi başarısız olursa, kullanıcıyı login sayfasına yönlendir
         localStorage.clear();
         window.location.href = "/auth/login";
-        /*         return {
-          error: { status: "AUTH_ERROR", data: "Authentication failed" },
-        }; */
       }
     }
+  } catch (error) {
+    console.error("Error refreshing token:", error);
+    localStorage.clear();
+    window.location.href = "/auth/login";
   }
-
-  return result;
 };
 
 export const apiSlice = createApi({
@@ -66,7 +72,7 @@ export const apiSlice = createApi({
   ],
   endpoints: (builder) => ({
     verifyToken: builder.query({
-      query: () => "Authentication",
+      query: () => "Authentication/refresh-web-token",
     }),
     // Get Patients By Page
     // getPatientsPage: builder.query({

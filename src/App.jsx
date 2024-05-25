@@ -5,8 +5,10 @@ import { adminRoutes } from "./routes/adminRoutes";
 import { doctorRoutes } from "./routes/doctorRoutes";
 import { patientRoutes } from "./routes/patientRoutes";
 import { useAuthChecker } from "./components/hooks/AuthChecker";
+import useTokenExpirationHandler from "./components/hooks/useTokenExpirationHandler";
 
 const App = () => {
+  useTokenExpirationHandler();
   useAuthChecker();
 
   const router = createBrowserRouter([

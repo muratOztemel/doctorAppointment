@@ -13,6 +13,7 @@ const LeftSideDoctor = () => {
       pageName: "DashboardHome",
       path: "/dashboard/doctor",
       icon: <IoHome />,
+      end: true,
     },
     {
       id: 2,
@@ -71,10 +72,11 @@ const LeftSideDoctor = () => {
           </div>
         </div>
       </li>
-      {linkDizi.map(({ id, path, icon, name }) => (
+      {linkDizi.map(({ id, path, icon, name, end }) => (
         <li key={id}>
           <NavLink
             to={path}
+            end={end}
             className={({ isActive }) =>
               `relative flex flex-row items-center h-11 focus:outline-none dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-cyan-500 dark:hover:border-gray-800 pr-6 ${
                 isActive ? "bg-cyan-100 border-cyan-500" : "hover:bg-cyan-50 "
