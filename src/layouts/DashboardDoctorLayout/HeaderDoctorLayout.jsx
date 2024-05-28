@@ -4,8 +4,8 @@ import DoctorLoginManager from "../../components/DoctorDashboard/DoctorLoginMana
 
 const HeaderDoctorLayout = () => {
   return (
-    <div className="fixed w-full flex items-center justify-between h-14 bg-white text-black z-10 ">
-      <div className="flex items-center justify-start md:justify-center pl-3 w-14 md:w-64 h-14 ">
+    <div className="fixed w-full flex items-center justify-between h-14 bg-white text-black z-10">
+      <div className="flex items-center justify-start md:justify-center pl-3 w-14 md:w-64 h-14">
         <img
           className="w-7 h-7 md:w-10 md:h-10 mr-2 rounded-md overflow-hidden"
           src="/icon.png"
@@ -15,7 +15,7 @@ const HeaderDoctorLayout = () => {
           <p className="text-xs text-gray-500">APPOINTMENT</p>
         </div>
       </div>
-      <div className="flex justify-between items-center w-full border-b border-dashed border-cyan-500 h-14 ml-2">
+      <div className="flex justify-between items-center w-full h-14 ml-2">
         <div className="bg-white rounded flex items-center w-full max-w-xl mr-4 p-2 shadow-sm border border-gray-200 md:ml-8">
           <button className="outline-none focus:outline-none">
             <CiSearch />

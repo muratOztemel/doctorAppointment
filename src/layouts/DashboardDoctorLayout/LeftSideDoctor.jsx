@@ -27,7 +27,7 @@ const LeftSideDoctor = () => {
       name: "My Patients",
       pageName: "DoctorsHome",
       path: "/dashboard/doctor/patients",
-      icon: <FaUserDoctor />,
+      icon: <FaUserInjured />,
     },
     {
       id: 4,
@@ -41,7 +41,7 @@ const LeftSideDoctor = () => {
       name: "My Profile",
       pageName: "PatientProfile",
       path: "/dashboard/doctor/profile",
-      icon: <FaUserInjured />,
+      icon: <FaUserDoctor />,
     },
     {
       id: 6,

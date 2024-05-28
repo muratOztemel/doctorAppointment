@@ -1,7 +1,7 @@
 import DoctorPatientList from "../../components/DoctorDashboard/DoctorPatientList";
 import TitleCard from "../../components/UI/Cards/TitleCard";
 
-const DashboardDoctorAppointmentList = () => {
+const DashboardDoctorPatientList = () => {
   return (
     <>
       <div className="xl:px-8 px-2 pt-6">
@@ -15,4 +15,4 @@ const DashboardDoctorAppointmentList = () => {
     </>
   );
 };
-export default DashboardDoctorAppointmentList;
+export default DashboardDoctorPatientList;

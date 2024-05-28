@@ -10,7 +10,6 @@ export function useAuthChecker() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("token", token);
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
@@ -39,11 +38,11 @@ export function useAuthChecker() {
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
           ];
 
-        console.log("User Role:", userRole); // Add this line for debugging
-        console.log("Primary SID:", primarysid); // Add this line for debugging
-        console.log("Group SID:", groupSid); // Add this line for debugging
-        console.log("User ID:", userId); // Add this line for debugging
-        console.log("Username:", username); // Add this line for debugging
+        // console.log("User Role:", userRole); // Add this line for debugging
+        // console.log("Doctor ID:", primarysid); // Add this line for debugging
+        // console.log("Patient ID:", groupSid); // Add this line for debugging
+        // console.log("User ID:", userId); // Add this line for debugging
+        // console.log("Username:", username); // Add this line for debugging
 
         if (userRole === "Patient") {
           dispatch(setPatientId(groupSid));

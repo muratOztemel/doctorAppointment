@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { format, addDays, isValid, parse } from "date-fns";
+import { format, addDays, isValid, parse, isAfter, set } from "date-fns";
 import { BsPersonWalking } from "react-icons/bs";
 import { FaUserDoctor } from "react-icons/fa6";
 import {
@@ -130,7 +130,19 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
     }
   };
 
-  const selectedSlots = slots[format(selectedDate, "yyyy-MM-dd")] || [];
+  const filterPastSlotsForToday = (slots) => {
+    const currentTime = new Date();
+    return slots.filter((slot) => {
+      const [hours, minutes] = slot.time.split(":").map(Number);
+      const slotTime = set(new Date(), { hours, minutes });
+      return isAfter(slotTime, currentTime);
+    });
+  };
+
+  const filteredSlots =
+    formattedSlotsDate === today
+      ? filterPastSlotsForToday(slots[formattedSlotsDate] || [])
+      : slots[formattedSlotsDate] || [];
 
   // Tüm tarihleri oluştur
   const allDates = generateDates(today, 30);
@@ -191,13 +203,13 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
           </button>
         </div>
         <div className="slots w-full">
-          {selectedSlots.length > 0 ? (
+          {filteredSlots.length > 0 ? (
             <>
               <h2 className="font-bold text-xl mb-2 text-cyan-700 text-center">
                 Available Slots on {format(selectedDate, "eeee, MMMM dd")}
               </h2>
               <div className="grid grid-cols-3 gap-2">
-                {selectedSlots.map((slot, index) => {
+                {filteredSlots.map((slot, index) => {
                   // Slot zamanını "HH:mm:ss" formatına dönüştür
                   const formattedSlotTime = `${slot.time}:00`;
                   // Slotun alınmış olup olmadığını kontrol edin

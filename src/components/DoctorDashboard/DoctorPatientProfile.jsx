@@ -114,9 +114,6 @@ const DoctorPatientProfile = () => {
   if (isError) return <p>Error fetching patient.</p>;
   if (isSuccess) return <p>Patient updated successfully!</p>;
 
-  const inputClass =
-    "block w-60 h-10 pl-4 pr-4 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none";
-
   return (
     <>
       <div className="flex items-center text-center gap-4">
