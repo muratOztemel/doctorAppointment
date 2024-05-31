@@ -4,6 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   useGetDailySlotsQuery,
   useGetDoctorWorkingDayByDoctorIdQuery,
@@ -16,6 +17,7 @@ import "./tooltipStyles.css";
 
 const DoctorCalendar = () => {
   const { doctorId } = useSelector((state) => state.doctors);
+  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [backgroundEvents, setBackgroundEvents] = useState([]);
   const today = new Date().toISOString().split("T")[0];
@@ -85,7 +87,7 @@ const DoctorCalendar = () => {
           appointment.appointmentTime,
           workingDaysData?.slotDuration
         )}`,
-        url: `/dashboard/doctor/patient/${appointment.patientId}/${appointment.patientFullName}`,
+        url: `/dashboard/doctor/visiting/${appointment.patientId}/${appointment.id}/${appointment.patientFullName}`,
       }));
       setEvents(formattedEvents);
     }
@@ -129,6 +131,13 @@ const DoctorCalendar = () => {
     });
   };
 
+  const handleEventClick = (info) => {
+    info.jsEvent.preventDefault();
+    if (info.event.url) {
+      navigate(info.event.url);
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
       <FullCalendar
@@ -148,6 +157,7 @@ const DoctorCalendar = () => {
         dayMaxEvents={true}
         eventBackgroundColor="#00b2b2"
         eventDidMount={handleEventMount}
+        eventClick={handleEventClick} // eventClick olayını ekleyin
       />
     </div>
   );

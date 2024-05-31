@@ -4,13 +4,13 @@ import { authRoutes } from "./routes/authRoutes";
 import { adminRoutes } from "./routes/adminRoutes";
 import { doctorRoutes } from "./routes/doctorRoutes";
 import { patientRoutes } from "./routes/patientRoutes";
-import { useAuthChecker } from "./components/hooks/AuthChecker";
+import { useAuthHandler } from "./components/hooks/useAuthHandler";
 import useTokenExpirationHandler from "./components/hooks/useTokenExpirationHandler";
 import "tippy.js/dist/tippy.css";
 
 const App = () => {
+  const isCheckingToken = useAuthHandler();
   useTokenExpirationHandler();
-  useAuthChecker();
 
   const router = createBrowserRouter([
     ...mainRoutes,
@@ -19,6 +19,10 @@ const App = () => {
     ...doctorRoutes,
     ...patientRoutes,
   ]);
+
+  if (isCheckingToken) {
+    return <div>Loading...</div>; // veya bir yükleme spinner'ı
+  }
 
   return (
     <div className="app">

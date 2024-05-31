@@ -4,6 +4,7 @@ import { FaUserInjured } from "react-icons/fa";
 import { FaUserDoctor } from "react-icons/fa6";
 import { AiFillMedicineBox } from "react-icons/ai";
 import { TbClockRecord } from "react-icons/tb";
+import { MdOutlineNotificationsNone } from "react-icons/md";
 
 const LeftSideDoctor = () => {
   const linkDizi = [
@@ -31,10 +32,10 @@ const LeftSideDoctor = () => {
     },
     {
       id: 4,
-      name: "My Medical Record",
-      pageName: "MyMedicalRecord",
-      path: "/dashboard/doctor/medical",
-      icon: <AiFillMedicineBox />,
+      name: "Notifications",
+      pageName: "NotificationsHome",
+      path: "/dashboard/doctor/notifications",
+      icon: <MdOutlineNotificationsNone />,
     },
     {
       id: 5,

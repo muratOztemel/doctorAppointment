@@ -174,17 +174,17 @@ const DoctorPatientProfile = () => {
           <div className="flex flex-col gap-3 px-2 xl:px-12 w-full">
             <Link
               to="/addMedical"
-              className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
+              className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
               <FaBoxArchive /> Medical Records
             </Link>
-            <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
+            <button className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
               <FaRegCalendarDays />
               Appointments
             </button>
-            <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
+            <button className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
               <FaUser /> Patient information
             </button>
-            <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
+            <button className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
               <FaHeartPulse />
               Health information
             </button>

@@ -10,6 +10,7 @@ import { MdCancel } from "react-icons/md";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { FaStethoscope } from "react-icons/fa";
+import ConfirmDeleteAppointment from "./ConfirmDeleteAppointment";
 
 const ListAppointment = ({ appointment }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);

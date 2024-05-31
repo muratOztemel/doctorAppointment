@@ -69,6 +69,7 @@ export const apiSlice = createApi({
     "Branches",
     "Favorites",
     "UserRoles",
+    "DoctorWorkingDays",
   ],
   endpoints: (builder) => ({
     verifyToken: builder.query({
