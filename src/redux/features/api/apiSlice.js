@@ -304,9 +304,19 @@ export const apiSlice = createApi({
       query: () => "Favorites",
       providesTags: ["Favorites"],
     }),
-    getFavoritesById: builder.query({
-      query: (id) => `Favorites/${id}`,
-      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    getFavoritesByUserId: builder.query({
+      query: (id) =>
+        `Favorites/get-favorites-by-userid?userId=${id}&page=1&pageSize=20`,
+      providesTags: (result, error, id) =>
+        result
+          ? [
+              ...result.map(({ favoriteId }) => ({
+                type: "Favorites",
+                id: favoriteId,
+              })),
+              { type: "Favorites", id: "LIST" },
+            ]
+          : [{ type: "Favorites", id: "LIST" }],
     }),
     addNewFavorite: builder.mutation({
       query(newFavorite) {
@@ -323,10 +333,9 @@ export const apiSlice = createApi({
       query: ({ id, updatedFavorite }) => ({
         url: `Favorites/${id}`,
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: updatedFavorite,
       }),
-      invalidatesTags: ["Favorites"],
+      invalidatesTags: [{ type: "Favorites", id: "LIST" }],
     }),
     deleteFavorite: builder.mutation({
       query(id) {
@@ -666,7 +675,7 @@ export const {
   useUpdateBranchMutation,
   useDeleteBranchMutation,
   useGetFavoritesQuery,
-  useGetFavoritesByIdQuery,
+  useGetFavoritesByUserIdQuery,
   useAddNewFavoriteMutation,
   useUpdateFavoriteMutation,
   useDeleteFavoriteMutation,

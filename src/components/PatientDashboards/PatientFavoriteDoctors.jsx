@@ -1,16 +1,18 @@
 import { TbClockRecord } from "react-icons/tb";
 import Card from "../UI/Cards/Card";
-import { useGetFavoritesByIdQuery } from "../../redux/features/api/apiSlice";
+import { useGetFavoritesByUserIdQuery } from "../../redux/features/api/apiSlice";
 import { useSelector } from "react-redux";
+import PatientFavoriteList from "./PatientFavoriteList";
 
-const PatientAppointments = () => {
+const PatientFavoriteDoctors = () => {
   const { userId } = useSelector((state) => state.users.userLogin);
-  console.log();
   const {
-    data: favorites,
+    data: favorites = [],
     isLoading,
     isError,
-  } = useGetFavoritesByIdQuery({ userId });
+  } = useGetFavoritesByUserIdQuery(userId, {
+    skip: !userId,
+  });
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -20,19 +22,30 @@ const PatientAppointments = () => {
     return <p>Error loading favorite doctors.</p>;
   }
 
+  const activeFavorites = favorites.filter(
+    (favorite) => favorite.favoriteStatus
+  );
+
   return (
-    <>
-      <Card
-        title={"My Favorite Doctors"}
-        icon={<TbClockRecord />}
-        color={"cyan"}
-        className={"mb-6"}>
-        <div className="my-6 w-full h-full gap-7 flex flex-col">
-          <div className="flex justify-end">favorite doctors</div>
-        </div>
-      </Card>
-    </>
+    <Card
+      title={"My Favorite Doctors"}
+      icon={<TbClockRecord />}
+      color={"cyan"}
+      className={"mb-6"}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+        {activeFavorites.length > 0 ? (
+          activeFavorites.map((favorite) => (
+            <PatientFavoriteList
+              key={favorite.favoriteId}
+              favorite={favorite}
+            />
+          ))
+        ) : (
+          <p>No favorite doctors found.</p>
+        )}
+      </div>
+    </Card>
   );
 };
 
-export default PatientAppointments;
+export default PatientFavoriteDoctors;
