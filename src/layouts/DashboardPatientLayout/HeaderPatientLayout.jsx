@@ -15,7 +15,7 @@ const HeaderPatientLayout = () => {
           <p className="text-xs text-gray-500">APPOINTMENT</p>
         </div>
       </div>
-      <div className="flex justify-between items-center w-full border-b border-dashed border-cyan-500 h-14 ml-2">
+      <div className="flex justify-between items-center w-full h-14 ml-2">
         <div className="bg-white rounded flex items-center w-full max-w-xl mr-4 p-2 shadow-sm border border-gray-200 md:ml-8">
           <button className="outline-none focus:outline-none">
             <CiSearch />

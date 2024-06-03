@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
-import { useVerifyTokenQuery } from "../../redux/features/api/apiSlice";
+import { useVerifyTokenMutation } from "../../redux/features/api/apiSlice";
 import { clearUser, setUserLogin } from "../../redux/slices/usersSlice";
 
 const useTokenExpirationHandler = () => {
@@ -18,7 +18,7 @@ const useTokenExpirationHandler = () => {
 
       if (timeUntilExpiration > 0) {
         const timeout = setTimeout(async () => {
-          const { isError } = useVerifyTokenQuery(undefined, {
+          const { isError } = useVerifyTokenMutation(undefined, {
             skip: !token,
           });
 

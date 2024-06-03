@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { jwtDecode } from "jwt-decode";
-import { useVerifyTokenQuery } from "../../redux/features/api/apiSlice";
+import { useVerifyTokenMutation } from "../../redux/features/api/apiSlice";
 import { clearUser, setUserLogin } from "../../redux/slices/usersSlice";
 import { setPatientId } from "../../redux/slices/patientSlice";
 import { setDoctorId } from "../../redux/slices/doctorsSlice";
@@ -11,7 +11,7 @@ export function useAuthHandler() {
   const [isCheckingToken, setIsCheckingToken] = useState(true);
   const token = localStorage.getItem("token");
 
-  const { data, error, isError } = useVerifyTokenQuery(undefined, {
+  const { data, error, isError } = useVerifyTokenMutation(undefined, {
     skip: !token,
   });
 

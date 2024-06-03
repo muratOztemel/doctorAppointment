@@ -72,8 +72,11 @@ export const apiSlice = createApi({
     "DoctorWorkingDays",
   ],
   endpoints: (builder) => ({
-    verifyToken: builder.query({
-      query: () => "Authentication/refresh-web-token",
+    verifyToken: builder.mutation({
+      query: () => ({
+        url: "Authentication/refresh-web-token",
+        method: "POST",
+      }),
     }),
     // Get Patients By Page
     // getPatientsPage: builder.query({
@@ -642,7 +645,7 @@ export const apiSlice = createApi({
 });
 
 export const {
-  useVerifyTokenQuery,
+  useVerifyTokenMutation,
   useGetDashboardDataQuery,
   useGetPatientsPageQuery,
   useDeletePatientMutation,

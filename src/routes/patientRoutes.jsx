@@ -6,12 +6,14 @@ import DashboardPatientFavoriteDoctors from "../pages/DashboardPatient/Dashboard
 import PatientProfile from "../components/PatientDashboards/PatientProfile";
 import ProtectedRoute from "../components/Security/ProtectedRoute";
 import PatientSettings from "../components/PatientDashboards/PatientSettings";
+import DashboardGetAppointment from "../pages/DashboardPatient/DashboardGetAppointment";
+import DashboardPatientDoctorProfile from "../pages/DashboardPatient/DashboardPatientDoctorProfile";
 
 export const patientRoutes = [
   {
     path: "/dashboard/patient/",
     element: <DashboardPatientLayout />,
-    elementError: <ErrorPage />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -26,8 +28,16 @@ export const patientRoutes = [
         element: <DashboardPatientAppointments />,
       },
       {
+        path: "getAppointmentDoctor",
+        element: <DashboardGetAppointment />,
+      },
+      {
         path: "mydoctors",
         element: <DashboardPatientFavoriteDoctors />,
+      },
+      {
+        path: "doctor/:id/:name",
+        element: <DashboardPatientDoctorProfile />,
       },
       {
         path: "settings",
