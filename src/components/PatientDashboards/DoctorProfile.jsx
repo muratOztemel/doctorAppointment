@@ -68,7 +68,8 @@ const DoctorProfile = () => {
         <Card
           title={"Doctor Information"}
           icon={<IoMdInformationCircleOutline className="text-2xl" />}
-          color={"green"}>
+          color={"green"}
+          className={"mt-6"}>
           <div className="w-full p-10 flex flex-col gap-2">
             <div className="flex">
               <p className="text-3xl font-medium">

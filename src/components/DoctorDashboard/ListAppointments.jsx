@@ -144,16 +144,16 @@ const ListAppointment = ({ appointment }) => {
 
               <td className="text-center">{getStatus(appointment.status)}</td>
               {useStatus === 1 || useStatus === 0 ? (
-                <td className="flex justify-center items-center">
+                <td className="flex justify-center items-center content-center">
                   <button
                     onClick={() => handleDelete(appointment.id)}
-                    className="w-52 h-9 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
+                    className="w-32 h-12 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                     <MdCancel className="mr-2" />
-                    Cancel Appointment
+                    Cancel
                   </button>
                   <Link
                     to={`/dashboard/doctor/visiting/${appointment.patientId}/${appointment.id}/${appointment.patientFullName}`}
-                    className="w-28 h-9 text-white bg-green-300 hover:bg-green-500 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex justify-center items-center px-3 py-2.5 text-center mr-2">
+                    className="w-32 h-12 text-white bg-green-300 hover:bg-green-500 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex justify-center items-center px-3 py-2.5 text-center mr-2">
                     <FaStethoscope className="h-12 mr-2" />
                     Visiting
                   </Link>

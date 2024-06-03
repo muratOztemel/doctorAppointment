@@ -8,6 +8,7 @@ import ProtectedRoute from "../components/Security/ProtectedRoute";
 import PatientSettings from "../components/PatientDashboards/PatientSettings";
 import DashboardGetAppointment from "../pages/DashboardPatient/DashboardGetAppointment";
 import DashboardPatientDoctorProfile from "../pages/DashboardPatient/DashboardPatientDoctorProfile";
+import DashboardPatientMedicalRecord from "../pages/DashboardPatient/DashboardPatientMedicalRecord";
 
 export const patientRoutes = [
   {
@@ -34,6 +35,10 @@ export const patientRoutes = [
       {
         path: "mydoctors",
         element: <DashboardPatientFavoriteDoctors />,
+      },
+      {
+        path: "medicalRecords",
+        element: <DashboardPatientMedicalRecord />,
       },
       {
         path: "doctor/:id/:name",

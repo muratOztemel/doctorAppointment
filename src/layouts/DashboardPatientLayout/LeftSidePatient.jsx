@@ -34,7 +34,7 @@ const LeftSidePatient = () => {
       id: 4,
       name: "My Medical Record",
       pageName: "MyMedicalRecord",
-      path: "/medical",
+      path: "/dashboard/patient/medicalRecords",
       icon: <AiFillMedicineBox />,
     },
     {

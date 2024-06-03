@@ -276,180 +276,173 @@ const DashboardGetAppointment = () => {
 
   return (
     <>
-      <Card
-        title={"My Favorite Doctors"}
-        icon={<TbClockRecord />}
-        color={"cyan"}
-        className={"mb-6"}>
-        <div className="col-span-2 p-4">
-          <div className="flex justify-center items-center">
-            <img
-              src={useDefaultImage(doctor?.doctorInfo)}
-              alt={`${doctor?.name} ${doctor?.surname}`}
-              className="w-36 h-36 rounded-full object-cover border border-dashed border-cyan-500 p-2 items-center"
-            />
-          </div>
-          <div className="flex justify-center items-center">
-            {doctor?.title} {doctor?.name} {doctor?.surname}
-          </div>
-          <div className="flex justify-center items-center text-gray-500">
-            {branchName}
-          </div>
-          <div className="text-center text-gray-300">Doctor Work Days</div>
-          <div className="flex justify-center items-center">
-            {workingDayElements}
-          </div>
-          <div className="text-sm flex flex-col justify-center items-center">
-            <div className="mr-2 text-gray-300">Add to Favorites</div>
-            <div>
-              {isFavorited ? (
-                <FaHeart
-                  className="text-red-500 text-3xl"
-                  onClick={toggleFavorite}
-                />
-              ) : (
-                <FaRegHeart className="text-3xl" onClick={toggleFavorite} />
-              )}
-            </div>
-          </div>
+      <div className="col-span-2 p-4">
+        <div className="flex justify-center items-center">
+          <img
+            src={useDefaultImage(doctor?.doctorInfo)}
+            alt={`${doctor?.name} ${doctor?.surname}`}
+            className="w-36 h-36 rounded-full object-cover border border-dashed border-cyan-500 p-2 items-center"
+          />
         </div>
-
-        <div className="col-span-6 p-4">
-          <div className="flex items-center space-x-2 mb-4">
-            <button
-              onClick={() => scroll("left")}
-              className="p-2 bg-gray-300 hover:bg-cyan-500 delay-100 text-white rounded-full w-8 h-8 flex justify-center items-center">
-              <IoIosArrowBack />
-            </button>
-            <div
-              className="flex overflow-x-auto hide-scrollbar"
-              style={{ width: "600px", height: "78px" }}
-              ref={sliderRef}>
-              {dateElements}
-            </div>
-            <button
-              onClick={() => scroll("right")}
-              className="p-2 bg-gray-300 hover:bg-cyan-500 delay-100 text-white rounded-full w-8 h-8 flex justify-center items-center">
-              <IoIosArrowForward />
-            </button>
-          </div>
-          <div className="slots w-full">
-            {filteredSlots.length > 0 ? (
-              <>
-                <h2 className="font-bold text-xl mb-2 text-cyan-700 text-center">
-                  Available Slots on {format(selectedDate, "eeee, MMMM dd")}
-                </h2>
-                <div className="grid grid-cols-3 gap-2">
-                  {filteredSlots.map((slot, index) => {
-                    const formattedSlotTime = `${slot.time}:00`;
-                    const isConfirmed = confirmedSlots.some(
-                      (cs) =>
-                        cs.slot === formattedSlotTime &&
-                        cs.doctorId === doctorId
-                    );
-                    return (
-                      <button
-                        key={index}
-                        disabled={isConfirmed || !slot.available}
-                        className={`p-2 rounded-lg ${
-                          isConfirmed
-                            ? "bg-green-200 cursor-not-allowed"
-                            : slot.available
-                            ? selectedSlot === slot.time
-                              ? "bg-cyan-800 text-white"
-                              : "bg-cyan-100"
-                            : "bg-red-200 cursor-not-allowed"
-                        }`}
-                        onClick={() => handleSlotChange(slot.time)}>
-                        {slot.time}
-                      </button>
-                    );
-                  })}
-                </div>
-              </>
+        <div className="flex justify-center items-center font-medium text-lg text-center">
+          {doctor?.title} {doctor?.name} {doctor?.surname}
+        </div>
+        <div className="flex justify-center items-center text-gray-500">
+          {branchName}
+        </div>
+        <div className="text-center text-gray-300">Doctor Work Days</div>
+        <div className="flex justify-center items-center">
+          {workingDayElements}
+        </div>
+        <div className="text-sm flex flex-col justify-center items-center">
+          <div className="mr-2 text-gray-300">Add to Favorites</div>
+          <div>
+            {isFavorited ? (
+              <FaHeart
+                className="text-red-500 text-3xl cursor-pointer"
+                onClick={toggleFavorite}
+              />
             ) : (
-              <div className="flex flex-col justify-center items-center font-bold text-xl mb-2 text-red-500 text-center">
-                No slots available on {format(selectedDate, "eeee, MMMM dd")}
-                <ImCancelCircle className="text-4xl mt-3" />
-              </div>
+              <FaRegHeart className="text-3xl" onClick={toggleFavorite} />
             )}
           </div>
         </div>
-        <div className="col-span-2">
-          <div className="mt-4 p-4 border rounded-lg border-cyan-500 border-dashed">
-            <h3 className="font-bold text-lg mb-4">Doctor Appointment</h3>
-            <div className="flex gap-4">
-              <div className="rounded-full border w-12 h-12 flex justify-center items-center">
-                <BsPersonWalking className="text-lg text-gray-400" />
-              </div>
-              <div className="text-md">Branch: {selectionPath.bolum}</div>
-            </div>
+      </div>
 
-            {selectedSlot && (
-              <>
-                <div className="inline-flex flex-col justify-center items-center">
-                  <div>
-                    <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
-                  </div>
-                  <div></div>
-                  <div>
-                    <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
-                  </div>
-                  <div></div>
-                  <div>
-                    <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
-                  </div>
-                  <div></div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="rounded-full border w-12 h-12 flex justify-center items-center">
-                    <FaUserDoctor className="text-lg text-gray-400" />
-                  </div>
-                  <div className="text-md">Doctor: {selectionPath.doktor}</div>
-                </div>
-                <div className="inline-flex flex-col justify-center items-center">
-                  <div>
-                    <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
-                  </div>
-                  <div></div>
-                  <div>
-                    <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
-                  </div>
-                  <div></div>
-                  <div>
-                    <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
-                  </div>
-                  <div></div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="rounded-full border w-12 h-12 flex justify-center items-center bg-green-500 text-white">
-                    {selectedSlot}
-                  </div>
-                  <div className="text-md">
-                    {format(selectedDate, "eeee, MMMM dd")}
-                  </div>
-                </div>
-                <div>
-                  <button
-                    onClick={openModal}
-                    className="bg-cyan-700 p-2 mt-4 hover:bg-green-600 text-white text-lg rounded">
-                    Create Appointment
-                  </button>
-                  <ConfirmAppointmentModal
-                    isOpen={isModalOpen}
-                    onClose={closeModal}
-                    doctor={{ id: doctorId }}
-                    selectedDate={selectedDate}
-                    selectedSlot={selectedSlot}
-                    branchName={selectionPath.bolum}
-                    onConfirm={handleConfirmSlot}
-                  />
-                </div>
-              </>
-            )}
+      <div className="col-span-6 p-4">
+        <div className="flex items-center space-x-2 mb-4">
+          <button
+            onClick={() => scroll("left")}
+            className="p-2 bg-gray-300 hover:bg-cyan-500 delay-100 text-white rounded-full w-8 h-8 flex justify-center items-center">
+            <IoIosArrowBack />
+          </button>
+          <div
+            className="flex overflow-x-auto hide-scrollbar"
+            style={{ width: "600px", height: "78px" }}
+            ref={sliderRef}>
+            {dateElements}
           </div>
+          <button
+            onClick={() => scroll("right")}
+            className="p-2 bg-gray-300 hover:bg-cyan-500 delay-100 text-white rounded-full w-8 h-8 flex justify-center items-center">
+            <IoIosArrowForward />
+          </button>
         </div>
-      </Card>
+        <div className="slots w-full">
+          {filteredSlots.length > 0 ? (
+            <>
+              <h2 className="font-bold text-xl mb-2 text-cyan-700 text-center">
+                Available Slots on {format(selectedDate, "eeee, MMMM dd")}
+              </h2>
+              <div className="grid grid-cols-3 gap-2">
+                {filteredSlots.map((slot, index) => {
+                  const formattedSlotTime = `${slot.time}:00`;
+                  const isConfirmed = confirmedSlots.some(
+                    (cs) =>
+                      cs.slot === formattedSlotTime && cs.doctorId === doctorId
+                  );
+                  return (
+                    <button
+                      key={index}
+                      disabled={isConfirmed || !slot.available}
+                      className={`p-2 rounded-lg ${
+                        isConfirmed
+                          ? "bg-green-200 cursor-not-allowed"
+                          : slot.available
+                          ? selectedSlot === slot.time
+                            ? "bg-cyan-800 text-white"
+                            : "bg-cyan-100"
+                          : "bg-red-200 cursor-not-allowed"
+                      }`}
+                      onClick={() => handleSlotChange(slot.time)}>
+                      {slot.time}
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col justify-center items-center font-bold text-xl mb-2 text-red-500 text-center">
+              No slots available on {format(selectedDate, "eeee, MMMM dd")}
+              <ImCancelCircle className="text-4xl mt-3" />
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="col-span-2">
+        <div className="mt-4 p-4 border rounded-lg border-cyan-500 border-dashed">
+          <h3 className="font-bold text-lg mb-4">Doctor Appointment</h3>
+          <div className="flex gap-4">
+            <div className="rounded-full border w-12 h-12 flex justify-center items-center">
+              <BsPersonWalking className="text-lg text-gray-400" />
+            </div>
+            <div className="text-md">Branch: {selectionPath.bolum}</div>
+          </div>
+
+          {selectedSlot && (
+            <>
+              <div className="inline-flex flex-col justify-center items-center">
+                <div>
+                  <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
+                </div>
+                <div></div>
+                <div>
+                  <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
+                </div>
+                <div></div>
+                <div>
+                  <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
+                </div>
+                <div></div>
+              </div>
+              <div className="flex gap-4">
+                <div className="rounded-full border w-12 h-12 flex justify-center items-center">
+                  <FaUserDoctor className="text-lg text-gray-400" />
+                </div>
+                <div className="text-md">Doctor: {selectionPath.doktor}</div>
+              </div>
+              <div className="inline-flex flex-col justify-center items-center">
+                <div>
+                  <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
+                </div>
+                <div></div>
+                <div>
+                  <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
+                </div>
+                <div></div>
+                <div>
+                  <div className="w-1 h-1 rounded border-r bg-slate-100 mb-1 ml-5"></div>
+                </div>
+                <div></div>
+              </div>
+              <div className="flex gap-4">
+                <div className="rounded-full border w-12 h-12 flex justify-center items-center bg-green-500 text-white">
+                  {selectedSlot}
+                </div>
+                <div className="text-md">
+                  {format(selectedDate, "eeee, MMMM dd")}
+                </div>
+              </div>
+              <div>
+                <button
+                  onClick={openModal}
+                  className="bg-cyan-700 p-2 mt-4 hover:bg-green-600 text-white text-lg rounded">
+                  Create Appointment
+                </button>
+                <ConfirmAppointmentModal
+                  isOpen={isModalOpen}
+                  onClose={closeModal}
+                  doctor={doctor}
+                  selectedDate={selectedDate}
+                  selectedSlot={selectedSlot}
+                  branchName={branchName}
+                  onConfirm={handleConfirmSlot} // Confirm handler
+                />
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </>
   );
 };

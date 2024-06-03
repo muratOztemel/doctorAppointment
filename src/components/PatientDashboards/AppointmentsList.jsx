@@ -139,9 +139,9 @@ const AppointmentList = ({ appointment }) => {
                 <td className="text-center">
                   <button
                     onClick={() => handleDelete(appointment.id)}
-                    className="w-52 h-9 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
+                    className=" text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex justify-center items-center px-3 py-2.5 text-center mr-2">
                     <MdCancel className="mr-2" />
-                    Cancel Appointment
+                    Cancel
                   </button>
                 </td>
               ) : (

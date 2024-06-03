@@ -78,11 +78,6 @@ export const apiSlice = createApi({
         method: "POST",
       }),
     }),
-    // Get Patients By Page
-    // getPatientsPage: builder.query({
-    //   query: ({ page = 1, searchTerm, sortField, sortOrder }) =>
-    //     `patients?_page=${page}&_limit=10&q=${searchTerm}&_sort=${sortField}&_order=${sortOrder}`,
-    // }),
     getDashboardData: builder.query({
       query: () => "Dashboard/GetDashboardData",
     }),
@@ -92,8 +87,6 @@ export const apiSlice = createApi({
         `Patients/SearchPatient?page=${page}&pageSize=20&searchterm=${searchTerm}&sort=${sortField}&sortby=${sortOrder}`,
       providesTags: ["Patients"],
     }),
-    // providesTags: ["Patients"],
-    // Delete Patient By Id
     deletePatient: builder.mutation({
       query: (id) => ({
         url: `Patients/${id}`,
@@ -639,6 +632,35 @@ export const apiSlice = createApi({
       },
       invalidatesTags: ["DoctorWorkingDays"], // Silme işlemi sonrası rolleri yenile
     }),
+    getTreatments: builder.query({
+      query: () => "Treatments",
+    }),
+    addNewTreatment: builder.mutation({
+      query(newTreatment) {
+        return {
+          url: `Treatments`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newTreatment,
+        };
+      },
+    }),
+    updateTreatment: builder.mutation({
+      query: ({ id, updatedTreatment }) => ({
+        url: `Treatments/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedTreatment,
+      }),
+    }),
+    deleteTreatment: builder.mutation({
+      query(id) {
+        return {
+          url: `Treatments/${id}`,
+          method: "DELETE",
+        };
+      },
+    }),
   }),
   /*   keepUnusedDataFor: 30,
   refetchOnMountOrArgChange: 5, */
@@ -725,4 +747,8 @@ export const {
   useGetDoctorWorkingDaysQuery,
   useUpdateDoctorWorkingDaysMutation,
   useDeleteDoctorWorkingDaysMutation,
+  useGetTreatmentsQuery,
+  useAddNewTreatmentMutation,
+  useUpdateTreatmentMutation,
+  useDeleteTreatmentMutation,
 } = apiSlice;
