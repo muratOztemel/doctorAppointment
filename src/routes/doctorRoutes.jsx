@@ -9,6 +9,7 @@ import DashboardDoctorVisiting from "../pages/DashboardDoctor/DashboardDoctorVis
 import DashboardDoctorProfile from "../pages/DashboardDoctor/DashboardDoctorProfile";
 import DashboardDoctorSettings from "../pages/DashboardDoctor/DashboardDoctorSettings";
 import DashboardDoctorPatientAppointments from "../pages/DashboardDoctor/DashboardDoctorPatientAppointments";
+import DashboardDoctorPatientMedicalRecords from "../pages/DashboardDoctor/DashboardDoctorPatientMedicalRecords";
 
 export const doctorRoutes = [
   {
@@ -27,6 +28,10 @@ export const doctorRoutes = [
       {
         path: "appointments",
         element: <DashboardDoctorAppointmentList />,
+      },
+      {
+        path: "medicalRecords/:id/:name",
+        element: <DashboardDoctorPatientMedicalRecords />,
       },
       {
         path: "patientAppointments/:id/:name",

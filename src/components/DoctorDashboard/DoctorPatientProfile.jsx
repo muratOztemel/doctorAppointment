@@ -173,21 +173,16 @@ const DoctorPatientProfile = () => {
 
           <div className="flex flex-col gap-3 px-2 xl:px-12 w-full">
             <Link
-              to="/addMedical"
-              className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
+              to={`/dashboard/doctor/medicalRecords/${patient.id}/${patient.name}${patient.surname}`}
+              className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-44 p-4 rounded ">
               <FaBoxArchive /> Medical Records
             </Link>
-            <button className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
+            <Link
+              to={`/dashboard/doctor/patientAppointments/${patient.id}/${patient.name}${patient.surname}`}
+              className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-44 p-4 rounded">
               <FaRegCalendarDays />
               Appointments
-            </button>
-            <button className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-              <FaUser /> Patient information
-            </button>
-            <button className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-              <FaHeartPulse />
-              Health information
-            </button>
+            </Link>
           </div>
         </div>
         <div className="col-span-12 lg:col-span-8 bg-white rounded-xl border-[1px] border-border p-6">

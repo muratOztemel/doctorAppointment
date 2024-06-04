@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useGetByDoctorAndDateQuery } from "../../redux/features/api/apiSlice";
 import Card from "../UI/Cards/Card";
@@ -19,6 +18,21 @@ const DoctorPatientList = () => {
       skip: !doctorId,
     }
   );
+
+  // Helper function to filter out duplicate patients
+  const filterUniquePatients = (appointments) => {
+    const uniquePatients = new Map();
+    appointments.forEach((appointment) => {
+      if (!uniquePatients.has(appointment.patientId)) {
+        uniquePatients.set(appointment.patientId, appointment);
+      }
+    });
+    return Array.from(uniquePatients.values());
+  };
+
+  const uniqueAppointments = appointments
+    ? filterUniquePatients(appointments)
+    : [];
 
   // Show loading state if either doctor or branch data is still loading
   if (isLoading) {
@@ -54,8 +68,12 @@ const DoctorPatientList = () => {
             </tr>
           </thead>
           <tbody>
-            {appointments?.map((appointment) => (
-              <ListPatients key={appointment.id} appointment={appointment} />
+            {uniqueAppointments.map((appointment, index) => (
+              <ListPatients
+                key={appointment.id}
+                appointment={appointment}
+                index={index + 1}
+              />
             ))}
           </tbody>
         </table>

@@ -83,8 +83,8 @@ const ListAppointment = ({ appointment }) => {
   const handleDeleteConfirm = async () => {
     if (appointmentToDelete) {
       await deleteAppointment(appointmentToDelete).unwrap();
-      setAppointmentToDelete(null); // ID'yi temizle
-      setShowConfirmModal(false); // Modalı kapat
+      setAppointmentToDelete(null); // Clear the ID
+      setShowConfirmModal(false); // Close the modal
       toast.error("The appointment has been removed.", {
         position: "bottom-left",
         autoClose: 2000,
@@ -109,12 +109,16 @@ const ListAppointment = ({ appointment }) => {
               useStatus === 1 ? "bg-green-50" : "bg-red-50"
             } rounded-md overflow-hidden`}>
             <tr>
-              <th>Branch</th>
-              <th>Patient</th>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Status</th>
-              {useStatus === 1 || useStatus === 0 ? <th>Action</th> : ""}
+              <th className="text-center">Branch</th>
+              <th className="text-center">Patient</th>
+              <th className="text-center">Date</th>
+              <th className="text-center">Time</th>
+              <th className="text-center">Status</th>
+              {useStatus === 1 || useStatus === 0 ? (
+                <th className="text-center">Action</th>
+              ) : (
+                ""
+              )}
             </tr>
           </thead>
           <tbody>
@@ -124,8 +128,8 @@ const ListAppointment = ({ appointment }) => {
                   ? "border-green-100 hover:bg-green-50"
                   : "border-red-100 hover:bg-red-50"
               }  transition`}>
-              <td className="text-center">{branch?.name}</td>
-              <td className="text-center flex flex-col justify-center items-center">
+              <td className="text-center align-middle">{branch?.name}</td>
+              <td className="text-center flex flex-col justify-center items-center align-middle">
                 <img
                   src={DefaultImage(patient)}
                   alt={`${appointment.patientFullName}`}
@@ -134,29 +138,33 @@ const ListAppointment = ({ appointment }) => {
                 {appointment.patientFullName}
               </td>
 
-              <td className="text-center">
+              <td className="text-center align-middle">
                 {format(appointment.appointmentDate, "yyyy-MM-dd")}
               </td>
 
-              <td className="text-center">
+              <td className="text-center align-middle">
                 {format(appointmentTime, "HH:mm")}
               </td>
 
-              <td className="text-center">{getStatus(appointment.status)}</td>
+              <td className="text-center align-middle">
+                {getStatus(appointment.status)}
+              </td>
               {useStatus === 1 || useStatus === 0 ? (
-                <td className="flex justify-center items-center content-center">
-                  <button
-                    onClick={() => handleDelete(appointment.id)}
-                    className="w-32 h-12 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
-                    <MdCancel className="mr-2" />
-                    Cancel
-                  </button>
-                  <Link
-                    to={`/dashboard/doctor/visiting/${appointment.patientId}/${appointment.id}/${appointment.patientFullName}`}
-                    className="w-32 h-12 text-white bg-green-300 hover:bg-green-500 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex justify-center items-center px-3 py-2.5 text-center mr-2">
-                    <FaStethoscope className="h-12 mr-2" />
-                    Visiting
-                  </Link>
+                <td className="text-center align-middle">
+                  <div className="flex justify-center items-center">
+                    <button
+                      onClick={() => handleDelete(appointment.id)}
+                      className="w-32 h-12 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex justify-center items-center px-3 py-2.5 text-center mr-2">
+                      <MdCancel className="mr-2" />
+                      Cancel
+                    </button>
+                    <Link
+                      to={`/dashboard/doctor/visiting/${appointment.patientId}/${appointment.id}/${appointment.patientFullName}`}
+                      className="w-32 h-12 text-white bg-green-300 hover:bg-green-500 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex justify-center items-center px-3 py-2.5 text-center mr-2">
+                      <FaStethoscope className="h-12 mr-2" />
+                      Visiting
+                    </Link>
+                  </div>
                 </td>
               ) : (
                 ""

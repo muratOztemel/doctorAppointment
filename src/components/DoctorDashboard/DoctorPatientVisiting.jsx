@@ -6,16 +6,20 @@ import {
   useGetPatientByIdQuery,
   useGetAppointmentByIdQuery,
   useAddNewTreatmentMutation,
+  useUpdateTreatmentMutation,
 } from "../../redux/features/api/apiSlice";
 import BloodType from "../Dasboards/Services/BloodType";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import ModalMedicine from "./ModalMedicine";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
 
 const DoctorPatientVisiting = () => {
+  const [treatmentId, setTreatmentId] = useState(null);
   const navigate = useNavigate();
   const { id: patientId, apId: appointmentId } = useParams();
+  const { doctorId } = useSelector((state) => state.doctors);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMedicinesData, setSelectedMedicinesData] = useState([]);
@@ -39,6 +43,8 @@ const DoctorPatientVisiting = () => {
   const [addNewTreatment, { isLoading: isAdding }] =
     useAddNewTreatmentMutation();
 
+  const [updateTreatment] = useUpdateTreatmentMutation();
+
   const formik = useFormik({
     initialValues: {
       complains: "",
@@ -56,7 +62,7 @@ const DoctorPatientVisiting = () => {
     onSubmit: async (values) => {
       try {
         const treatmentData = {
-          doctorId: appointment.doctorId,
+          doctorId: doctorId,
           patientId: patientId,
           apointmentId: appointmentId,
           complains: values.complains,
@@ -74,7 +80,19 @@ const DoctorPatientVisiting = () => {
           })),
         };
 
-        const result = await addNewTreatment(treatmentData);
+        const result = await updateTreatment({
+          id: treatmentId,
+          updatedTreatment: {
+            id: treatmentId,
+            doctorId: doctorId,
+            patientId: patientId,
+            apointmentId: appointmentId,
+            complains: values.complains,
+            diognasis: values.diognasis,
+            vitalSigns: values.vitalSigns,
+            treatmentDetails: values.treatmentDetails,
+          },
+        });
         console.log(result);
         toast.success("The treatment has been created successfully.", {
           position: "bottom-left",
@@ -91,6 +109,23 @@ const DoctorPatientVisiting = () => {
       }
     },
   });
+
+  useEffect(() => {
+    const createId = async () => {
+      const result = await addNewTreatment({
+        doctorId: doctorId,
+        patientId: patientId,
+        apointmentId: appointmentId,
+        complains: "",
+        diognasis: "",
+        vitalSigns: "",
+        treatmentDetails: "",
+      });
+      setTreatmentId(result.data.id);
+    };
+
+    createId();
+  }, []);
 
   if (isLoadingPatient || isLoadingAppointment || isAdding) {
     return <div>Loading...</div>;
@@ -154,7 +189,7 @@ const DoctorPatientVisiting = () => {
         <img
           src={DefaultImage(patient)}
           alt={appointment?.patientFullName || "Patient"}
-          className="mt-[-120px] ml-[100px] w-36 h-36 rounded-full object-cover border border-dashed border-cyan-500 p-2 items-center"
+          className="mt-[-120px] ml-[100px] w-36 h-36 bg-white rounded-full object-cover border border-dashed border-cyan-500 p-2 items-center"
         />
       </div>
 
@@ -165,12 +200,12 @@ const DoctorPatientVisiting = () => {
               {patient.name} {patient.surname}
             </h2>
             <p className="text-xs text-gray-500">{patient.email}</p>
-            <p className="text-xs">{patient.phone}</p>
+            <p className="text-xs text-center">{patient.phone}</p>
           </div>
 
           <div className="flex flex-col gap-3 px-2 xl:px-12 w-full">
             <Link
-              to="/addMedical"
+              to={`/dashboard/doctor/medicalRecords/${patient.id}/${patient.name}${patient.surname}`}
               className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
               Medical Records
             </Link>

@@ -87,7 +87,7 @@ function Login() {
           }
 
           if (userRole === "Doctor") {
-            dispatch(setDoctorId(primarysid));
+            dispatch(setDoctorId(Number(primarysid)));
             dispatch(
               setUserLogin({
                 userId,
