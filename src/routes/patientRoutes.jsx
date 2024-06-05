@@ -13,7 +13,11 @@ import DashboardPatientMedicalRecord from "../pages/DashboardPatient/DashboardPa
 export const patientRoutes = [
   {
     path: "/dashboard/patient/",
-    element: <DashboardPatientLayout />,
+    element: (
+      <ProtectedRoute allowedRoles={["Patient"]}>
+        <DashboardPatientLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
     children: [
       {

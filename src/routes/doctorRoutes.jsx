@@ -10,14 +10,15 @@ import DashboardDoctorProfile from "../pages/DashboardDoctor/DashboardDoctorProf
 import DashboardDoctorSettings from "../pages/DashboardDoctor/DashboardDoctorSettings";
 import DashboardDoctorPatientAppointments from "../pages/DashboardDoctor/DashboardDoctorPatientAppointments";
 import DashboardDoctorPatientMedicalRecords from "../pages/DashboardDoctor/DashboardDoctorPatientMedicalRecords";
+import DashboardDoctorNotifications from "../pages/DashboardDoctor/DashboardDoctorNotifications";
 
 export const doctorRoutes = [
   {
     path: "/dashboard/doctor/",
     element: (
-      // <ProtectedRoute allowedRoles={["Doctor"]}>
-      <DashboardDoctorLayout />
-      // </ProtectedRoute>
+      <ProtectedRoute allowedRoles={["Doctor"]}>
+        <DashboardDoctorLayout />
+      </ProtectedRoute>
     ),
     errorElement: <ErrorPage />,
     children: [
@@ -52,6 +53,10 @@ export const doctorRoutes = [
       {
         path: "profile",
         element: <DashboardDoctorProfile />,
+      },
+      {
+        path: "notifications",
+        element: <DashboardDoctorNotifications />,
       },
       {
         path: "settings",

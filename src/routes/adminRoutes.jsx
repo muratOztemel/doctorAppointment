@@ -22,7 +22,11 @@ import UserRolesForm from "../components/Dasboards/UserRoles/UserRolesForm";
 export const adminRoutes = [
   {
     path: "/dashboard/admin/",
-    element: <DashboardAdminLayout />,
+    element: (
+      <ProtectedRoute allowedRoles={["Admin"]}>
+        <DashboardAdminLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
     children: [
       {
