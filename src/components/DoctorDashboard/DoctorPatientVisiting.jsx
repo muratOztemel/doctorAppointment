@@ -1,28 +1,35 @@
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import DefaultImage from "../hooks/DefaultImage";
+import { useSelector } from "react-redux";
 import {
   useGetPatientByIdQuery,
   useGetAppointmentByIdQuery,
   useAddNewTreatmentMutation,
   useUpdateTreatmentMutation,
+  useGetTreatmentsQuery,
+  useGetTreatmentByIdQuery,
+  useAddNewPrescriptionMutation,
+  useAddNewPrescriptionMedicineMutation,
 } from "../../redux/features/api/apiSlice";
 import BloodType from "../Dasboards/Services/BloodType";
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
 import ModalMedicine from "./ModalMedicine";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
 
 const DoctorPatientVisiting = () => {
   const [treatmentId, setTreatmentId] = useState(null);
-  const navigate = useNavigate();
-  const { id: patientId, apId: appointmentId } = useParams();
-  const { doctorId } = useSelector((state) => state.doctors);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMedicinesData, setSelectedMedicinesData] = useState([]);
+  const navigate = useNavigate();
+  const { id: patientIdParam, apId: appointmentIdParam } = useParams();
+  const { doctorId } = useSelector((state) => state.doctors);
+
+  const patientId = Number(patientIdParam);
+  const appointmentId = Number(appointmentIdParam);
+  const doctorIdNumber = Number(doctorId);
 
   const {
     data: patient,
@@ -40,10 +47,24 @@ const DoctorPatientVisiting = () => {
     skip: !appointmentId,
   });
 
-  const [addNewTreatment, { isLoading: isAdding }] =
-    useAddNewTreatmentMutation();
+  const {
+    data: treatments = [],
+    isLoading: isLoadingTreatments,
+    isError: isErrorTreatments,
+  } = useGetTreatmentsQuery();
 
+  const {
+    data: treatment,
+    isLoading: isLoadingTreatment,
+    isError: isErrorTreatment,
+  } = useGetTreatmentByIdQuery(treatmentId, {
+    skip: !treatmentId,
+  });
+
+  const [addNewTreatment] = useAddNewTreatmentMutation();
+  const [addNewPrescription] = useAddNewPrescriptionMutation();
   const [updateTreatment] = useUpdateTreatmentMutation();
+  const [addNewPrescriptionMedicine] = useAddNewPrescriptionMedicineMutation();
 
   const formik = useFormik({
     initialValues: {
@@ -62,8 +83,8 @@ const DoctorPatientVisiting = () => {
     onSubmit: async (values) => {
       try {
         const treatmentData = {
-          doctorId: doctorId,
-          patientId: patientId,
+          doctorId: doctorIdNumber,
+          patientId,
           apointmentId: appointmentId,
           complains: values.complains,
           diognasis: values.diognasis,
@@ -93,7 +114,28 @@ const DoctorPatientVisiting = () => {
             treatmentDetails: values.treatmentDetails,
           },
         });
-        console.log(result);
+
+        const resultPR = await addNewPrescription({
+          treatmentId: treatmentId,
+          description: values.treatmentDetails,
+        });
+
+        console.log("result", result);
+        console.log("resultPR", resultPR);
+
+        const promises = selectedMedicinesData.map((medicine) =>
+          medicine.medicines.map((med) =>
+            addNewPrescriptionMedicine({
+              prescriptionId: resultPR.data.id,
+              medicineId: med.id,
+              dosage: med.dosage,
+              instruction: med.instruction,
+              description: med.description,
+            })
+          )
+        );
+        await Promise.all(promises.flat());
+
         toast.success("The treatment has been created successfully.", {
           position: "bottom-left",
           autoClose: 2000,
@@ -108,30 +150,58 @@ const DoctorPatientVisiting = () => {
         console.log(error);
       }
     },
+    enableReinitialize: true,
   });
 
   useEffect(() => {
-    const createId = async () => {
-      const result = await addNewTreatment({
-        doctorId: doctorId,
-        patientId: patientId,
-        apointmentId: appointmentId,
-        complains: "",
-        diognasis: "",
-        vitalSigns: "",
-        treatmentDetails: "",
-      });
-      setTreatmentId(result.data.id);
+    const checkAndCreateTreatment = async () => {
+      const existingTreatment = treatments.find(
+        (treatment) => treatment.apointmentId === appointmentId
+      );
+
+      if (existingTreatment) {
+        setTreatmentId(existingTreatment.id);
+        formik.setValues({
+          complains: existingTreatment.complains,
+          diognasis: existingTreatment.diognasis,
+          vitalSigns: existingTreatment.vitalSigns,
+          treatmentDetails: existingTreatment.treatmentDetails,
+          prescriptions: existingTreatment.prescriptions || [],
+        });
+      } else {
+        const result = await addNewTreatment({
+          doctorId: doctorIdNumber,
+          patientId,
+          apointmentId: appointmentId,
+          complains: "",
+          diognasis: "",
+          vitalSigns: "",
+          treatmentDetails: "",
+        });
+        setTreatmentId(result.data.id);
+      }
     };
 
-    createId();
-  }, []);
+    if (appointmentId && treatments.length > 0) {
+      checkAndCreateTreatment();
+    }
+  }, [appointmentId, treatments, addNewTreatment, doctorIdNumber, patientId]);
 
-  if (isLoadingPatient || isLoadingAppointment || isAdding) {
+  if (
+    isLoadingPatient ||
+    isLoadingAppointment ||
+    isLoadingTreatments ||
+    isLoadingTreatment
+  ) {
     return <div>Loading...</div>;
   }
 
-  if (isErrorPatient || isErrorAppointment) {
+  if (
+    isErrorPatient ||
+    isErrorAppointment ||
+    isErrorTreatments ||
+    isErrorTreatment
+  ) {
     return <div>Error loading data.</div>;
   }
 
@@ -360,7 +430,7 @@ const DoctorPatientVisiting = () => {
                               height="1em"
                               width="1em"
                               xmlns="http://www.w3.org/2000/svg">
-                              <path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" />
+                              <path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"></path>
                             </svg>
                           </button>
                         </div>

@@ -635,6 +635,10 @@ export const apiSlice = createApi({
     getTreatments: builder.query({
       query: () => "Treatments",
     }),
+    getTreatmentById: builder.query({
+      query: (id) => `Treatments/${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
     addNewTreatment: builder.mutation({
       query(newTreatment) {
         return {
@@ -658,6 +662,49 @@ export const apiSlice = createApi({
         return {
           url: `Treatments/${id}`,
           method: "DELETE",
+        };
+      },
+    }),
+    getPrescriptions: builder.query({
+      query: () => "Prescriptions",
+    }),
+    getPrescriptionById: builder.query({
+      query: (id) => `Prescriptions/${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
+    addNewPrescription: builder.mutation({
+      query(newPrescription) {
+        return {
+          url: `Prescriptions`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newPrescription,
+        };
+      },
+    }),
+    updatePrescription: builder.mutation({
+      query: ({ id, updatedPrescription }) => ({
+        url: `Prescriptions/${id}`,
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: updatedPrescription,
+      }),
+    }),
+    deletePrescription: builder.mutation({
+      query(id) {
+        return {
+          url: `Prescriptions/${id}`,
+          method: "DELETE",
+        };
+      },
+    }),
+    addNewPrescriptionMedicine: builder.mutation({
+      query(newPrescriptionMedicine) {
+        return {
+          url: `PrescriptionMedicines`,
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: newPrescriptionMedicine,
         };
       },
     }),
@@ -748,7 +795,14 @@ export const {
   useUpdateDoctorWorkingDaysMutation,
   useDeleteDoctorWorkingDaysMutation,
   useGetTreatmentsQuery,
+  useGetTreatmentByIdQuery,
   useAddNewTreatmentMutation,
   useUpdateTreatmentMutation,
   useDeleteTreatmentMutation,
+  useGetPrescriptionsQuery,
+  useGetPrescriptionByIdQuery,
+  useAddNewPrescriptionMutation,
+  useUpdatePrescriptionMutation,
+  useDeletePrescriptionMutation,
+  useAddNewPrescriptionMedicineMutation,
 } = apiSlice;
