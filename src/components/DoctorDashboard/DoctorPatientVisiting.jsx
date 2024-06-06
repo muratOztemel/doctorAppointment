@@ -69,25 +69,26 @@ const DoctorPatientVisiting = () => {
   const formik = useFormik({
     initialValues: {
       complains: "",
-      diognasis: "",
+      diagnosis: "",
       vitalSigns: "",
       treatmentDetails: "",
       prescriptions: [],
     },
     validationSchema: Yup.object({
       complains: Yup.string().required("Complains is required"),
-      diognasis: Yup.string().required("Diagnosis is required"),
+      diagnosis: Yup.string().required("Diagnosis is required"),
       vitalSigns: Yup.string().required("Vital signs are required"),
       treatmentDetails: Yup.string().required("Treatment details are required"),
     }),
     onSubmit: async (values) => {
+      console.log("Selected Medicines Data:", selectedMedicinesData);
       try {
         const treatmentData = {
           doctorId: doctorIdNumber,
           patientId,
           apointmentId: appointmentId,
           complains: values.complains,
-          diognasis: values.diognasis,
+          diagnosis: values.diagnosis,
           vitalSigns: values.vitalSigns,
           treatmentDetails: values.treatmentDetails,
           prescriptions: selectedMedicinesData.map((medicine) => ({
@@ -109,7 +110,7 @@ const DoctorPatientVisiting = () => {
             patientId: patientId,
             apointmentId: appointmentId,
             complains: values.complains,
-            diognasis: values.diognasis,
+            diognasis: values.diagnosis,
             vitalSigns: values.vitalSigns,
             treatmentDetails: values.treatmentDetails,
           },
@@ -128,9 +129,9 @@ const DoctorPatientVisiting = () => {
             addNewPrescriptionMedicine({
               prescriptionId: resultPR.data.id,
               medicineId: med.id,
-              dosage: med.dosage,
-              instruction: med.instruction,
-              description: med.description,
+              dosage: med.dosage || "No dosage",
+              instruction: med.instruction || "No instruction",
+              description: med.description || "No description",
             })
           )
         );
@@ -148,6 +149,16 @@ const DoctorPatientVisiting = () => {
         });
       } catch (error) {
         console.log(error);
+        toast.error("An error occurred while creating the treatment.", {
+          position: "bottom-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       }
     },
     enableReinitialize: true,
@@ -158,12 +169,12 @@ const DoctorPatientVisiting = () => {
       const existingTreatment = treatments.find(
         (treatment) => treatment.apointmentId === appointmentId
       );
-
+      console.log(existingTreatment);
       if (existingTreatment) {
         setTreatmentId(existingTreatment.id);
         formik.setValues({
           complains: existingTreatment.complains,
-          diognasis: existingTreatment.diognasis,
+          diagnosis: existingTreatment.diognasis,
           vitalSigns: existingTreatment.vitalSigns,
           treatmentDetails: existingTreatment.treatmentDetails,
           prescriptions: existingTreatment.prescriptions || [],
@@ -182,10 +193,10 @@ const DoctorPatientVisiting = () => {
       }
     };
 
-    if (appointmentId && treatments.length > 0) {
+    if (appointmentId) {
       checkAndCreateTreatment();
     }
-  }, [appointmentId, treatments, addNewTreatment, doctorIdNumber, patientId]);
+  }, [appointmentId, treatments, doctorIdNumber, patientId]);
 
   if (
     isLoadingPatient ||
@@ -338,14 +349,14 @@ const DoctorPatientVisiting = () => {
                   <div className="px-4 py-2 w-full">
                     <textarea
                       rows="2"
-                      name="diognasis"
+                      name="diagnosis"
                       onBlur={formik.handleBlur}
                       onChange={formik.handleChange}
-                      value={formik.values.diognasis}
+                      value={formik.values.diagnosis}
                       className={`${inputClass} w-full`}></textarea>
-                    {formik.touched.diognasis && formik.errors.diognasis && (
+                    {formik.touched.diagnosis && formik.errors.diagnosis && (
                       <small className="text-red-600">
-                        {formik.errors.diognasis}
+                        {formik.errors.diagnosis}
                       </small>
                     )}
                   </div>

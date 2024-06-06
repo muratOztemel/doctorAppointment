@@ -219,6 +219,13 @@ function Login() {
           <span>Login with Google</span>
         </button>
       </div>
+      <div>
+        <Link
+          to="/"
+          className="text-center flex justify-center items-center hover:text-red-500 mt-6">
+          Go to Homepage
+        </Link>
+      </div>
     </>
   );
 }

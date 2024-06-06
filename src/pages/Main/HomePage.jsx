@@ -1,4 +1,4 @@
-import ImageSlider from "./ImageSlider";
+import ImageSlider from "../../components/Main/ImageSlider";
 
 const HomePage = () => {
   return (

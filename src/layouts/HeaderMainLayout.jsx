@@ -25,36 +25,44 @@ const HeaderMainLayout = () => {
               <div className="flex justify-between">
                 <ul className="flex">
                   <li className="mr-4">
-                    <a className="text-gray-700 hover:text-blue-600" href="#">
+                    <Link
+                      to="/about"
+                      className="text-gray-700 hover:text-red-600">
                       About
-                    </a>
+                    </Link>
                   </li>
                   <li className="mr-4">
-                    <a className="text-gray-700 hover:text-blue-600" href="#">
+                    <Link
+                      className="text-gray-700 hover:text-red-600"
+                      to={"/doctors"}>
                       Doctors
-                    </a>
+                    </Link>
                   </li>
                   <li className="mr-4">
-                    <a className="text-gray-700 hover:text-blue-600" href="#">
+                    <Link
+                      to="/contact"
+                      className="text-gray-700 hover:text-red-600">
                       Contact
-                    </a>
+                    </Link>
                   </li>
                   <li className="mr-4">
-                    <a className="text-gray-700 hover:text-blue-600" href="#">
+                    <Link
+                      to="/faq"
+                      className="text-gray-700 hover:text-red-600">
                       FAQ
-                    </a>
+                    </Link>
                   </li>
                 </ul>
                 <ul className="flex">
                   <li className="mr-6">
-                    <i className="fa fa-phone text-blue-600 mr-2"></i>+000 1234
+                    <i className="fa fa-phone text-red-600 mr-2"></i>+000 1234
                     56789
                   </li>
                   <li>
-                    <i className="fa fa-envelope text-blue-600 mr-2"></i>
+                    <i className="fa fa-envelope text-red-600 mr-2"></i>
                     <a
                       href="mailto:support@yourmail.com"
-                      className="hover:text-blue-600">
+                      className="hover:text-red-600">
                       support@yourmail.com
                     </a>
                   </li>
@@ -64,7 +72,7 @@ const HeaderMainLayout = () => {
           </div>
           <nav className="bg-white py-4">
             <div className="container mx-auto px-4 flex justify-between items-center">
-              <a href="#" className="flex items-center">
+              <Link to={"/"} className="flex items-center">
                 <img
                   src="icon.png"
                   className="h-8 mr-2"
@@ -72,27 +80,33 @@ const HeaderMainLayout = () => {
                 />
                 <span className="text-xl font-bold text-red-500">Doctor</span>
                 <span className="text-xl text-gray-700">Appointment</span>
-              </a>
+              </Link>
               <ul className="flex items-center space-x-4">
                 <li>
-                  <a href="#" className="text-gray-700 hover:text-red-500">
+                  <Link to={"/"} className="text-gray-700 hover:text-red-500">
                     Home
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-700 hover:text-red-500">
+                  <Link
+                    to={"/about"}
+                    className="text-gray-700 hover:text-red-500">
                     About
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-700 hover:text-red-500">
+                  <Link
+                    to={"/services"}
+                    className="text-gray-700 hover:text-red-500">
                     Services
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="text-gray-700 hover:text-red-500">
+                  <Link
+                    to={"/contact"}
+                    className="text-gray-700 hover:text-red-500">
                     Contact
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <Link
