@@ -20,6 +20,7 @@ import Card from "../UI/Cards/Card";
 import { TbClockRecord } from "react-icons/tb";
 import useDefaultImage from "../hooks/DefaultImage";
 import { toast } from "react-toastify";
+import Spinner from "../UI/Spinner"; // Ensure the Spinner component is imported
 
 const DashboardGetAppointment = () => {
   const [favorites, setFavorites] = useState([]);
@@ -28,7 +29,7 @@ const DashboardGetAppointment = () => {
   const today = format(new Date(), "yyyy-MM-dd");
   const [searchParams] = useSearchParams();
   const dayFromUrl = searchParams.get("day");
-  const doctorId = searchParams.get("doctorId");
+  const doctorId = Number(searchParams.get("doctorId"));
   const branchName = searchParams.get("branchName");
 
   let initialDate = today;
@@ -44,8 +45,9 @@ const DashboardGetAppointment = () => {
   const [confirmedSlots, setConfirmedSlots] = useState([]);
   const [slots, setSlots] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const sliderRef = useRef(null);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false); // New state for spinner visibility
+  const sliderRef = useRef(null);
 
   const formattedSlotsDate = format(selectedDate, "yyyy-MM-dd");
   const {
@@ -58,7 +60,7 @@ const DashboardGetAppointment = () => {
     useGetDoctorWorkingDayByDoctorIdQuery(doctorId);
   const { data: dailySlots, isLoading: isLoadingDailySlots } =
     useGetDailySlotsQuery({ doctorId, date: formattedSlotsDate });
-  const { data: appointments, isLoading: isLoadingAppointments } =
+  const { data: appointments = [], isLoading: isLoadingAppointments } =
     useGetAppointmentsByPatientAndDateQuery({
       patientId,
       date: formattedSlotsDate,
@@ -95,8 +97,12 @@ const DashboardGetAppointment = () => {
     };
 
     setIsLoadingSlots(true);
-    fetchData();
-  }, [dailySlots, doctorData]);
+    fetchData().finally(() => {
+      setTimeout(() => {
+        setShowSpinner(false); // Hide spinner after 1 second
+      }, 1000);
+    });
+  }, [dailySlots, doctorData, selectedDate]);
 
   useEffect(() => {
     if (appointments) {
@@ -136,6 +142,7 @@ const DashboardGetAppointment = () => {
     setSelectedDate(date);
     setSelectedSlot(null);
     setIsLoadingSlots(true);
+    setShowSpinner(true); // Show spinner when date changes
   };
 
   const handleSlotChange = (slot) => {
@@ -276,6 +283,13 @@ const DashboardGetAppointment = () => {
 
   return (
     <>
+      {showSpinner && (
+        <div className="modal-backdrop">
+          <div className="modal-content">
+            <Spinner />
+          </div>
+        </div>
+      )}
       <div className="col-span-2 p-4">
         <div className="flex justify-center items-center">
           <img

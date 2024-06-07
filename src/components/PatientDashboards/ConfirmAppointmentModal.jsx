@@ -95,31 +95,32 @@ const ConfirmAppointmentModal = ({
   return (
     <div
       onClick={handleOutsideClick}
-      className="fixed z-10 inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-cyan-50 p-4 rounded-lg shadow-lg flex flex-col justify-center items-center">
-        <h2 className="text-lg font-bold">Appointment Confirmation</h2>
-        <p>{branchName}</p>
-        <p>
-          <img
-            src={defaultImage}
-            alt={`${doctor.name} ${doctor.surname}`}
-            className="w-36 h-36 rounded-full object-cover bg-white border border-dashed border-cyan-500 p-2 items-center"
-          />
-        </p>
-        <p>Doctor Name: {doctorFullName}</p>
-        <p>
-          Appointment Date: {formattedDate} {selectedSlot}
-        </p>
-        <div className="flex justify-end space-x-4 mt-4">
+      className="fixed z-10 inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center p-4">
+      <div className="bg-cyan-50 p-4 rounded-lg shadow-lg flex flex-col justify-center items-center w-full max-w-lg">
+        <h2 className="text-lg font-bold mb-4">Appointment Confirmation</h2>
+
+        <img
+          src={defaultImage}
+          alt={`${doctor.name} ${doctor.surname}`}
+          className="w-36 h-36 rounded-full object-cover bg-white border border-dashed border-cyan-500 p-2 mb-4"
+        />
+        <p className="text-lg font-bold mb-2">{branchName}</p>
+        <p className="mb-2">Doctor Name</p>
+        <p className="text-lg font-bold mb-2">{doctorFullName}</p>
+        <p className="mb-2">Appointment Date</p>
+        <p className="text-lg font-bold mb-2">{formattedDate}</p>
+        <p className="mb-2">Appointment Time</p>
+        <p className="text-lg font-bold mb-4">{selectedSlot}</p>
+        <div className="flex justify-end space-x-4 w-full">
           <button
             onClick={handleConfirm}
-            className="px-4 py-2 bg-green-500 text-white rounded">
-            Onayla
+            className="px-4 py-2 bg-green-500 text-white rounded w-full sm:w-auto">
+            Confirm
           </button>
           <button
             onClick={handleCancel}
-            className="px-4 py-2 bg-red-500 text-white rounded">
-            İptal
+            className="px-4 py-2 bg-red-500 text-white rounded w-full sm:w-auto">
+            Cancel
           </button>
         </div>
       </div>

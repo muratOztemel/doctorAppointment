@@ -12,11 +12,12 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { ImCancelCircle } from "react-icons/im";
 import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Spinner from "../UI/Spinner"; // Ensure the Spinner component is imported
 
 const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
   const { patientId } = useSelector((state) => state.patient);
   const today = format(new Date(), "yyyy-MM-dd");
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const dayFromUrl = searchParams.get("day");
 
   let initialDate = today;
@@ -29,15 +30,15 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
 
   const [selectedDate, setSelectedDate] = useState(initialDate);
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [selectedAvailable, setSelectedAvailable] = useState(null);
   const [confirmedSlots, setConfirmedSlots] = useState([]);
-  const [dates, setDates] = useState([]);
   const [slots, setSlots] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const [showSpinner, setShowSpinner] = useState(false); // New state for spinner visibility
   const sliderRef = useRef(null);
   const [isLoadingSlots, setIsLoadingSlots] = useState(false); // Veri yükleniyor mu?
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const formattedSlotsDate = format(selectedDate, "yyyy-MM-dd");
 
@@ -67,8 +68,12 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
     };
 
     setIsLoadingSlots(true);
-    fetchData();
-  }, [dailySlots, doctorData]);
+    fetchData().finally(() => {
+      setTimeout(() => {
+        setShowSpinner(false); // Hide spinner after 1 second
+      }, 1000);
+    });
+  }, [dailySlots, doctorData, selectedDate]);
 
   useEffect(() => {
     if (appointments) {
@@ -109,6 +114,7 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
     setDay(format(date, "yyyy-MM-dd"));
     setSelectedSlot(null); // Tarih değiştiğinde seçili slota null atın
     setIsLoadingSlots(true); // Yeni tarih seçildiğinde veri yükleniyor olarak işaretleyin
+    setShowSpinner(true); // Show spinner when date changes
   };
 
   const handleSlotChange = (slot) => {
@@ -183,11 +189,18 @@ const DoctorAppointment = ({ doctor, branchName, setDay, day }) => {
 
   return (
     <>
+      {showSpinner && (
+        <div className="modal-backdrop">
+          <div className="modal-content">
+            <Spinner />
+          </div>
+        </div>
+      )}
       <div className="col-span-6 p-4">
         <div className="flex items-center space-x-2 mb-4">
           <button
             onClick={() => scroll("left")}
-            className="p-2 bg-gray-300 hover:bg-cyan-500 delay-100	 text-white rounded-full w-8 h-8 flex justify-center items-center">
+            className="p-2 bg-gray-300 hover:bg-cyan-500 delay-100 text-white rounded-full w-8 h-8 flex justify-center items-center">
             <IoIosArrowBack />
           </button>
           <div

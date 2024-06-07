@@ -3,6 +3,7 @@ import {
   useGetDoctorByIdQuery,
   useGetBranchByIdQuery,
   useGetPatientByIdQuery,
+  useDeleteAppointmentMutation,
 } from "../../redux/features/api/apiSlice";
 import { format, parse } from "date-fns";
 import { useState } from "react";
@@ -15,6 +16,7 @@ import ConfirmDeleteAppointment from "./ConfirmDeleteAppointment";
 const ListAppointment = ({ appointment }) => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [appointmentToDelete, setAppointmentToDelete] = useState(null);
+  const [deleteAppointment] = useDeleteAppointmentMutation();
 
   const {
     data: doctor,

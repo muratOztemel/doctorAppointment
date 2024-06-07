@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { setUserLogin } from "../../../redux/slices/usersSlice";
-import { useGetPatientByIdQuery } from "../../../redux/features/api/apiSlice";
-import DefaultImage from "../../hooks/DefaultImage";
+import { setUserLogin } from "../../redux/slices/usersSlice";
+import { useGetPatientByIdQuery } from "../../redux/features/api/apiSlice";
+import DefaultImage from "../hooks/DefaultImage";
 import { FaUser } from "react-icons/fa";
 import { IoLogOut, IoSettings } from "react-icons/io5";
 

@@ -1,22 +1,23 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useAuthenticationMutation } from "../../../redux/features/api/apiSlice";
 import { setUserLogin } from "../../../redux/slices/usersSlice";
 import { setPatientId } from "../../../redux/slices/patientSlice";
 import { setDoctorId } from "../../../redux/slices/doctorsSlice";
-import Spinner from "../../UI/Spinner";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useFormik } from "formik";
 import LoginSchema from "./LoginSchema";
 import { loginData } from "./loginData";
 import { toast } from "react-toastify";
-import Spinner1 from "../../UI/Spinner1";
+import Spinner from "../../UI/Spinner";
+
+let audio = new Audio("/sounds/heartbeat.mp3");
 
 function Login() {
-  // const { userId } = useSelector((state) => state.users.userLogin);
   const [showPassword, setShowPassword] = useState(false);
   const [wrongP, setWrongP] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const dispatch = useDispatch();
   const [authentication, { isLoading }] = useAuthenticationMutation();
   const navigate = useNavigate();
@@ -24,6 +25,34 @@ function Login() {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  const playHeartbeatSound = () => {
+    if (!audio.playing) {
+      audio.loop = true;
+      audio.play();
+    }
+  };
+
+  const stopHeartbeatSound = () => {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  };
+
+  useEffect(() => {
+    if (isLoading) {
+      playHeartbeatSound();
+      setIsModalVisible(true);
+    } else {
+      stopHeartbeatSound();
+      setIsModalVisible(false);
+    }
+
+    return () => {
+      stopHeartbeatSound();
+    };
+  }, [isLoading]);
 
   const formik = useFormik({
     initialValues: {
@@ -33,13 +62,21 @@ function Login() {
     validationSchema: LoginSchema,
     onSubmit: async (values) => {
       try {
-        let result = await authentication({
+        setIsModalVisible(true);
+
+        const delayPromise = new Promise((resolve) =>
+          setTimeout(resolve, 1000)
+        );
+        const result = await authentication({
           username: values.username,
           password: values.password,
         });
 
-        if (result?.error?.originalStatus == 400) {
-          setWrongP(result.error?.data);
+        await delayPromise;
+
+        if (result?.error?.originalStatus === 400) {
+          setWrongP(result.error.data);
+          setIsModalVisible(false);
           return;
         }
 
@@ -49,26 +86,22 @@ function Login() {
           localStorage.setItem("token", token);
           const decodedToken = jwtDecode(token);
 
-          let userRole =
+          const userRole =
             decodedToken[
               "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
             ];
-
           const primarysid =
             decodedToken[
               "http://schemas.microsoft.com/ws/2008/06/identity/claims/primarysid"
             ];
-
           const groupSid =
             decodedToken[
               "http://schemas.microsoft.com/ws/2008/06/identity/claims/groupsid"
             ];
-
           const userId =
             decodedToken[
               "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"
             ];
-
           const username =
             decodedToken[
               "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
@@ -76,64 +109,41 @@ function Login() {
 
           if (userRole === "Patient") {
             dispatch(setPatientId(groupSid));
-            dispatch(
-              setUserLogin({
-                userId,
-                username,
-                token,
-                userRole,
-              })
-            );
-          }
-
-          if (userRole === "Doctor") {
+          } else if (userRole === "Doctor") {
             dispatch(setDoctorId(Number(primarysid)));
-            dispatch(
-              setUserLogin({
-                userId,
-                username,
-                token,
-                userRole,
-              })
-            );
           }
 
-          if (userRole === "Admin") {
-            dispatch(
-              setUserLogin({
-                userId,
-                username,
-                token,
-                userRole,
-              })
-            );
-          }
+          dispatch(setUserLogin({ userId, username, token, userRole }));
 
-          // Role based routing
           navigate(
             userRole === "Admin"
               ? "/dashboard/admin"
               : userRole === "Patient"
-              ? `/dashboard/patient/`
+              ? "/dashboard/patient/"
               : "/dashboard/doctor"
           );
         }
       } catch (error) {
         console.error("Error user login:", error);
+        toast.error("An error occurred during login. Please try again.");
+      } finally {
+        setTimeout(() => {
+          setIsModalVisible(false);
+          stopHeartbeatSound();
+        }, 5000);
       }
     },
   });
-  // Form içinde genel hata mesajını göstermek için
-  {
-    formik.errors.general && (
-      <p className="text-red-500 text-center">{formik.errors.general}</p>
-    );
-  }
-
-  if (isLoading) return <Spinner />;
 
   return (
     <>
+      {isModalVisible && (
+        <div className="modal-backdrop">
+          <div className="modal-content">
+            <Spinner />
+          </div>
+        </div>
+      )}
       <h2 className="text-2xl font-bold text-gray-800 mb-2">Welcome!</h2>
       <p className="text-gray-700 mb-6">Please sign in to your account</p>
       <p className="text-red-500 text-center">{wrongP}</p>
@@ -143,7 +153,7 @@ function Login() {
             <div className="relative">
               <input
                 id={field.id}
-                name={field.id}
+                name={field.name}
                 type={
                   field.id === "password"
                     ? showPassword
@@ -167,9 +177,9 @@ function Login() {
                   onClick={togglePasswordVisibility}
                   className="absolute inset-y-0 right-0 flex items-center pr-3 mr-6">
                   {showPassword ? (
-                    <img src="/images/icons/hide-eye.jpg" />
+                    <img src="/images/icons/hide-eye.jpg" alt="hide" />
                   ) : (
-                    <img src="/images/icons/show-eye.jpg" />
+                    <img src="/images/icons/show-eye.jpg" alt="show" />
                   )}
                 </button>
               )}
@@ -186,9 +196,6 @@ function Login() {
             )}
           </div>
         ))}
-        {formik.errors.submit && (
-          <p className="text-red-500 text-center">{formik.errors.submit}</p>
-        )}
         <button
           type="submit"
           disabled={formik.isSubmitting}
@@ -200,7 +207,7 @@ function Login() {
             Forgot Password?
           </Link>
         </p>
-        <p>Haven&apos;t you registered yet?</p>
+        <p>Haven't you registered yet?</p>
       </form>
       <div className="mt-2 flex w-full">
         <Link
@@ -208,16 +215,6 @@ function Login() {
           className="text-white w-full mt-4 bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
           Create account
         </Link>
-      </div>
-      <div className="mt-6">
-        <button className="w-full text-center py-3 my-3 border flex space-x-2 items-center justify-center border-slate-200 rounded-lg text-slate-700 hover:bg-gray-100 hover:text-slate-900 hover:shadow transition duration-150">
-          <img
-            src="https://www.svgrepo.com/show/355037/google.svg"
-            className="w-6 h-6"
-            alt=""
-          />{" "}
-          <span>Login with Google</span>
-        </button>
       </div>
       <div>
         <Link

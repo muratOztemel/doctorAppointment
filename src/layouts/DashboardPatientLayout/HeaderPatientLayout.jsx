@@ -1,6 +1,6 @@
 import { CiSearch } from "react-icons/ci";
-import PatientNotification from "../../components/Dasboards/Services/PatientNotification";
-import PatientLoginManager from "../../components/Dasboards/Services/PatientLoginManager";
+import PatientNotification from "../../components/PatientDashboards/PatientNotification";
+import PatientLoginManager from "../../components/PatientDashboards/PatientLoginManager";
 
 const HeaderPatientLayout = () => {
   return (

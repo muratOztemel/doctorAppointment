@@ -104,16 +104,7 @@ const DoctorPatientVisiting = () => {
 
         const result = await updateTreatment({
           id: treatmentId,
-          updatedTreatment: {
-            id: treatmentId,
-            doctorId: doctorId,
-            patientId: patientId,
-            apointmentId: appointmentId,
-            complains: values.complains,
-            diognasis: values.diagnosis,
-            vitalSigns: values.vitalSigns,
-            treatmentDetails: values.treatmentDetails,
-          },
+          updatedTreatment: treatmentData,
         });
 
         const resultPR = await addNewPrescription({
