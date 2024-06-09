@@ -1,12 +1,15 @@
-import { NavLink } from "react-router-dom";
-import { IoHome, IoSettingsOutline } from "react-icons/io5";
+import { NavLink, useNavigate } from "react-router-dom";
+import { IoHome, IoLogOut, IoSettingsOutline } from "react-icons/io5";
 import { FaUserInjured } from "react-icons/fa";
 import { FaUserDoctor } from "react-icons/fa6";
-import { LuCalendarSearch } from "react-icons/lu";
 import { AiFillMedicineBox } from "react-icons/ai";
 import { TbClockRecord } from "react-icons/tb";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../../redux/slices/usersSlice";
 
 const LeftSidePatient = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const linkDizi = [
     {
       id: 1,
@@ -50,6 +53,18 @@ const LeftSidePatient = () => {
       pageName: "SettingsHome",
       path: "/dashboard/patient/settings",
       icon: <IoSettingsOutline />,
+    },
+    {
+      id: 7,
+      name: "Logout",
+      pageName: "Logout",
+      path: "/auth/login",
+      icon: <IoLogOut className="text-red-500 w-6 h-6" />,
+      onClick: () => {
+        localStorage.removeItem("token");
+        dispatch(clearUser());
+        navigate("/auth/login");
+      },
     },
   ];
 

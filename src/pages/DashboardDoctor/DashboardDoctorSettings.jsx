@@ -86,7 +86,6 @@ const DashboardDoctorSettings = () => {
             slotDuration: values.slotDuration,
           },
         });
-        console.log(result);
         toast.success("Your transaction has been completed successfully.", {
           position: "bottom-left",
           autoClose: 2000,

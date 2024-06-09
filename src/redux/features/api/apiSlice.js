@@ -24,14 +24,15 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 const handleTokenRefresh = async (args, api, extraOptions) => {
   try {
     const refreshToken = localStorage.getItem("refreshToken");
-    console.log("Refresh token:", refreshToken);
     if (refreshToken) {
+      const token = localStorage.getItem("token"); // Mevcut access-token
       const refreshResult = await baseQuery(
         {
           url: "Authentication/refresh-web-token",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Mevcut access-token'ı header içinde gönderiyoruz
           },
           body: JSON.stringify({ refreshToken }),
         },
@@ -39,12 +40,17 @@ const handleTokenRefresh = async (args, api, extraOptions) => {
         extraOptions
       );
 
-      console.log("Refresh token result:", refreshResult);
-
       if (refreshResult.data) {
         const { token: newToken } = refreshResult.data;
         localStorage.setItem("token", newToken);
-        return await baseQuery(args, api, extraOptions);
+        // Orijinal isteği yeni token ile tekrar gönder
+        const newHeaders = new Headers(api.getState().api.headers);
+        newHeaders.set("Authorization", `Bearer ${newToken}`);
+        return await baseQuery(
+          { ...args, headers: newHeaders },
+          api,
+          extraOptions
+        );
       } else {
         localStorage.clear();
         window.location.href = "/auth/login";
@@ -72,10 +78,19 @@ export const apiSlice = createApi({
     "DoctorWorkingDays",
   ],
   endpoints: (builder) => ({
+    refreshToken: builder.mutation({
+      query: () => ({
+        url: "Authentication/refresh-web-token",
+        method: "POST",
+      }),
+    }),
     verifyToken: builder.mutation({
       query: () => ({
         url: "Authentication/refresh-web-token",
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }),
     }),
     getDashboardData: builder.query({
@@ -714,6 +729,7 @@ export const apiSlice = createApi({
 });
 
 export const {
+  useRefreshTokenMutation,
   useVerifyTokenMutation,
   useGetDashboardDataQuery,
   useGetPatientsPageQuery,
@@ -806,3 +822,4 @@ export const {
   useDeletePrescriptionMutation,
   useAddNewPrescriptionMedicineMutation,
 } = apiSlice;
+export default apiSlice.reducer;

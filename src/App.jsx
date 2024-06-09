@@ -21,7 +21,7 @@ const App = () => {
   ]);
 
   if (isCheckingToken) {
-    return <div>Loading...</div>; // veya bir yükleme spinner'ı
+    return <div>Loading...</div>;
   }
 
   return (

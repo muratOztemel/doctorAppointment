@@ -77,21 +77,31 @@ const DoctorCalendar = () => {
   }, [workingDaysData]);
 
   useEffect(() => {
-    if (appointmentsData && dailySlotsData) {
-      const formattedEvents = appointmentsData.map((appointment) => ({
-        title: appointment.patientFullName,
-        start: `${format(appointment.appointmentDate, "yyyy-MM-dd")}T${
-          appointment.appointmentTime
-        }`,
-        end: `${format(appointment.appointmentDate, "yyyy-MM-dd")}T${addTime(
-          appointment.appointmentTime,
-          workingDaysData?.slotDuration
-        )}`,
-        url: `/dashboard/doctor/visiting/${appointment.patientId}/${appointment.id}/${appointment.patientFullName}`,
-      }));
+    if (appointmentsData && dailySlotsData && workingDaysData?.slotDuration) {
+      const formattedEvents = appointmentsData
+        .map((appointment) => {
+          if (appointment.appointmentTime) {
+            return {
+              title: appointment.patientFullName,
+              start: `${format(appointment.appointmentDate, "yyyy-MM-dd")}T${
+                appointment.appointmentTime
+              }`,
+              end: `${format(
+                appointment.appointmentDate,
+                "yyyy-MM-dd"
+              )}T${addTime(
+                appointment.appointmentTime,
+                workingDaysData.slotDuration
+              )}`,
+              url: `/dashboard/doctor/visiting/${appointment.patientId}/${appointment.id}/${appointment.patientFullName}`,
+            };
+          }
+          return null;
+        })
+        .filter((event) => event !== null);
       setEvents(formattedEvents);
     }
-  }, [appointmentsData, dailySlotsData]);
+  }, [appointmentsData, dailySlotsData, workingDaysData]);
 
   function addTime(time, duration) {
     const [hours, minutes, seconds] = time.split(":").map(Number);
