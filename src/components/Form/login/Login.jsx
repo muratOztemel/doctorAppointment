@@ -72,6 +72,8 @@ function Login() {
           password: values.password,
         });
 
+        console.log(result);
+
         await delayPromise;
 
         if (result?.error?.originalStatus === 400) {
@@ -80,49 +82,51 @@ function Login() {
           return;
         }
 
+        if (!result.data || !result.data.accessToken) {
+          throw new Error("Authentication failed, no access token received.");
+        }
+
         const token = result.data.accessToken;
 
-        if (token) {
-          localStorage.setItem("token", token);
-          const decodedToken = jwtDecode(token);
+        localStorage.setItem("token", token);
+        const decodedToken = jwtDecode(token);
 
-          const userRole =
-            decodedToken[
-              "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-            ];
-          const primarysid =
-            decodedToken[
-              "http://schemas.microsoft.com/ws/2008/06/identity/claims/primarysid"
-            ];
-          const groupSid =
-            decodedToken[
-              "http://schemas.microsoft.com/ws/2008/06/identity/claims/groupsid"
-            ];
-          const userId =
-            decodedToken[
-              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"
-            ];
-          const username =
-            decodedToken[
-              "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
-            ];
+        const userRole =
+          decodedToken[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+          ];
+        const primarysid =
+          decodedToken[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/primarysid"
+          ];
+        const groupSid =
+          decodedToken[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/groupsid"
+          ];
+        const userId =
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sid"
+          ];
+        const username =
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+          ];
 
-          if (userRole === "Patient") {
-            dispatch(setPatientId(groupSid));
-          } else if (userRole === "Doctor") {
-            dispatch(setDoctorId(Number(primarysid)));
-          }
-
-          dispatch(setUserLogin({ userId, username, token, userRole }));
-
-          navigate(
-            userRole === "Admin"
-              ? "/dashboard/admin"
-              : userRole === "Patient"
-              ? "/dashboard/patient/"
-              : "/dashboard/doctor"
-          );
+        if (userRole === "Patient") {
+          dispatch(setPatientId(groupSid));
+        } else if (userRole === "Doctor") {
+          dispatch(setDoctorId(Number(primarysid)));
         }
+
+        dispatch(setUserLogin({ userId, username, token, userRole }));
+
+        navigate(
+          userRole === "Admin"
+            ? "/dashboard/admin"
+            : userRole === "Patient"
+            ? "/dashboard/patient/"
+            : "/dashboard/doctor"
+        );
       } catch (error) {
         console.error("Error user login:", error);
         toast.error("An error occurred during login. Please try again.");

@@ -7,6 +7,7 @@ import Doctors from "../pages/Main/Doctors";
 import Faq from "../pages/Main/Faq";
 import HomePage from "../pages/Main/HomePage";
 import Services from "../pages/Main/Services";
+import Unauthorized from "../pages/Unauthorized";
 
 export const mainRoutes = [
   {
@@ -41,6 +42,10 @@ export const mainRoutes = [
       {
         path: "/faq",
         element: <Faq />,
+      },
+      {
+        path: "/unauthorized",
+        element: <Unauthorized />,
       },
     ],
   },

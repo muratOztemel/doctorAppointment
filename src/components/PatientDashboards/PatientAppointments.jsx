@@ -4,6 +4,7 @@ import { useGetAppointmentsByPatientAndDateQuery } from "../../redux/features/ap
 import { useSelector } from "react-redux";
 import AppointmentsList from "./AppointmentsList";
 import { useState } from "react";
+import { format } from "date-fns";
 
 const PatientAppointments = () => {
   const [showPastAppointments, setShowPastAppointments] = useState(false);
@@ -22,18 +23,38 @@ const PatientAppointments = () => {
     return <p>Error loading appointments.</p>;
   }
 
-  const filterAppointments = (appointmentDate, isFuture) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize today's date to midnight for accurate comparison
-    const dateOfAppointment = new Date(appointmentDate);
-    return isFuture ? dateOfAppointment > today : dateOfAppointment < today;
+  const filterAppointments = (appointmentDate, appointmentTime, isFuture) => {
+    const now = new Date();
+
+    appointmentDate = format(appointmentDate, "yyyy-MM-dd");
+
+    // Combine appointment date and time into a single Date object
+    const dateOfAppointment = new Date(`${appointmentDate}T${appointmentTime}`);
+
+    if (isNaN(dateOfAppointment)) {
+      console.error(
+        "Invalid dateOfAppointment:",
+        `${appointmentDate}T${appointmentTime}`
+      );
+      return false;
+    }
+
+    return isFuture ? dateOfAppointment > now : dateOfAppointment < now;
   };
 
   const futureAppointments = appointments?.filter((appointment) =>
-    filterAppointments(appointment.appointmentDate, true)
+    filterAppointments(
+      appointment.appointmentDate,
+      appointment.appointmentTime,
+      true
+    )
   );
   const pastAppointments = appointments?.filter((appointment) =>
-    filterAppointments(appointment.appointmentDate, false)
+    filterAppointments(
+      appointment.appointmentDate,
+      appointment.appointmentTime,
+      false
+    )
   );
 
   return (
