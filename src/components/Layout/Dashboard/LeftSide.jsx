@@ -1,12 +1,16 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
-import { IoHome, IoSettingsOutline } from "react-icons/io5";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { IoHome, IoLogOut, IoSettingsOutline } from "react-icons/io5";
 import { FaUserInjured } from "react-icons/fa";
 import { FaUserDoctor } from "react-icons/fa6";
 import { LuCalendarSearch } from "react-icons/lu";
 import { AiFillMedicineBox } from "react-icons/ai";
+import { clearUser } from "../../../redux/slices/usersSlice";
 
 const LeftSide = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [activeLinkId, setActiveLinkId] = useState(null);
 
   const toggleLink = (id) => {
@@ -104,6 +108,18 @@ const LeftSide = () => {
           icon: <IoSettingsOutline />,
         },
       ],
+    },
+    {
+      id: 7,
+      name: "Logout",
+      pageName: "Logout",
+      path: "/auth/login",
+      icon: <IoLogOut className="text-red-500 w-6 h-6" />,
+      onClick: () => {
+        localStorage.removeItem("token");
+        dispatch(clearUser());
+        navigate("/auth/login");
+      },
     },
   ];
 

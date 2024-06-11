@@ -1,4 +1,5 @@
 import useFutureAppointments from "../hooks/useFutureAppointments";
+import { format } from "date-fns";
 
 const FutureAppointments = () => {
   const { futureAppointments, isLoading, isError } = useFutureAppointments();
@@ -12,8 +13,8 @@ const FutureAppointments = () => {
   }
 
   return (
-    <div>
-      <h2>Future Appointments</h2>
+    <div className="flex justify-center items-center bg-green-400 mb-6 p-2 text-white rounded gap-4">
+      <h2>Future Appointments > </h2>
       {futureAppointments.length === 0 ? (
         <p>No future appointments found.</p>
       ) : (
@@ -24,10 +25,14 @@ const FutureAppointments = () => {
           const seconds = Math.floor(timeLeft % 60);
 
           return (
-            <div key={appointment.id}>
+            <div key={appointment.id} className="flex items-center gap-4">
+              <p>Doctor: {appointment.doctorFullName}</p>
               <p>
-                Appointment on {appointment.appointmentDate} at{" "}
-                {appointment.appointmentTime}
+                <strong>
+                  Appointment on{" "}
+                  {format(appointment.appointmentDate, "yyyy-MM-dd")} at{" "}
+                  {appointment.appointmentTime}
+                </strong>
               </p>
               <p>
                 Time left: {hours}h {minutes}m {seconds}s

@@ -9,16 +9,10 @@ import {
 } from "../../redux/features/api/apiSlice.js";
 import Spinner from "../../components/UI/Spinner.jsx";
 import useDefaultImage from "../../components/hooks/DefaultImage";
-import {
-  FaBoxArchive,
-  FaRegCalendarDays,
-  FaUser,
-  FaHeartPulse,
-} from "react-icons/fa6";
+import { FaBoxArchive, FaHeartPulse } from "react-icons/fa6";
 import BloodType from "../Dasboards/Services/BloodType.jsx";
 import { Link } from "react-router-dom";
 import { countries } from "../Dasboards/Services/Countries.jsx";
-import { bloodGroups } from "../Dasboards/Services/BloodGroups.jsx";
 import { toast } from "react-toastify";
 
 const PatientProfile = () => {
@@ -215,14 +209,10 @@ const PatientProfile = () => {
                 <FaBoxArchive /> My Profile
               </Link>
               <Link
-                to="/addMedical"
+                to="/dashboard/patient/medicalRecords"
                 className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
                 <FaBoxArchive /> Medical Records
               </Link>
-              <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaHeartPulse />
-                Health information
-              </button>
             </div>
           </div>
           <div className="col-span-12 lg:col-span-8 bg-white rounded-xl border-[1px] border-cyan-500 p-6">
