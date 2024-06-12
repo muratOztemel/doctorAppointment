@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { useGetDoctorByIdQuery } from "../../../redux/features/api/apiSlice.js";
@@ -12,6 +12,7 @@ import {
   useGetDoctorInfoByDoctorIdQuery,
 } from "../../../redux/features/api/apiSlice.js";
 import DoctorStickyLink from "../Services/DoctorStickyLink.jsx";
+import DoctorPatientList from "./DoctorPatientList.jsx";
 
 const DoctorPatients = () => {
   const dispatch = useDispatch();
@@ -96,36 +97,11 @@ const DoctorPatients = () => {
 
             <div className="flex flex-col justify-center items-center gap-3 px-2 xl:px-12 w-full">
               <DoctorStickyLink doctorId={doctorId} doctorName={doctorName} />
-              <Link
-                to=""
-                className=" bg-green-500  text-white text-sm gap-4 flex items-center w-52 p-4 rounded">
-                <FaUserDoctor />
-                Doctor Information
-              </Link>
-              <Link
-                to={`/dashboard/admin/doctor/patient`}
-                className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-52 p-4 rounded">
-                <FaUser />
-                Patients
-              </Link>
-              <Link className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-52 p-4 rounded">
-                <FaRegCalendarDays /> Appointments
-              </Link>
-              <Link className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-52 p-4 rounded">
-                <FaRegCalendarDays /> Doctor Working Days
-              </Link>
-              <Link className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-52 p-4 rounded">
-                <FaRegCalendarDays /> Doctor Holidays
-              </Link>
-              <Link className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-52 p-4 rounded">
-                <RiLockPasswordLine />
-                Change Password
-              </Link>
             </div>
           </div>
 
           <div className="grid grid-cols-3  gap-3 lg:col-span-8 bg-white rounded-xl border-[1px] p-6">
-            XXXX
+            <DoctorPatientList doctorId={doctorId} />
           </div>
         </div>
       </div>

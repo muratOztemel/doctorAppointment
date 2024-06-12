@@ -96,31 +96,6 @@ const DoctorChangePassword = () => {
 
             <div className="flex flex-col justify-center items-center gap-3 px-2 xl:px-12 w-full">
               <DoctorStickyLink doctorId={doctorId} doctorName={doctorName} />
-              <Link
-                to=""
-                className=" bg-green-500  text-white text-sm gap-4 flex items-center w-52 p-4 rounded">
-                <FaUserDoctor />
-                Doctor Information
-              </Link>
-              <Link
-                to={`/dashboard/admin/doctor/patient`}
-                className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-52 p-4 rounded">
-                <FaUser />
-                Patients
-              </Link>
-              <Link className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-52 p-4 rounded">
-                <FaRegCalendarDays /> Appointments
-              </Link>
-              <Link className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-52 p-4 rounded">
-                <FaRegCalendarDays /> Doctor Working Days
-              </Link>
-              <Link className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-52 p-4 rounded">
-                <FaRegCalendarDays /> Doctor Holidays
-              </Link>
-              <Link className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-52 p-4 rounded">
-                <RiLockPasswordLine />
-                Change Password
-              </Link>
             </div>
           </div>
 

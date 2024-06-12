@@ -2,8 +2,11 @@ import { NavLink } from "react-router-dom";
 import {
   FaRegCalendarDays,
   FaUserInjured,
-  FaBriefcaseMedical,
+  FaUserDoctor,
 } from "react-icons/fa6";
+import { BsFillCalendarWeekFill } from "react-icons/bs";
+import { RiLockPasswordFill } from "react-icons/ri";
+import { BiSolidCalendarX } from "react-icons/bi";
 
 const DoctorStickyLink = ({ doctorId, doctorName }) => {
   const linkDizi = [
@@ -11,38 +14,38 @@ const DoctorStickyLink = ({ doctorId, doctorName }) => {
       id: 1,
       name: "Doctor Information",
       path: `/dashboard/admin/doctor/${doctorId}/${doctorName}`,
-      icon: <FaUserInjured />,
+      icon: <FaUserDoctor />,
       end: true,
     },
     {
       id: 2,
       name: "Patients",
       path: `/dashboard/admin/doctorPatients/${doctorId}/${doctorName}`,
-      icon: <FaRegCalendarDays />,
+      icon: <FaUserInjured />,
     },
     {
       id: 3,
       name: "Appointments",
       path: `/dashboard/admin/doctorAppointments/${doctorId}/${doctorName}`,
-      icon: <FaBriefcaseMedical />,
+      icon: <FaRegCalendarDays />,
     },
     {
       id: 4,
       name: "Doctor Working Days",
       path: `/dashboard/admin/doctorWorkingDays/${doctorId}/${doctorName}`,
-      icon: <FaBriefcaseMedical />,
+      icon: <BsFillCalendarWeekFill />,
     },
     {
       id: 5,
       name: "Doctor Holidays",
       path: `/dashboard/admin/doctorHolidays/${doctorId}/${doctorName}`,
-      icon: <FaBriefcaseMedical />,
+      icon: <BiSolidCalendarX />,
     },
     {
       id: 6,
       name: "Change Password",
       path: `/dashboard/admin/password/${doctorId}/${doctorName}`,
-      icon: <FaBriefcaseMedical />,
+      icon: <RiLockPasswordFill />,
     },
   ];
 
