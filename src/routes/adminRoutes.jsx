@@ -18,6 +18,9 @@ import BranchesList from "../components/Dasboards/Branches/BranchesList";
 import ProtectedRoute from "../components/Security/ProtectedRoute";
 import Settings from "../components/Dasboards/Settings/Settings";
 import UserRolesForm from "../components/Dasboards/UserRoles/UserRolesForm";
+import PatientAppointments from "../components/Dasboards/Appointments/PatientAppointments";
+import PatientMedicalRecords from "../components/Dasboards/Medical/PatientMedicalRecords";
+import DoctorPatients from "../components/Dasboards/Doctors/DoctorPatients";
 
 export const adminRoutes = [
   {
@@ -50,12 +53,24 @@ export const adminRoutes = [
         element: <DoctorProfile />,
       },
       {
+        path: "doctorPatients/:id/:name",
+        element: <DoctorPatients />,
+      },
+      {
         path: "addDoctor",
         element: <AddDoctor />,
       },
       {
         path: "appointments",
         element: <DashboardAdminAppointmentsPage />,
+      },
+      {
+        path: "appointments/:id/:name",
+        element: <PatientAppointments />,
+      },
+      {
+        path: "medical/:id/:name",
+        element: <PatientMedicalRecords />,
       },
       {
         path: "appointment/:id/:pname/:dname",

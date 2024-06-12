@@ -16,8 +16,8 @@ const HeaderDoctorLayout = () => {
         </div>
       </div>
       <div className="flex justify-between items-center w-full h-14 ml-2">
-        <div className="bg-white rounded flex items-center w-full max-w-xl mr-4 p-2 shadow-sm border border-gray-200 md:ml-8">
-          <button className="outline-none focus:outline-none">
+        <div className="bg-white rounded flex items-center w-full max-w-xl mr-4 p-2 md:ml-8">
+          {/* <button className="outline-none focus:outline-none">
             <CiSearch />
           </button>
           <input
@@ -26,7 +26,7 @@ const HeaderDoctorLayout = () => {
             id=""
             placeholder="Search"
             className="w-full pl-3 text-sm text-black outline-none focus:outline-none bg-transparent"
-          />
+          /> */}
         </div>
         <ul className="flex items-center">
           <li>

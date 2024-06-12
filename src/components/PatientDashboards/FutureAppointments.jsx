@@ -14,7 +14,7 @@ const FutureAppointments = () => {
 
   return (
     <div className="flex justify-center items-center bg-green-400 mb-6 p-2 text-white rounded gap-4">
-      <h2>Future Appointments > </h2>
+      <h2>Future Appointments : </h2>
       {futureAppointments.length === 0 ? (
         <p>No future appointments found.</p>
       ) : (

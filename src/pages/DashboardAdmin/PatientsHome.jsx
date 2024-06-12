@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   setPatientId,
   setSortField,
@@ -23,6 +23,7 @@ const PatientsHome = () => {
   const [isShowError, setIsShowError] = useState(false);
   const [bloodGroupFilter, setBloodGroupFilter] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
+  const [searchTermLocal, setSearchTermLocal] = useState("");
 
   const dispatch = useDispatch();
   const { sortField, sortOrder, searchTerm, filter } = useSelector(
@@ -42,29 +43,8 @@ const PatientsHome = () => {
     filter,
   });
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop >=
-          document.documentElement.offsetHeight - 1 &&
-        !isFetching
-      ) {
-        setPage((prevPage) => prevPage + 1);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isFetching]);
-
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error!</div>;
-
-  /*   const sortedPatients = [...patients].sort((a, b) => {
-    if (a[sortField] < b[sortField]) return sortOrder === "asc" ? -1 : 1;
-    if (a[sortField] > b[sortField]) return sortOrder === "asc" ? 1 : -1;
-    return 0;
-  }); */
 
   const handleBloodGroupChange = (e) => {
     const selectedBloodGroup = Number(e.target.value);
@@ -75,20 +55,16 @@ const PatientsHome = () => {
   const handleGenderChange = (e) => {
     const selectedGender = Number(e.target.value);
     setGenderFilter(selectedGender);
-    dispatch(setFilter(selectedGender)); // Filter state güncellendi
+    dispatch(setFilter(selectedGender));
   };
 
   const sortedPatients = patients?.length
     ? [...patients].sort((a, b) => {
-        // Tarih alanı için özel karşılaştırma
         if (sortField === "birthdate") {
-          // Tarih string'lerini Date objelerine dönüştür
           const dateA = new Date(a.birthDate);
           const dateB = new Date(b.birthDate);
-          // Tarihleri karşılaştır
           return sortOrder === "asc" ? dateA - dateB : dateB - dateA;
         } else {
-          // Diğer alanlar için genel karşılaştırma
           if (a[sortField] < b[sortField]) return sortOrder === "asc" ? -1 : 1;
           if (a[sortField] > b[sortField]) return sortOrder === "asc" ? 1 : -1;
         }
@@ -115,46 +91,48 @@ const PatientsHome = () => {
   };
 
   const ageCalculate = (birthDateString) => {
-    // Doğum tarihini Date nesnesine dönüştürme
     const birthDate = new Date(birthDateString);
-
-    // Bugünkü tarihi alma
     const today = new Date();
     const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth() + 1; // JavaScript'te aylar 0'dan başlar, bu yüzden +1 ekliyoruz
+    const currentMonth = today.getMonth() + 1;
     const currentDay = today.getDate();
 
-    // Yaş hesaplama
     let age = currentYear - birthDate.getFullYear();
     if (
-      currentMonth < birthDate.getMonth() + 1 || // Ayları karşılaştırırken 1 eklemeyi unutmayın
+      currentMonth < birthDate.getMonth() + 1 ||
       (currentMonth === birthDate.getMonth() + 1 &&
         currentDay < birthDate.getDate())
     ) {
       age--;
     }
-    return age; // Yaşı döndürme
+    return age;
   };
 
   function formatDate(createdAt) {
     const date = new Date(createdAt);
-    const day = date.getDate().toString().padStart(2, "0"); // Günü al ve iki basamaklı yap
-    const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Ayı al (0'dan başladığı için 1 ekliyoruz) ve iki basamaklı yap
-    const year = date.getFullYear(); // Yılı al
-    return `${day}.${month}.${year}`; // Formatı DD.MM.YYYY olarak döndür
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
   }
 
   const handleSearch = (e) => {
+    setSearchTermLocal(e.target.value);
     if (e.target.value.length > 1) {
       dispatch(setSearchTerm(e.target.value));
-      setPage(1); // Arama yapıldığında sayfayı sıfırla!
+      setPage(1);
     }
   };
 
-  const handleFilterChange = (e) => {
-    dispatch(setFilter(e.target.value));
-    setPage(1); // Filter yapıldığında sayfayı sıfırla!
-    dispatch(setFilter("1"));
+  const handleReset = () => {
+    setBloodGroupFilter("");
+    setGenderFilter("");
+    setSearchTermLocal("");
+    dispatch(setSearchTerm(""));
+    dispatch(setFilter(""));
+    dispatch(setSortField(""));
+    dispatch(setSortOrder("asc"));
+    setPage(1);
   };
 
   return (
@@ -168,19 +146,16 @@ const PatientsHome = () => {
               <input
                 type="text"
                 placeholder='Search "Patients"'
-                // pattern="[A-Za-z]{2,}"
                 className="h-14 text-sm rounded-md bg-dry border border-border px-4"
+                value={searchTermLocal}
                 onChange={handleSearch}
               />
-              {/* <p className="text-xs text-gray-500 ml-4">
-                at least 2 characters
-              </p> */}
             </div>
             <div className="text-sm relative w-full ">
               <div className="w-full">
                 <div className="relative h-10 w-full min-w-[200px]">
                   <button
-                    onClick={() => setPage(1)}
+                    onClick={handleReset}
                     className="w-full h-14 bg-green-300 rounded-md text-white hover:bg-green-600">
                     RESET
                   </button>
@@ -191,6 +166,7 @@ const PatientsHome = () => {
               <div className="w-full">
                 <div className="relative h-10 w-full min-w-[200px]">
                   <select
+                    value={bloodGroupFilter}
                     onChange={handleBloodGroupChange}
                     className="bg-slate-500 text-white  peer h-14 w-full rounded-[7px] p-3">
                     <option value="">All Blood Groups</option>
@@ -210,11 +186,12 @@ const PatientsHome = () => {
               <div className="w-full">
                 <div className="relative h-10 w-full min-w-[200px]">
                   <select
+                    value={genderFilter}
                     onChange={handleGenderChange}
                     className="bg-slate-700 text-white  peer h-14 w-full rounded-[7px] p-3">
                     <option value="">All Gender</option>
-                    <option value="2">Female</option>
-                    <option value="1">Male</option>
+                    <option value="1">Female</option>
+                    <option value="2">Male</option>
                     <option value="3">Other</option>
                     <option value="4">Other</option>
                   </select>
@@ -223,9 +200,7 @@ const PatientsHome = () => {
             </div>
           </div>
           <div className="mt-8 w-full overflow-x-scroll">
-            {/* <TablePage patients={patients} /> */}
             <div>
-              {/* Search and Filter Inputs */}
               <table className="table-auto w-full">
                 <thead className="bg-cyan-50 rounded-md overflow-hidden">
                   <tr>
@@ -373,11 +348,11 @@ const PatientsHome = () => {
                         )}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {patient.gender === 1 ? (
+                        {patient.gender === 2 ? (
                           <span className="py-1 px-4 bg-cyan-300 text-cyan-500 bg-opacity-10 text-xs rounded-xl">
                             Male
                           </span>
-                        ) : patient.gender === 2 ? (
+                        ) : patient.gender === 1 ? (
                           <span className="py-1 px-4 bg-pink-300 text-pink-500 bg-opacity-10 text-xs rounded-xl">
                             Female
                           </span>
@@ -438,8 +413,6 @@ const PatientsHome = () => {
                   ))}
                 </tbody>
               </table>
-              {/* Pagination Controls */}
-              {!isFetching && <p>Loading more users...</p>}
               {isLoading ? (
                 <div>Loading...</div>
               ) : (
