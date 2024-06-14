@@ -17,7 +17,7 @@ const PatientStickyLink = ({ patientId, patientName }) => {
     {
       id: 2,
       name: "Patient Appointments",
-      path: `/dashboard/admin/appointments/${patientId}/${patientName}`,
+      path: `/dashboard/admin/appointment/${patientId}/${patientName}`,
       icon: <FaRegCalendarDays />,
     },
     {

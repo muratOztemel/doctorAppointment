@@ -73,7 +73,7 @@ export const adminRoutes = [
         element: <DashboardAdminAppointmentsPage />,
       },
       {
-        path: "appointments/:id/:name",
+        path: "appointment/:id/:name",
         element: <PatientAppointments />,
       },
       {

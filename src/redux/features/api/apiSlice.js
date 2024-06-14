@@ -519,6 +519,10 @@ export const apiSlice = createApi({
     getHolidays: builder.query({
       query: () => "Holidays",
     }),
+    getHolidayByDoctorId: builder.query({
+      query: (id) => `Holidays/GetHolidayByDoctorId?doctorId=${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
     addNewHoliday: builder.mutation({
       query(newHoliday) {
         return {
@@ -791,6 +795,7 @@ export const {
   useGetMedicinesPageQuery,
   useGetAuthorityQuery,
   useGetHolidaysQuery,
+  useGetHolidayByDoctorIdQuery,
   useAddNewHolidayMutation,
   useUpdateHolidayMutation,
   useDeleteHolidayMutation,

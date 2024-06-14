@@ -1,46 +1,116 @@
 import { useParams, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { useGetDoctorByIdQuery } from "../../../redux/features/api/apiSlice.js";
-import Spinner from "../../UI/Spinner.jsx";
-import { FaRegCalendarDays, FaUser, FaUserDoctor } from "react-icons/fa6";
-import BloodType from "../Services/BloodType.jsx";
-import { RiLockPasswordLine } from "react-icons/ri";
-
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import {
-  useGetBranchesQuery,
+  useGetDoctorByIdQuery,
   useGetDoctorInfoByDoctorIdQuery,
+  useGetHolidayByDoctorIdQuery,
+  useAddNewHolidayMutation,
+  useGetBranchesQuery,
 } from "../../../redux/features/api/apiSlice.js";
+import BloodType from "../Services/BloodType.jsx";
 import DoctorStickyLink from "../Services/DoctorStickyLink.jsx";
+import { format } from "date-fns";
+import { toast } from "react-toastify";
 
 const DoctorHolidays = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let { id: doctorId } = useParams();
   doctorId = Number(doctorId);
-  const { data: doctor, isError, isLoading } = useGetDoctorByIdQuery(doctorId);
+
+  const {
+    data: doctor,
+    isError: isErrorDoctor,
+    isLoading: isLoadingDoctor,
+  } = useGetDoctorByIdQuery(doctorId);
   const {
     data: doctorInfo,
-    isDoctorInfoError,
-    isDoctorInfoLoading,
+    isError: isDoctorInfoError,
+    isLoading: isDoctorInfoLoading,
   } = useGetDoctorInfoByDoctorIdQuery(doctorId);
 
-  const { data: branches, isLoading: isLoadingBranches } =
-    useGetBranchesQuery();
+  const {
+    data: holidays = [],
+    isLoading: isLoadingHolidays,
+    isError: isErrorHolidays,
+    error: holidaysError, // Log the error details
+  } = useGetHolidayByDoctorIdQuery(doctorId);
 
-  if (isLoading || !branches || isDoctorInfoLoading) {
+  const [addHoliday] = useAddNewHolidayMutation();
+
+  const {
+    data: branches,
+    isLoading: isLoadingBranches,
+    isError: isErrorBranches,
+  } = useGetBranchesQuery();
+
+  const doctorName = `${doctor?.name} ${doctor?.surname}`;
+
+  const formik = useFormik({
+    initialValues: {
+      startDate: "",
+      endDate: "",
+    },
+    validationSchema: Yup.object({
+      startDate: Yup.date().required("Start date is required"),
+      endDate: Yup.date().required("End date is required"),
+    }),
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await addHoliday({ ...values, doctorId }).unwrap();
+        toast.success("Holiday added successfully.", {
+          position: "bottom-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+        resetForm();
+      } catch (error) {
+        toast.error("Failed to add holiday.", {
+          position: "bottom-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
+    },
+  });
+
+  if (
+    isLoadingDoctor ||
+    isDoctorInfoLoading ||
+    isLoadingHolidays ||
+    isLoadingBranches
+  ) {
     return <div>Loading...</div>;
   }
 
-  if (isError || isDoctorInfoError) {
-    return <div>Error loading the doctor s data!</div>;
+  if (
+    isErrorDoctor ||
+    isDoctorInfoError ||
+    isErrorHolidays ||
+    isErrorBranches
+  ) {
+    console.error("Error loading data:", {
+      doctor: isErrorDoctor,
+      doctorInfo: isDoctorInfoError,
+      holidays: isErrorHolidays,
+      branches: isErrorBranches,
+      holidaysError, // Log the error details
+    });
+    return <div>Error loading the doctor's data!</div>;
   }
-
-  if (isError) return <div>Error: {isError.toString()}</div>;
-
-  if (isLoading) return <Spinner />;
-
-  const doctorName = `${doctor?.name} ${doctor?.surname}`;
 
   return (
     <>
@@ -99,8 +169,89 @@ const DoctorHolidays = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3  gap-3 lg:col-span-8 bg-white rounded-xl border-[1px] p-6">
-            XXXX
+          <div className="flex flex-col gap-3 lg:col-span-8 bg-white rounded-xl border-[1px] p-6">
+            <div className="w-full">
+              <h2 className="text-xl font-semibold mb-4">Doctor Holidays</h2>
+              <form onSubmit={formik.handleSubmit} className="mb-6">
+                <div className="flex flex-col gap-4">
+                  <label>
+                    Start Date:
+                    <input
+                      type="datetime-local"
+                      name="startDate"
+                      value={formik.values.startDate}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className={`block w-full mt-1 ${
+                        formik.touched.startDate && formik.errors.startDate
+                          ? "border-red-500"
+                          : ""
+                      }`}
+                    />
+                    {formik.touched.startDate && formik.errors.startDate ? (
+                      <div className="text-red-500 text-sm">
+                        {formik.errors.startDate}
+                      </div>
+                    ) : null}
+                  </label>
+                  <label>
+                    End Date:
+                    <input
+                      type="datetime-local"
+                      name="endDate"
+                      value={formik.values.endDate}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className={`block w-full mt-1 ${
+                        formik.touched.endDate && formik.errors.endDate
+                          ? "border-red-500"
+                          : ""
+                      }`}
+                    />
+                    {formik.touched.endDate && formik.errors.endDate ? (
+                      <div className="text-red-500 text-sm">
+                        {formik.errors.endDate}
+                      </div>
+                    ) : null}
+                  </label>
+                  <button
+                    type="submit"
+                    className="mt-4 px-4 py-2 bg-green-500 text-white rounded">
+                    Add Holiday
+                  </button>
+                </div>
+              </form>
+              <div className="overflow-x-auto">
+                <table className="table-auto w-full">
+                  <thead className="bg-cyan-50 rounded-md overflow-hidden">
+                    <tr>
+                      <th className="text-left py-2 px-4">Start Date</th>
+                      <th className="text-left py-2 px-4">End Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {holidays?.map((holiday) => (
+                      <tr
+                        key={holiday.id}
+                        className="border-b border-cyan-100 hover:bg-cyan-50 transition">
+                        <td className="py-2 px-4">
+                          {format(
+                            new Date(holiday.startDate),
+                            "yyyy-MM-dd HH:mm"
+                          )}
+                        </td>
+                        <td className="py-2 px-4">
+                          {format(
+                            new Date(holiday.endDate),
+                            "yyyy-MM-dd HH:mm"
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>

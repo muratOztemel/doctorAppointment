@@ -263,7 +263,7 @@ const AppointmentsHome = () => {
                           </span>
                         ) : appointment.status === 2 ? (
                           <span className="py-1 px-4 bg-purple-300 text-purple-500 bg-opacity-10 text-xs rounded-xl">
-                            Reject
+                            Canceled
                           </span>
                         ) : (
                           <span className="py-1 px-4 bg-red-300 text-red-500 bg-opacity-10 text-xs rounded-xl">
@@ -277,7 +277,7 @@ const AppointmentsHome = () => {
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         <div className="flex justify-end">
                           <Link
-                            to="/appointmentProfile"
+                            to={`/dashboard/admin/appointment/${appointment.id}/${appointment.patientFullName}`}
                             onClick={() => {
                               dispatch(setAppointmentId(appointment.id));
                               dispatch(setPatientId(appointment.patientId));
@@ -294,21 +294,6 @@ const AppointmentsHome = () => {
                             onClick={() => {
                               // dispatch(setIsShowError());
                               dispatch(setAppointmentId(appointment.id));
-                              setStatus("confirmed");
-                              setIsShowError(true);
-                            }}
-                            className="w-28 h-9 text-white bg-green-300 hover:bg-green-500 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
-                            <img
-                              src="/images/delete.png"
-                              alt="approve"
-                              className="h-4 mr-2"
-                            />
-                            Approve
-                          </button>
-                          <button
-                            onClick={() => {
-                              // dispatch(setIsShowError());
-                              dispatch(setAppointmentId(appointment.id));
                               setStatus("cancel");
                             }}
                             className="w-28 h-9 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
@@ -317,7 +302,7 @@ const AppointmentsHome = () => {
                               alt="reject"
                               className="h-4 mr-2"
                             />
-                            Reject
+                            Cancel
                           </button>
                           {isShowError && (
                             <ModalStatusAppointment

@@ -178,7 +178,7 @@ const DashboardDoctorSettings = () => {
   ];
 
   const inputClass =
-    "block w-60 h-10 pl-4 pr-4 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none";
+    "block w-full h-10 pl-4 pr-4 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none";
 
   return (
     <div className="xl:px-8 px-2 pt-6">

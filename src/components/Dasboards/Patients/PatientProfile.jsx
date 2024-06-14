@@ -163,7 +163,7 @@ const PatientProfile = () => {
     { id: 8, label: "0-" },
   ];
 
-  const patientName = `${patient.name}${patient.surname}`;
+  const patientName = `${patient.name} ${patient.surname}`;
 
   return (
     <>
