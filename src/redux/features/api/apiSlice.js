@@ -79,9 +79,13 @@ export const apiSlice = createApi({
   ],
   endpoints: (builder) => ({
     refreshToken: builder.mutation({
-      query: () => ({
+      query: (refreshToken) => ({
         url: "Authentication/refresh-web-token",
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: { refreshToken },
       }),
     }),
     verifyToken: builder.mutation({

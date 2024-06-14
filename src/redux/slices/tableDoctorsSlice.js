@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const tableDoctorsSlice = createSlice({
+const initialState = {
+  doctorId: null,
+  sortField: "",
+  sortOrder: "asc",
+  searchTerm: "",
+  filter: "",
+};
+
+const tableDoctorsSlice = createSlice({
   name: "tableDoctors",
-  initialState: {
-    doctorId: 0,
-    sortField: "id",
-    sortOrder: "asc",
-    searchTerm: "",
-    filter: "",
-  },
+  initialState,
   reducers: {
     setDoctorId: (state, action) => {
       state.doctorId = action.payload;
@@ -25,6 +27,12 @@ export const tableDoctorsSlice = createSlice({
     setFilter: (state, action) => {
       state.filter = action.payload;
     },
+    resetFilters: (state) => {
+      state.sortField = "";
+      state.sortOrder = "asc";
+      state.searchTerm = "";
+      state.filter = "";
+    },
   },
 });
 
@@ -34,7 +42,7 @@ export const {
   setSortOrder,
   setSearchTerm,
   setFilter,
-  setIsShowError,
+  resetFilters,
 } = tableDoctorsSlice.actions;
 
 export default tableDoctorsSlice.reducer;

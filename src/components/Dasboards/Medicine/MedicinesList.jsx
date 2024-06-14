@@ -62,7 +62,7 @@ const MedicinesList = () => {
       name: Yup.string().required("Name is required"),
       type: Yup.string(),
       amount: Yup.string(),
-      treatment: Yup.string(),
+      treatment: Yup.string().required("Treatment is required"),
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
@@ -134,17 +134,17 @@ const MedicinesList = () => {
         <form onSubmit={formikAdd.handleSubmit} className="mb-6 mt-6">
           <table className="table-auto w-full">
             <thead className="bg-cyan-50 rounded-md overflow-hidden">
-              <tr>
-                <th className="cursor-pointer hover:bg-cyan-300">ID</th>
-                <th className="cursor-pointer hover:bg-cyan-300">Name</th>
-                <th className="cursor-pointer hover:bg-cyan-300">Type</th>
-                <th className="cursor-pointer hover:bg-cyan-300">Amount</th>
-                <th className="cursor-pointer hover:bg-cyan-300">Treatment</th>
-                <th className="cursor-pointer hover:bg-cyan-300">Actions</th>
+              <tr className="space-x-2">
+                <th className="px-4 py-2">ID</th>
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2">Type</th>
+                <th className="px-4 py-2">Amount</th>
+                <th className="px-4 py-2">Treatment</th>
+                <th className="px-4 py-2">Actions</th>
               </tr>
             </thead>
-            <tbody>
-              <tr className="border-b border-cyan-100 hover:bg-cyan-50 transition">
+            <tbody className="space-y-2">
+              <tr className="odd:bg-white even:bg-gray-100 border-b border-cyan-100 hover:bg-cyan-50 transition">
                 <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                   New
                 </td>

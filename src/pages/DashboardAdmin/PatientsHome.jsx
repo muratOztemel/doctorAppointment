@@ -193,7 +193,6 @@ const PatientsHome = () => {
                     <option value="1">Female</option>
                     <option value="2">Male</option>
                     <option value="3">Other</option>
-                    <option value="4">Other</option>
                   </select>
                 </div>
               </div>
@@ -400,13 +399,6 @@ const PatientsHome = () => {
                             />
                             Delete
                           </button>
-                          {isShowError && (
-                            <ModalDeletePatient
-                              setIsShowError={setIsShowError}
-                              isShowError={isShowError}
-                              message={`Are you sure you want to delete user`}
-                            />
-                          )}
                         </div>
                       </td>
                     </tr>
@@ -418,16 +410,20 @@ const PatientsHome = () => {
               ) : (
                 <div className="flex justify-center m-4">
                   <button
-                    href="#"
                     onClick={() => setPage(page - 1)}
-                    className="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                    disabled={page === 1}
+                    className={`flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 ${
+                      page === 1 && "cursor-not-allowed opacity-50"
+                    }`}>
                     <FaArrowLeftLong className="w-3.5 h-3.5 me-2" />
                     Previous
                   </button>
+                  <span className="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-700">
+                    Page {page}
+                  </span>
                   <button
-                    href="#"
                     onClick={() => setPage(page + 1)}
-                    className="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                    className="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700">
                     Next
                     <FaArrowRightLong className="w-3.5 h-3.5 ms-2" />
                   </button>
@@ -437,7 +433,15 @@ const PatientsHome = () => {
           </div>
         </Card>
       </div>
+      {isShowError && (
+        <ModalDeletePatient
+          setIsShowError={setIsShowError}
+          isShowError={isShowError}
+          message={`Are you sure you want to delete user`}
+        />
+      )}
     </>
   );
 };
+
 export default PatientsHome;

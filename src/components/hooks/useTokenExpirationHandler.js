@@ -9,6 +9,19 @@ const useTokenExpirationHandler = () => {
   const [refreshToken] = useRefreshTokenMutation();
 
   useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const result = await refreshToken().unwrap();
+        console.log("Refresh Token Response:", result);
+      } catch (err) {
+        console.error("Failed to refresh token:", err);
+      }
+    };
+
+    fetchToken();
+  }, [refreshToken]);
+
+  useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {

@@ -7,6 +7,7 @@ import {
   setSortOrder,
   setSearchTerm,
   setFilter,
+  resetFilters, // yeni action
 } from "../../redux/slices/tableDoctorsSlice.js";
 import { useGetDoctorsQuery } from "../../redux/features/api/apiSlice.js";
 import Card from "../../components/UI/Cards/Card.jsx";
@@ -22,6 +23,7 @@ import DefaultImage from "../../components/hooks/DefaultImage.jsx";
 const DoctorsHome = () => {
   const [page, setPage] = useState(1);
   const [isShowError, setIsShowError] = useState(false);
+  const [searchTermLocal, setSearchTermLocal] = useState("");
 
   const dispatch = useDispatch();
   const { sortField, sortOrder, searchTerm, filter } = useSelector(
@@ -82,13 +84,15 @@ const DoctorsHome = () => {
   }
 
   const handleSearch = (e) => {
+    setSearchTermLocal(e.target.value);
     dispatch(setSearchTerm(e.target.value));
     setPage(1); // Arama yapıldığında sayfayı sıfırla!
   };
 
-  const handleFilterChange = (e) => {
-    dispatch(setFilter(e.target.value));
-    setPage(1); // Filter yapıldığında sayfayı sıfırla!
+  const handleReset = () => {
+    dispatch(resetFilters());
+    setPage(1);
+    setSearchTermLocal("");
   };
 
   return (
@@ -100,57 +104,19 @@ const DoctorsHome = () => {
           icon={<FaUserDoctor />}
           color={"cyan"}
           className="mt-5">
-          <div className="grid lg:grid-cols-5 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-2 mt-5">
+          <div className="flex gap-2 mt-5">
             <input
               type="text"
               placeholder='Search "Doctors"'
-              className="h-14 text-sm rounded-md bg-dry border border-border px-4"
+              className="h-14 w-full text-sm rounded-md bg-dry border border-border px-4"
+              value={searchTermLocal}
               onChange={handleSearch}
             />
-            <div className="text-sm relative w-full ">
-              <div className="w-full">
-                <div className="relative h-10 w-full min-w-[200px]">
-                  <button
-                    onClick={() => setPage(1)}
-                    className="w-full h-14 bg-green-300 rounded-md text-white hover:bg-green-600">
-                    RESET
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="text-sm relative w-full ">
-              <div className="w-full">
-                <div className="relative h-10 w-full min-w-[200px]">
-                  <select
-                    onChange={handleFilterChange}
-                    className="bg-slate-500 text-white  peer h-14 w-full rounded-[7px] p-3">
-                    <option value="">All Blood Groups</option>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div className="text-sm relative w-full ">
-              <div className="w-full">
-                <div className="relative h-10 w-full min-w-[200px]">
-                  <select
-                    onChange={handleFilterChange}
-                    className="bg-slate-700 text-white  peer h-14 w-full rounded-[7px] p-3">
-                    <option value="">Gender</option>
-                    <option value="Female">Female</option>
-                    <option value="Male">Male</option>
-                    <option value="Agender">Other</option>
-                  </select>
-                </div>
-              </div>
-            </div>
+            <button
+              onClick={handleReset}
+              className="w-full h-14 bg-green-300 rounded-md text-white hover:bg-green-600">
+              RESET
+            </button>
           </div>
           <div className="mt-8 w-full overflow-x-scroll">
             <div>
@@ -295,26 +261,30 @@ const DoctorsHome = () => {
                   ))}
                 </tbody>
               </table>
-              {isLoading ? (
-                <div>Loading...</div>
-              ) : (
-                <div className="flex justify-center m-4">
-                  <button
-                    href="#"
-                    onClick={() => setPage(page - 1)}
-                    className="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                    <FaArrowLeftLong className="w-3.5 h-3.5 me-2" />
-                    Previous
-                  </button>
-                  <button
-                    href="#"
-                    onClick={() => setPage(page + 1)}
-                    className="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                    Next
-                    <FaArrowRightLong className="w-3.5 h-3.5 ms-2" />
-                  </button>
-                </div>
-              )}
+              <div className="flex justify-center m-4">
+                <button
+                  href="#"
+                  onClick={() => setPage(page - 1)}
+                  disabled={page === 1}
+                  className={`flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                    page === 1 ? "opacity-50 cursor-not-allowed" : ""
+                  }`}>
+                  <FaArrowLeftLong className="w-3.5 h-3.5 me-2" />
+                  Previous
+                </button>
+                <button
+                  href="#"
+                  onClick={() => setPage(page + 1)}
+                  disabled={filteredAndSortedDoctors.length === 0}
+                  className={`flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                    filteredAndSortedDoctors.length === 0
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}>
+                  Next
+                  <FaArrowRightLong className="w-3.5 h-3.5 ms-2" />
+                </button>
+              </div>
             </div>
           </div>
         </Card>

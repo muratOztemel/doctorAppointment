@@ -143,7 +143,7 @@ const PatientProfile = () => {
   if (isError) return <div>Error: {isError.toString()}</div>;
 
   const inputClass =
-    "block w-60 h-10 pl-4 pr-4 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none";
+    "block w-full h-10 pl-4 pr-4 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none";
 
   const bloodTypeOptions = [
     { id: 1, label: "A+" },
