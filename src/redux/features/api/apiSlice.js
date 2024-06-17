@@ -224,6 +224,7 @@ export const apiSlice = createApi({
         headers: { "Content-Type": "application/json" },
         body: updatedAppointment,
       }),
+      invalidatesTags: ["Appointments"],
     }),
     deleteAppointment: builder.mutation({
       query(id) {

@@ -108,7 +108,7 @@ const DoctorsHome = () => {
             <input
               type="text"
               placeholder='Search "Doctors"'
-              className="h-14 w-full text-sm rounded-md bg-dry border border-border px-4"
+              className="h-14 w-full text-sm rounded-md bg-gray-100 border px-4 focus:outline-none"
               value={searchTermLocal}
               onChange={handleSearch}
             />
@@ -248,13 +248,6 @@ const DoctorsHome = () => {
                             />
                             Delete
                           </button>
-                          {isShowError && (
-                            <ModalDeleteDoctor
-                              setIsShowError={setIsShowError}
-                              isShowError={isShowError}
-                              message={`Are you sure you want to delete doctor`}
-                            />
-                          )}
                         </div>
                       </td>
                     </tr>
@@ -289,6 +282,13 @@ const DoctorsHome = () => {
           </div>
         </Card>
       </div>
+      {isShowError && (
+        <ModalDeleteDoctor
+          setIsShowError={setIsShowError}
+          isShowError={isShowError}
+          message={`Are you sure you want to delete doctor`}
+        />
+      )}
     </>
   );
 };
