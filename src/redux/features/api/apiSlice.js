@@ -525,7 +525,7 @@ export const apiSlice = createApi({
       query: () => "Holidays",
     }),
     getHolidayByDoctorId: builder.query({
-      query: (id) => `Holidays/GetHolidayByDoctorId?doctorId=${id}`,
+      query: (id) => `Holidays/GetHolidaysByDoctorId?doctorId=${id}`,
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
     }),
     addNewHoliday: builder.mutation({
