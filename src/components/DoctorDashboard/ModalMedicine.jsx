@@ -73,13 +73,15 @@ const ModalMedicine = ({ onClose, onConfirm }) => {
   };
 
   const handleConfirm = () => {
-    onConfirm({
+    const medicineData = {
       medicines: selectedMedicines,
       quantity,
       dosageQuantity,
       instructions,
       dosages,
-    });
+    };
+    console.log("Confirming Medicine Data:", medicineData);
+    onConfirm(medicineData);
     onClose(); // Close modal after confirmation
   };
 

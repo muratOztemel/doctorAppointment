@@ -5,7 +5,7 @@ import {
   FaBriefcaseMedical,
 } from "react-icons/fa6";
 
-const PatientStickyLink = ({ patientId, patientName }) => {
+const PatientStickyLink = ({ id, patientId, patientName }) => {
   const linkDizi = [
     {
       id: 1,
@@ -17,7 +17,7 @@ const PatientStickyLink = ({ patientId, patientName }) => {
     {
       id: 2,
       name: "Patient Appointments",
-      path: `/dashboard/admin/appointment/${patientId}/${patientName}`,
+      path: `/dashboard/admin/appointments/${patientId}/${patientName}`,
       icon: <FaRegCalendarDays />,
     },
     {

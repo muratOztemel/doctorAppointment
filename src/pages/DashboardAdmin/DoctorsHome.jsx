@@ -108,7 +108,7 @@ const DoctorsHome = () => {
             <input
               type="text"
               placeholder='Search "Doctors"'
-              className="h-14 w-full text-sm rounded-md bg-gray-100 border px-4 focus:outline-none"
+              className="h-14 w-full text-sm rounded-md bg-gray-100 focus:bg-cyan-100 focus:border-cyan-500 border px-4 focus:outline-none"
               value={searchTermLocal}
               onChange={handleSearch}
             />

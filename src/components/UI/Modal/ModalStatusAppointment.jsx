@@ -51,7 +51,6 @@ const ModalStatusAppointment = (props) => {
         },
       });
 
-      console.log(result);
       props.setIsShowError(false);
     } catch (err) {
       console.error("Error updating appointment:", err);

@@ -123,17 +123,13 @@ const DoctorWorkingDays = () => {
     },
   });
 
-  if (isLoading || !branches || isDoctorInfoLoading) {
+  if (isLoading || isLoadingBranches || isDoctorInfoLoading || isLoadingDays) {
     return <div>Loading...</div>;
   }
 
-  if (isError || isDoctorInfoError) {
-    return <div>Error loading the doctor's data!</div>;
+  if (isError || isDoctorInfoError || isErrorDays) {
+    return <div>Error loading the doctors data!</div>;
   }
-
-  if (isError) return <div>Error: {isError.toString()}</div>;
-
-  if (isLoading) return <Spinner />;
 
   const doctorName = `${doctor?.name} ${doctor?.surname}`;
   const daysOfWeek = [

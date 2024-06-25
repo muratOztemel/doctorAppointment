@@ -100,7 +100,7 @@ const DoctorPatients = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3  gap-3 lg:col-span-8 bg-white rounded-xl border-[1px] p-6">
+          <div className="flex gap-3 lg:col-span-8 bg-white rounded-xl border-[1px] p-6">
             <DoctorPatientList doctorId={doctorId} />
           </div>
         </div>

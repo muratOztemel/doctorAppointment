@@ -141,63 +141,52 @@ const PatientsHome = () => {
         <TitleCard title={"P A T I E N T S"} />
         <PatientsDashboard />
         <Card title={"Patient List"} icon={<PiUsers />} color={"cyan"}>
-          <div className="grid lg:grid-cols-5 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-2 mt-6">
-            <div className="flex flex-col justify-center">
+          <div className="flex flex-wrap gap-2 mt-6">
+            <div className="text-sm relative flex-1 min-w-[200px]">
               <input
                 type="text"
                 placeholder='Search "Patients"'
-                className="h-14 text-sm rounded-md bg-dry border border-border px-4 focus:outline-none"
+                className="h-14 w-full text-sm rounded-md bg-gray-100 focus:bg-cyan-100 focus:border-cyan-500 border px-4 focus:outline-none"
                 value={searchTermLocal}
                 onChange={handleSearch}
               />
             </div>
-            <div className="text-sm relative w-full ">
-              <div className="w-full">
-                <div className="relative h-10 w-full min-w-[200px]">
-                  <button
-                    onClick={handleReset}
-                    className="w-full h-14 bg-green-300 rounded-md text-white hover:bg-green-600">
-                    RESET
-                  </button>
-                </div>
-              </div>
+            <div className="text-sm relative flex-1 min-w-[200px]">
+              <button
+                onClick={handleReset}
+                className="w-full h-14 bg-green-300 rounded-md text-white hover:bg-green-600">
+                RESET
+              </button>
             </div>
-            <div className="text-sm relative w-full ">
-              <div className="w-full">
-                <div className="relative h-10 w-full min-w-[200px]">
-                  <select
-                    value={bloodGroupFilter}
-                    onChange={handleBloodGroupChange}
-                    className="bg-slate-500 text-white  peer h-14 w-full rounded-[7px] p-3">
-                    <option value="">All Blood Groups</option>
-                    <option value="1">A+</option>
-                    <option value="2">A-</option>
-                    <option value="3">B+</option>
-                    <option value="4">B-</option>
-                    <option value="5">AB+</option>
-                    <option value="6">AB-</option>
-                    <option value="7">O+</option>
-                    <option value="8">O-</option>
-                  </select>
-                </div>
-              </div>
+            <div className="text-sm relative flex-1 min-w-[200px]">
+              <select
+                value={bloodGroupFilter}
+                onChange={handleBloodGroupChange}
+                className="bg-slate-500 text-white peer h-14 w-full rounded-[7px] p-3">
+                <option value="">All Blood Groups</option>
+                <option value="1">A+</option>
+                <option value="2">A-</option>
+                <option value="3">B+</option>
+                <option value="4">B-</option>
+                <option value="5">AB+</option>
+                <option value="6">AB-</option>
+                <option value="7">O+</option>
+                <option value="8">O-</option>
+              </select>
             </div>
-            <div className="text-sm relative w-full ">
-              <div className="w-full">
-                <div className="relative h-10 w-full min-w-[200px]">
-                  <select
-                    value={genderFilter}
-                    onChange={handleGenderChange}
-                    className="bg-slate-700 text-white  peer h-14 w-full rounded-[7px] p-3">
-                    <option value="">All Gender</option>
-                    <option value="1">Female</option>
-                    <option value="2">Male</option>
-                    <option value="3">Other</option>
-                  </select>
-                </div>
-              </div>
+            <div className="text-sm relative flex-1 min-w-[200px]">
+              <select
+                value={genderFilter}
+                onChange={handleGenderChange}
+                className="bg-slate-700 text-white peer h-14 w-full rounded-[7px] p-3">
+                <option value="">All Gender</option>
+                <option value="1">Female</option>
+                <option value="2">Male</option>
+                <option value="3">Other</option>
+              </select>
             </div>
           </div>
+
           <div className="mt-8 w-full overflow-x-scroll">
             <div>
               <table className="table-auto w-full">
@@ -376,7 +365,7 @@ const PatientsHome = () => {
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         <div className="flex justify-end">
                           <Link
-                            to={`/dashboard/admin/patient/${patient.id}/${patient.name}${patient.surname}`}
+                            to={`/dashboard/admin/patient/${patient.id}/${patient.name} ${patient.surname}`}
                             onClick={() => dispatch(setPatientId(patient.id))}
                             className="w-28 h-9 text-white bg-amber-300 hover:bg-amber-500 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                             <img

@@ -117,6 +117,16 @@ const AppointmentsHome = () => {
                         : ""}
                     </th>
                     <th
+                      onClick={() => handleSort("branchName")}
+                      className="cursor-pointer hover:bg-cyan-300">
+                      Branch{" "}
+                      {sortField === "branchName"
+                        ? sortOrder === "asc"
+                          ? "↓"
+                          : "↑"
+                        : ""}
+                    </th>
+                    <th
                       onClick={() => handleSort("doctorId")}
                       className="cursor-pointer hover:bg-cyan-300">
                       Doctor{" "}
@@ -188,6 +198,9 @@ const AppointmentsHome = () => {
                         {appointment.id}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
+                        {appointment.branchName}
+                      </td>
+                      <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         {appointment.doctorFullName}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
@@ -222,15 +235,16 @@ const AppointmentsHome = () => {
                         )}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
-                        {format(appointment.createdAt, "MM/dd/yyyy")}
+                        {format(new Date(appointment.createdAt), "MM/dd/yyyy")}
                       </td>
                       <td className="text-start text-sm py-4 px-2 whitespace-nowrap">
                         <div className="flex justify-end">
                           <Link
-                            to={`/dashboard/admin/appointment/${appointment.id}/${appointment.patientFullName}`}
+                            to={`/dashboard/admin/appointment/${appointment.id}/${appointment.patientId}/${appointment.patientFullName}`}
                             onClick={() => {
                               dispatch(setAppointmentId(appointment.id));
-                              dispatch(setPatientId(appointment.patientId));
+                              // Make sure setPatientId action is imported and defined correctly
+                              // dispatch(setPatientId(appointment.patientId));
                             }}
                             className="w-28 h-9 text-white bg-amber-300 hover:bg-amber-500 focus:ring-4 focus:ring-amber-300 font-medium rounded-lg text-base inline-flex items-center px-3 py-2.5 text-center mr-2">
                             <img
@@ -266,7 +280,6 @@ const AppointmentsHome = () => {
               ) : (
                 <div className="flex justify-center m-4">
                   <button
-                    href="#"
                     onClick={() => setPage(page - 1)}
                     disabled={page === 1}
                     className="flex items-center justify-center px-4 h-10 me-3 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -274,7 +287,6 @@ const AppointmentsHome = () => {
                     Previous
                   </button>
                   <button
-                    href="#"
                     onClick={() => setPage(page + 1)}
                     className="flex items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                     Next

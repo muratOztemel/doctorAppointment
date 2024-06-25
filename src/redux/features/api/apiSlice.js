@@ -72,6 +72,7 @@ export const apiSlice = createApi({
     "Roles",
     "Doctors",
     "Users",
+    "Holidays",
     "Branches",
     "Favorites",
     "UserRoles",
@@ -523,6 +524,7 @@ export const apiSlice = createApi({
     }),
     getHolidays: builder.query({
       query: () => "Holidays",
+      providesTags: ["Holidays"],
     }),
     getHolidayByDoctorId: builder.query({
       query: (id) => `Holidays/GetHolidaysByDoctorId?doctorId=${id}`,
@@ -722,6 +724,19 @@ export const apiSlice = createApi({
         };
       },
     }),
+    getPrescriptionMedicinesByTreatmentId: builder.query({
+      query: (id) =>
+        `PrescriptionMedicines/get-all-by-treatmentid?treatmentId=${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
+    deletePrescriptionMedicine: builder.mutation({
+      query(id) {
+        return {
+          url: `PrescriptionMedicines/${id}`,
+          method: "DELETE",
+        };
+      },
+    }),
     addNewPrescriptionMedicine: builder.mutation({
       query(newPrescriptionMedicine) {
         return {
@@ -830,6 +845,8 @@ export const {
   useAddNewPrescriptionMutation,
   useUpdatePrescriptionMutation,
   useDeletePrescriptionMutation,
+  useGetPrescriptionMedicinesByTreatmentIdQuery,
+  useDeletePrescriptionMedicineMutation,
   useAddNewPrescriptionMedicineMutation,
 } = apiSlice;
 export default apiSlice.reducer;

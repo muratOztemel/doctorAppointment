@@ -29,8 +29,8 @@ const DoctorChangePassword = () => {
 
   const {
     data: doctorInfo,
-    isDoctorInfoError,
-    isDoctorInfoLoading,
+    isError: isDoctorInfoError,
+    isLoading: isDoctorInfoLoading,
   } = useGetDoctorInfoByDoctorIdQuery(doctorId);
 
   const {
@@ -48,10 +48,12 @@ const DoctorChangePassword = () => {
 
   const formik = useFormik({
     initialValues: {
+      oldPassword: "",
       newPassword: "",
       confirmPassword: "",
     },
     validationSchema: Yup.object({
+      oldPassword: Yup.string().required("Required"),
       newPassword: Yup.string()
         .min(6, "Password must be at least 6 characters")
         .required("Required"),
@@ -61,7 +63,27 @@ const DoctorChangePassword = () => {
     }),
     onSubmit: async (values, { resetForm }) => {
       try {
-        const result = await updateUser({
+        // Şifre doğrulama işlemi
+        const isOldPasswordValid = await validateOldPassword(
+          values.oldPassword,
+          user.password
+        );
+
+        if (!isOldPasswordValid) {
+          toast.error("Old password is incorrect", {
+            position: "bottom-left",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+          });
+          return;
+        }
+
+        await updateUser({
           id: doctor.userId,
           updatedUser: {
             id: doctor.userId,
@@ -95,6 +117,16 @@ const DoctorChangePassword = () => {
       }
     },
   });
+
+  const validateOldPassword = async (inputOldPassword, storedPasswordHash) => {
+    // Bu işlev eski şifreyi manuel olarak doğrular.
+    // Hashing ve karşılaştırma işlemini burada yapabilirsiniz.
+    // Örneğin, bcrypt kullanarak:
+    // return bcrypt.compare(inputOldPassword, storedPasswordHash);
+
+    // Bu örnek için basit bir eşleşme kontrolü yapıyoruz
+    return inputOldPassword === storedPasswordHash;
+  };
 
   if (
     isLoadingDoctor ||
@@ -175,6 +207,28 @@ const DoctorChangePassword = () => {
             <form
               onSubmit={formik.handleSubmit}
               className="col-span-3 flex flex-col gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Old Password
+                  <input
+                    type="password"
+                    name="oldPassword"
+                    value={formik.values.oldPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    className={`${inputClass} ${
+                      formik.touched.oldPassword && formik.errors.oldPassword
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    } rounded-md shadow-sm`}
+                  />
+                  {formik.touched.oldPassword && formik.errors.oldPassword ? (
+                    <div className="text-red-500 text-sm">
+                      {formik.errors.oldPassword}
+                    </div>
+                  ) : null}
+                </label>
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   New Password

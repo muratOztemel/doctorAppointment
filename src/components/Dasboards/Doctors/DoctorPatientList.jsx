@@ -3,7 +3,7 @@ import ListPatients from "./ListPatients";
 
 const DoctorPatientList = ({ doctorId }) => {
   const {
-    data: appointments,
+    data: appointments = [],
     isLoading,
     isError,
   } = useGetByDoctorAndDateQuery(
@@ -12,8 +12,6 @@ const DoctorPatientList = ({ doctorId }) => {
       skip: !doctorId,
     }
   );
-
-  console.log(appointments);
 
   // Helper function to filter out duplicate patients
   const filterUniquePatients = (appointments) => {
@@ -42,30 +40,34 @@ const DoctorPatientList = ({ doctorId }) => {
 
   return (
     <div className="w-full">
-      <table className="table-auto w-full">
-        <thead className="bg-cyan-50 rounded-md overflow-hidden">
-          <tr>
-            <th>#</th>
-            <th>Photo</th>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Blood Group</th>
-            <th>Gender</th>
-            <th>Age</th>
-            <th>Phone Number</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {uniqueAppointments.map((appointment, index) => (
-            <ListPatients
-              key={appointment.id}
-              appointment={appointment}
-              index={index + 1}
-            />
-          ))}
-        </tbody>
-      </table>
+      {uniqueAppointments.length > 0 ? (
+        <table className="table-auto w-full">
+          <thead className="bg-cyan-50 rounded-md overflow-hidden">
+            <tr>
+              <th>#</th>
+              <th>Photo</th>
+              <th>Name</th>
+              <th>Surname</th>
+              <th>Blood Group</th>
+              <th>Gender</th>
+              <th>Age</th>
+              <th>Phone Number</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {uniqueAppointments.map((appointment, index) => (
+              <ListPatients
+                key={appointment.id}
+                appointment={appointment}
+                index={index + 1}
+              />
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No patients found.</p>
+      )}
     </div>
   );
 };

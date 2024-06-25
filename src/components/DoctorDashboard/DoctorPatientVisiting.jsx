@@ -13,6 +13,8 @@ import {
   useGetTreatmentByIdQuery,
   useAddNewPrescriptionMutation,
   useAddNewPrescriptionMedicineMutation,
+  useGetPrescriptionsQuery,
+  useGetPrescriptionMedicinesByTreatmentIdQuery,
 } from "../../redux/features/api/apiSlice";
 import BloodType from "../Dasboards/Services/BloodType";
 import ModalMedicine from "./ModalMedicine";
@@ -48,18 +50,16 @@ const DoctorPatientVisiting = () => {
   });
 
   const {
-    data: treatments = [],
+    data: treatments,
     isLoading: isLoadingTreatments,
     isError: isErrorTreatments,
   } = useGetTreatmentsQuery();
 
-  const {
-    data: treatment,
-    isLoading: isLoadingTreatment,
-    isError: isErrorTreatment,
-  } = useGetTreatmentByIdQuery(treatmentId, {
-    skip: !treatmentId,
-  });
+  const { data: prescriptions } = useGetPrescriptionsQuery();
+  const { data: prescriptionMedicinesByTreatmentId } =
+    useGetPrescriptionMedicinesByTreatmentIdQuery(treatmentId, {
+      skip: !treatmentId,
+    });
 
   const [addNewTreatment] = useAddNewTreatmentMutation();
   const [addNewPrescription] = useAddNewPrescriptionMutation();
@@ -88,23 +88,17 @@ const DoctorPatientVisiting = () => {
           patientId,
           apointmentId: appointmentId,
           complains: values.complains,
-          diagnosis: values.diagnosis,
+          diognasis: values.diagnosis,
           vitalSigns: values.vitalSigns,
           treatmentDetails: values.treatmentDetails,
-          prescriptions: selectedMedicinesData.map((medicine) => ({
-            description: medicine.description,
-            prescriptionMedicines: medicine.medicines.map((med) => ({
-              medicineId: med.id,
-              dosage: med.dosage,
-              instruction: med.instruction,
-              description: med.description,
-            })),
-          })),
         };
 
         const result = await updateTreatment({
           id: treatmentId,
-          updatedTreatment: treatmentData,
+          updatedTreatment: {
+            id: treatmentId,
+            ...treatmentData,
+          },
         });
 
         const resultPR = await addNewPrescription({
@@ -112,20 +106,29 @@ const DoctorPatientVisiting = () => {
           description: values.treatmentDetails,
         });
 
-        console.log("result", result);
-        console.log("resultPR", resultPR);
+        console.log("Prescription Result:", resultPR.data);
 
         const promises = selectedMedicinesData.map((medicine) =>
-          medicine.medicines.map((med) =>
-            addNewPrescriptionMedicine({
+          medicine.medicines.map((med) => {
+            const instructionValue = med.instructions === "before meal" ? 0 : 1;
+            const prescriptionMedicineData = {
               prescriptionId: resultPR.data.id,
               medicineId: med.id,
               dosage: med.dosage || "No dosage",
-              instruction: med.instruction || "No instruction",
+              instruction: instructionValue,
               description: med.description || "No description",
-            })
-          )
+              morningUsage: medicine.dosages.morning ?? false,
+              afternoonUsage: medicine.dosages.afternoon ?? false,
+              eveningUsage: medicine.dosages.evening ?? false,
+            };
+            console.log(
+              "Prescription Medicine Data:",
+              prescriptionMedicineData
+            );
+            return addNewPrescriptionMedicine(prescriptionMedicineData);
+          })
         );
+
         await Promise.all(promises.flat());
 
         toast.success("The treatment has been created successfully.", {
@@ -139,7 +142,7 @@ const DoctorPatientVisiting = () => {
           theme: "colored",
         });
       } catch (error) {
-        console.log(error);
+        console.error("Error creating treatment or prescription:", error);
         toast.error("An error occurred while creating the treatment.", {
           position: "bottom-left",
           autoClose: 2000,
@@ -157,53 +160,78 @@ const DoctorPatientVisiting = () => {
 
   useEffect(() => {
     const checkAndCreateTreatment = async () => {
-      const existingTreatment = treatments.find(
-        (treatment) => treatment.apointmentId === appointmentId
-      );
-      console.log(existingTreatment);
-      if (existingTreatment) {
-        setTreatmentId(existingTreatment.id);
-        formik.setValues({
-          complains: existingTreatment.complains,
-          diagnosis: existingTreatment.diognasis,
-          vitalSigns: existingTreatment.vitalSigns,
-          treatmentDetails: existingTreatment.treatmentDetails,
-          prescriptions: existingTreatment.prescriptions || [],
+      try {
+        const existingTreatment = treatments?.find((treatment) => {
+          console.log(
+            `Checking treatment ${treatment.id} with appointmentId ${treatment.apointmentId}`
+          );
+          return treatment.apointmentId === appointmentId;
         });
-      } else {
-        const result = await addNewTreatment({
-          doctorId: doctorIdNumber,
-          patientId,
-          apointmentId: appointmentId,
-          complains: "",
-          diognasis: "",
-          vitalSigns: "",
-          treatmentDetails: "",
-        });
-        setTreatmentId(result.data.id);
+        console.log("existingTreatment:", existingTreatment);
+
+        if (existingTreatment) {
+          console.log("Existing treatment found:", existingTreatment);
+          setTreatmentId(existingTreatment.id);
+
+          // Update formik values with the existing treatment data
+          formik.setValues({
+            complains: existingTreatment.complains || "",
+            diagnosis: existingTreatment.diognasis || "",
+            vitalSigns: existingTreatment.vitalSigns || "",
+            treatmentDetails: existingTreatment.treatmentDetails || "",
+            prescriptions: prescriptions
+              .filter(
+                (prescription) =>
+                  prescription.treatmentId === existingTreatment.id
+              )
+              .map((prescription) => ({
+                ...prescription,
+                medicines:
+                  prescriptionMedicinesByTreatmentId?.filter(
+                    (medicine) => medicine.prescriptionId === prescription.id
+                  ) || [],
+              })),
+          });
+        } else {
+          console.log("Creating new treatment...");
+          const result = await addNewTreatment({
+            doctorId: doctorIdNumber,
+            patientId,
+            apointmentId: appointmentId,
+            complains: "",
+            diognasis: "",
+            vitalSigns: "",
+            treatmentDetails: "",
+          });
+          if (result.data && result.data.id) {
+            console.log("New treatment created:", result.data);
+            setTreatmentId(result.data.id);
+          } else {
+            throw new Error("Failed to create new treatment");
+          }
+        }
+      } catch (error) {
+        console.error("Error in checkAndCreateTreatment:", error);
       }
     };
 
-    if (appointmentId) {
+    if (appointmentId && treatments) {
       checkAndCreateTreatment();
     }
-  }, [appointmentId, treatments, doctorIdNumber, patientId]);
+  }, [
+    appointmentId,
+    treatments,
+    doctorIdNumber,
+    patientId,
+    prescriptions,
+    prescriptionMedicinesByTreatmentId,
+  ]);
 
-  if (
-    isLoadingPatient ||
-    isLoadingAppointment ||
-    isLoadingTreatments ||
-    isLoadingTreatment
-  ) {
+  if (isLoadingPatient || isLoadingAppointment || isLoadingTreatments) {
     return <div>Loading...</div>;
   }
 
-  if (
-    isErrorPatient ||
-    isErrorAppointment ||
-    isErrorTreatments ||
-    isErrorTreatment
-  ) {
+  if (isErrorPatient || isErrorAppointment || isErrorTreatments) {
     return <div>Error loading data.</div>;
   }
 
@@ -218,6 +246,12 @@ const DoctorPatientVisiting = () => {
   const formatTime = (timeStr) => {
     const time = new Date(`1970-01-01T${timeStr}Z`);
     return isNaN(time.getTime()) ? "--" : format(time, "HH:mm");
+  };
+
+  const handleRemoveMedicine = (medicineId) => {
+    setSelectedMedicinesData((prevState) =>
+      prevState.filter((medicine) => medicine.id !== medicineId)
+    );
   };
 
   return (
@@ -410,7 +444,7 @@ const DoctorPatientVisiting = () => {
                             </div>
                             <div>
                               Dosages:{" "}
-                              {Object.entries(medicine.dosages)
+                              {Object.entries(medicine.dosages || {})
                                 .filter(([key, value]) => value)
                                 .map(([key]) => key)
                                 .join(", ")}
@@ -419,11 +453,7 @@ const DoctorPatientVisiting = () => {
                           <button
                             type="button"
                             className="w-12 h-10 bg-cyan-100 text-cyan-600 rounded-md flex justify-center items-center mr-4"
-                            onClick={() =>
-                              setSelectedMedicinesData((prevState) =>
-                                prevState.filter((_, idx) => idx !== index)
-                              )
-                            }>
+                            onClick={() => handleRemoveMedicine(medicine.id)}>
                             <svg
                               stroke="currentColor"
                               fill="currentColor"
@@ -508,6 +538,7 @@ const DoctorPatientVisiting = () => {
       {isModalOpen && (
         <ModalMedicine
           onConfirm={(medicinesData) => {
+            console.log("Medicines Data from Modal:", medicinesData);
             setSelectedMedicinesData([...selectedMedicinesData, medicinesData]);
             setIsModalOpen(false);
           }}

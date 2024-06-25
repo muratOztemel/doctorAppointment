@@ -1,26 +1,18 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import {
   useGetPatientByIdQuery,
   useGetAppointmentsByPatientAndDateQuery,
 } from "../../../redux/features/api/apiSlice.js";
-import Spinner from "../../UI/Spinner.jsx";
-import { FaBoxArchive, FaRegCalendarDays, FaUser } from "react-icons/fa6";
 import BloodType from "../Services/BloodType.jsx";
-import { Link } from "react-router-dom";
-import { countries } from "../Services/Countries.jsx";
-import { bloodGroups } from "../Services/BloodGroups.jsx";
 import { format } from "date-fns";
 import PatientStickyLink from "../Services/PatientStickyLink.jsx";
 
 const PatientProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id: patientId } = useParams();
+  const { id, pid: patientId } = useParams();
   const selectedDate = new Date().toISOString().split("T")[0]; // Set the selected date to today
 
   const {
@@ -43,7 +35,7 @@ const PatientProfile = () => {
   if (isLoading || isLoadingAppointment) return <p>Loading...</p>;
   if (isError || isErrorAppointment) return <p>Error fetching patient.</p>;
 
-  const patientName = `${patient.name}${patient.surname}`;
+  const patientName = `${patient.name} ${patient.surname}`;
 
   return (
     <>
@@ -68,9 +60,7 @@ const PatientProfile = () => {
               </span>
             </div>
             <div className="p-4 ml-36">
-              <h1 className="text-xl font-semibold">
-                {patient.name} {patient.surname}
-              </h1>
+              <h1 className="text-xl font-semibold">{patientName}</h1>
               <p className="text-xs text-gray-500">{patient.phone}</p>
             </div>
           </div>
@@ -88,7 +78,7 @@ const PatientProfile = () => {
                 ? "/images/female.png"
                 : "/images/agender.png"
             }
-            alt={`${patient.name} ${patient.surname}`}
+            alt={`${patientName}`}
             className="mt-[-120px] ml-[100px] w-36 h-36 rounded-full object-cover border border-dashed border-cyan-500 p-2 items-center"
           />
         </div>
@@ -96,15 +86,14 @@ const PatientProfile = () => {
         <div className="grid grid-cols-12 gap-6 my-8 items-center">
           <div className="col-span-12 flex flex-col items-center justify-center gap-6 lg:col-span-4 bg-white rounded-xl border-[1px] border-border p-6 lg:sticky top-28 ">
             <div className="gap-2 flex-col justify-center items-center text-center">
-              <h2 className="text-sm font-semibold">
-                {patient.name} {patient.surname}
-              </h2>
+              <h2 className="text-sm font-semibold">{patientName}</h2>
               <p className="text-xs text-gray-500">{patient.email}</p>
               <p className="text-xs">{patient.phone}</p>
             </div>
 
             <div className="flex flex-col items-center justify-center gap-3 px-2 xl:px-12 w-full">
               <PatientStickyLink
+                id={id}
                 patientId={patientId}
                 patientName={patientName}
               />
@@ -126,7 +115,14 @@ const PatientProfile = () => {
                         "yyyy-MM-dd"
                       )}
                     </span>
-                    <span>{appointment.appointmentTime}</span>
+                    <span>
+                      {format(
+                        `${appointment.appointmentDate.substring(0, 10)}T${
+                          appointment.appointmentTime
+                        }`,
+                        "HH:mm"
+                      )}
+                    </span>
                     <span>{appointment.doctorFullName}</span>
                     <span>{appointment.branchName}</span>
                     <span>{appointment.status}</span>
