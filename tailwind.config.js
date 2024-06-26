@@ -5,6 +5,9 @@ export default {
     extend: {},
   },
   plugins: [
+    require("tailwindcss/plugin")(({ addVariant }) => {
+      addVariant("search-cancel", "&::-webkit-search-cancel-button");
+    }),
     function ({ addUtilities }) {
       const newUtilities = {
         ".hide-scrollbar": {

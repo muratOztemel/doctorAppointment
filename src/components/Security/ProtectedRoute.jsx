@@ -1,26 +1,27 @@
-import { useEffect } from "react";
-import { array } from "prop-types";
 import { useSelector } from "react-redux";
-import { useNavigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { useAuthHandler } from "../../components/hooks/useAuthHandler";
+import useTokenExpirationHandler from "../../components/hooks/useTokenExpirationHandler";
 
-const ProtectedRoute = ({ allowedRoles }) => {
+const ProtectedRoute = ({ children, allowedRoles }) => {
   const { userRole } = useSelector((state) => state.users.userLogin);
-  const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const isCheckingToken = useAuthHandler(); // Token kontrolü burada yapılacak
+  useTokenExpirationHandler(); // Token süresi kontrolü burada yapılacak
 
-  useEffect(() => {
-    if (!token) {
-      navigate("/auth/login"); // Token yoksa kullanıcıyı giriş sayfasına yönlendir
-    } else if (!allowedRoles.includes(userRole)) {
-      navigate("/unauthorized"); // Kullanıcının rolü izin verilenler arasında değilse yetkisiz sayfasına yönlendir
-    }
-  }, [navigate, allowedRoles, token, userRole]);
+  if (isCheckingToken) {
+    return <div>Loading...</div>; // Token kontrolü yapılırken yükleme ekranı
+  }
 
-  return <Outlet />;
-};
+  if (!token) {
+    return <Navigate to="/auth/login" />;
+  }
 
-ProtectedRoute.propTypes = {
-  allowedRoles: array.isRequired,
+  if (!allowedRoles.includes(userRole)) {
+    return <Navigate to="/unauthorized" />;
+  }
+
+  return children;
 };
 
 export default ProtectedRoute;

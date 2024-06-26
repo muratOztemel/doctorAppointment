@@ -20,6 +20,8 @@ import { Link } from "react-router-dom";
 import { countries } from "../Services/Countries";
 import { bloodGroups } from "../Services/BloodGroups";
 import { format } from "date-fns";
+import { toast } from "react-toastify";
+import PatientStickyLink from "../Services/PatientStickyLink.jsx";
 
 const PatientProfile = () => {
   const dispatch = useDispatch();
@@ -31,7 +33,7 @@ const PatientProfile = () => {
     isError,
     isLoading,
   } = useGetPatientByIdQuery(patientId);
-  const [updatePatient, { isSuccess }] = useUpdatePatientMutation();
+  const [updatePatient] = useUpdatePatientMutation();
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [nationality, setNationality] = useState("TC");
@@ -49,6 +51,7 @@ const PatientProfile = () => {
       gender: "",
       email: "",
       phoneNumber: "",
+      bloodGroup: "",
       photo: null,
     },
     validationSchema: Yup.object({
@@ -64,7 +67,7 @@ const PatientProfile = () => {
       email: Yup.string().email("Invalid email address"),
       phoneNumber: Yup.string(),
     }),
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       const formData = new FormData();
       Object.keys(values).forEach((key) => {
         if (key === "photo" && file) {
@@ -73,7 +76,38 @@ const PatientProfile = () => {
           formData.append(key, values[key]);
         }
       });
-      updatePatient({ id, formData });
+      await updatePatient({
+        id: patient.id,
+        updatedPatient: {
+          id: patient.id,
+          name: values.name,
+          surname: values.surname,
+          nationality: values.nationality,
+          identyType: values.identyType,
+          identyNo: values.identyNo,
+          country: values.country,
+          language: values.language,
+          birthDate: values.birthDate,
+          gender: Number(values.gender),
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+          bloodGroup: Number(values.bloodGroup),
+          photo: file?.name
+            ? `/images/fotos/patients/${file.name}`
+            : patient.photo,
+          userId: patient.userId,
+        },
+      });
+      toast.success("Your profile has been updated successfully.", {
+        position: "bottom-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     },
   });
 
@@ -92,6 +126,7 @@ const PatientProfile = () => {
         email: patient.email,
         phoneNumber: patient.phoneNumber,
         photo: patient.photo,
+        bloodGroup: patient.bloodGroup,
       });
       if (patient.photo) {
         setPreview(patient.photo);
@@ -113,10 +148,22 @@ const PatientProfile = () => {
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error fetching patient.</p>;
-  if (isSuccess) return <p>Patient updated successfully!</p>;
 
   const inputClass =
-    "block w-60 h-10 pl-4 pr-4 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none";
+    "block w-full h-10 pl-4 pr-4 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none";
+
+  const bloodTypeOptions = [
+    { id: 1, label: "A+" },
+    { id: 2, label: "A-" },
+    { id: 3, label: "B+" },
+    { id: 4, label: "B-" },
+    { id: 5, label: "AB+" },
+    { id: 6, label: "AB-" },
+    { id: 7, label: "0+" },
+    { id: 8, label: "0-" },
+  ];
+
+  const patientName = `${patient.name} ${patient.surname}`;
 
   return (
     <>
@@ -164,10 +211,11 @@ const PatientProfile = () => {
             alt={`${patient.name} ${patient.surname}`}
             className="mt-[-120px] ml-[100px] w-36 h-36 rounded-full object-cover border border-dashed border-cyan-500 p-2 items-center"
           />
+          <div className="mt-[-146px] ml-[100px] w-36 h-36 rounded-full bg-white p-2 items-center"></div>
         </div>
 
         <div className="grid grid-cols-12 gap-6 my-8 items-start">
-          <div className="col-span-12 flex flex-col items-center justify-center gap-6 lg:col-span-4 bg-white rounded-xl border-[1px] border-border p-6 lg:sticky top-28 ">
+          <div className="col-span-12 flex flex-col items-center justify-center gap-6 lg:col-span-4 bg-white rounded-xl border-[1px] p-6 lg:sticky top-28 ">
             <div className="gap-2 flex-col justify-center items-center text-center">
               <h2 className="text-sm font-semibold">
                 {patient.name} {patient.surname}
@@ -176,26 +224,14 @@ const PatientProfile = () => {
               <p className="text-xs">{patient.phone}</p>
             </div>
 
-            <div className="flex flex-col gap-3 px-2 xl:px-12 w-full">
-              <Link
-                to="/addMedical"
-                className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaBoxArchive /> Medical Records
-              </Link>
-              <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaRegCalendarDays />
-                Appointments
-              </button>
-              <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaUser /> Patient information
-              </button>
-              <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaHeartPulse />
-                Health information
-              </button>
+            <div className="flex flex-col justify-center items-center gap-3 px-2 xl:px-12 w-full">
+              <PatientStickyLink
+                patientId={patientId}
+                patientName={patientName}
+              />
             </div>
           </div>
-          <div className="col-span-12 lg:col-span-8 bg-white rounded-xl border-[1px] border-border p-6">
+          <div className="col-span-12 lg:col-span-8 bg-white rounded-xl p-6 border-[1px]">
             <div className="flex flex-col gap-6">
               <form
                 onSubmit={formik.handleSubmit}
@@ -259,13 +295,13 @@ const PatientProfile = () => {
                     value={formik.values.bloodGroup}
                     className={inputClass}>
                     <option>Select Blood Group</option>
-                    {bloodGroups.map((bloodGroup) => (
-                      <option key={bloodGroup} value={bloodGroup}>
+                    {bloodTypeOptions.map((bloodGroup) => (
+                      <option key={bloodGroup.id} value={bloodGroup.id}>
                         {patient.bloodGroup === ""
                           ? "Select Blood Group"
-                          : bloodGroup === patient.bloodGroup
-                          ? bloodGroup
-                          : bloodGroup}
+                          : bloodGroup.id === patient.bloodGroup
+                          ? bloodGroup.label
+                          : bloodGroup.label}
                       </option>
                     ))}
                   </select>
@@ -357,19 +393,6 @@ const PatientProfile = () => {
                     </small>
                   )}
                 </div>
-                <div>
-                  <label htmlFor="surname">Surname</label>
-                  <input
-                    id="surname"
-                    name="surname"
-                    type="text"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    value={formik.values.surname}
-                    className={inputClass}
-                  />
-                </div>
-
                 <div>
                   <label htmlFor="file">Profile Image</label>
                   <input

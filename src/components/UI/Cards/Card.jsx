@@ -5,7 +5,7 @@ const Card = ({ icon, title, children, className, color }) => {
   const textColor = `text-${color}-500`;
   return (
     <div
-      className={`bg-white rounded-xl border-[1px] border-dashed border-cyan-500 p-3 ${className}`}>
+      className={`bg-white rounded-xl border-[1px] border-gray-200 p-3 ${className}`}>
       <div className="flex gap-4 items-center">
         <div
           className={`${bgColor} ${textColor} w-10 h-10 flex flex-col justify-center items-center bg-opacity-10 rounded-md`}>

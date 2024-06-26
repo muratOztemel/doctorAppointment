@@ -4,11 +4,9 @@ import { authRoutes } from "./routes/authRoutes";
 import { adminRoutes } from "./routes/adminRoutes";
 import { doctorRoutes } from "./routes/doctorRoutes";
 import { patientRoutes } from "./routes/patientRoutes";
-import { useAuthChecker } from "./components/hooks/AuthChecker";
+import "tippy.js/dist/tippy.css";
 
 const App = () => {
-  useAuthChecker();
-
   const router = createBrowserRouter([
     ...mainRoutes,
     ...authRoutes,

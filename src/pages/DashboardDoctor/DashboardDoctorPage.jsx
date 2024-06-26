@@ -1,4 +1,6 @@
+import DashboardDoctorHome from "./DashboardDoctorHome";
+
 const DashboardDoctorPage = () => {
-  return <div>dashboardDoctorPage</div>;
+  return <DashboardDoctorHome />;
 };
 export default DashboardDoctorPage;

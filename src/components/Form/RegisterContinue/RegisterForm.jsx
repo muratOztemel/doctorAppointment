@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAddNewPatientMutation } from "../../../redux/features/api/apiSlice";
 import Spinner from "../../UI/Spinner";
 import { registerData } from "./registerData";
@@ -60,7 +60,7 @@ const RegisterForm = () => {
         };
 
         await addNewPatient(newPatientData);
-        navigate(`/dashboardPatient`);
+        navigate(`/dashboard/patient`);
       } catch (err) {
         console.error("Error adding new product:", err);
       }

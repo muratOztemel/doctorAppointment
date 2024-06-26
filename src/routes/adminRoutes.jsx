@@ -18,11 +18,22 @@ import BranchesList from "../components/Dasboards/Branches/BranchesList";
 import ProtectedRoute from "../components/Security/ProtectedRoute";
 import Settings from "../components/Dasboards/Settings/Settings";
 import UserRolesForm from "../components/Dasboards/UserRoles/UserRolesForm";
+import PatientAppointments from "../components/Dasboards/Appointments/PatientAppointments";
+import PatientMedicalRecords from "../components/Dasboards/Medical/PatientMedicalRecords";
+import DoctorPatients from "../components/Dasboards/Doctors/DoctorPatients";
+import DoctorAppointments from "../components/Dasboards/Doctors/DoctorAppointments";
+import DoctorWorkingDays from "../components/Dasboards/Doctors/DoctorWorkingDays";
+import DoctorHolidays from "../components/Dasboards/Doctors/DoctorHolidays";
+import DoctorChangePassword from "../components/Dasboards/Doctors/DoctorChangePassword";
 
 export const adminRoutes = [
   {
     path: "/dashboard/admin/",
-    element: <DashboardAdminLayout />,
+    element: (
+      <ProtectedRoute allowedRoles={["Admin"]}>
+        <DashboardAdminLayout />
+      </ProtectedRoute>
+    ),
     errorElement: <ErrorPage />,
     children: [
       {
@@ -46,6 +57,14 @@ export const adminRoutes = [
         element: <DoctorProfile />,
       },
       {
+        path: "doctorPatients/:id/:name",
+        element: <DoctorPatients />,
+      },
+      {
+        path: "doctorAppointments/:id/:name",
+        element: <DoctorAppointments />,
+      },
+      {
         path: "addDoctor",
         element: <AddDoctor />,
       },
@@ -54,7 +73,27 @@ export const adminRoutes = [
         element: <DashboardAdminAppointmentsPage />,
       },
       {
-        path: "appointment/:id/:pname/:dname",
+        path: "appointment/:id/:pid/:name",
+        element: <PatientAppointments />,
+      },
+      {
+        path: "doctorWorkingDays/:id/:name",
+        element: <DoctorWorkingDays />,
+      },
+      {
+        path: "doctorHolidays/:id/:name",
+        element: <DoctorHolidays />,
+      },
+      {
+        path: "password/:id/:name",
+        element: <DoctorChangePassword />,
+      },
+      {
+        path: "medical/:id/:name",
+        element: <PatientMedicalRecords />,
+      },
+      {
+        path: "appointments/:id/:pname",
         element: <AppointmentProfile />,
       },
       {

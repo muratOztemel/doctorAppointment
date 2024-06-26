@@ -20,6 +20,7 @@ import {
 import { countries } from "../Services/Countries";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
+import DoctorStickyLink from "../Services/DoctorStickyLink.jsx";
 
 const DoctorProfile = () => {
   const dispatch = useDispatch();
@@ -102,11 +103,11 @@ const DoctorProfile = () => {
           name: values.name,
           surname: values.surname,
           title: values.title,
-          userId: 0,
+          userId: doctor.userId,
         },
       });
 
-      await updateDoctorInfos({
+      const result = await updateDoctorInfos({
         id: doctorInfo.id,
         updatedDoctorInfos: {
           id: doctorInfo.id,
@@ -130,6 +131,7 @@ const DoctorProfile = () => {
           articles: values.articles,
         },
       });
+      console.log(result);
       toast.success("Your transaction has been completed successfully.", {
         position: "bottom-left",
         autoClose: 2000,
@@ -194,11 +196,13 @@ const DoctorProfile = () => {
   };
 
   const inputClass =
-    "block w-60 h-10 pl-4 pr-4 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none";
+    "block w-full h-10 pl-4 pr-4 py-2 text-lg text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none";
 
   if (isError) return <div>Error: {isError.toString()}</div>;
 
   if (isLoading) return <Spinner />;
+
+  const doctorName = `${doctor?.name} ${doctor?.surname}`;
 
   return (
     <>
@@ -223,9 +227,7 @@ const DoctorProfile = () => {
               </span>
             </div>
             <div className="p-4 ml-36">
-              <h1 className="text-xl font-semibold">
-                {doctor.name} {doctor.surname}
-              </h1>
+              <h1 className="text-xl font-semibold">{doctorName}</h1>
               <p className="text-xs text-gray-500">
                 {doctor?.doctorInfo?.phoneNumber}
               </p>
@@ -241,45 +243,25 @@ const DoctorProfile = () => {
                 ? doctor.doctorInfo.photo
                 : ""
             }
-            alt={`${doctor.name} ${doctor.surname}`}
+            alt={doctorName}
             className="mt-[-120px] ml-[100px] w-36 h-36 rounded-full object-cover border border-dashed border-cyan-500 p-2 items-center"
           />
         </div>
 
         <div className="grid grid-cols-12 gap-6 my-8 items-start">
-          <div className="col-span-12 flex flex-col items-center justify-center gap-6 lg:col-span-4 bg-white rounded-xl border-[1px] border-cyan-500 p-6 lg:sticky top-28 ">
+          <div className="col-span-12 flex flex-col items-center justify-center gap-6 lg:col-span-4 bg-white rounded-xl border-[1px] p-6 lg:sticky top-28 ">
             <div className="gap-2 flex-col justify-center items-center text-center">
-              <h2 className="text-sm font-semibold">
-                {doctor.name} {doctor.surname}
-              </h2>
+              <h2 className="text-sm font-semibold">{doctorName}</h2>
               <p className="text-xs text-gray-500">{doctor.email}</p>
               <p className="text-xs">{doctor.phone}</p>
             </div>
 
-            <div className="flex flex-col gap-3 px-2 xl:px-12 w-full">
-              <Link className=" bg-cyan-500  text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaUserDoctor />
-                Personal Information
-              </Link>
-              <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaUser />
-                Patients
-              </button>
-              <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaRegCalendarDays /> Appointments
-              </button>
-              <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <TbLockAccess />
-                Access Control
-              </button>
-              <button className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <RiLockPasswordLine />
-                Change Password
-              </button>
+            <div className="flex flex-col justify-center items-center gap-3 px-2 xl:px-12 w-full">
+              <DoctorStickyLink doctorId={doctorId} doctorName={doctorName} />
             </div>
           </div>
 
-          <div className="grid grid-cols-3  gap-3 lg:col-span-8 bg-white rounded-xl border-[1px] border-cyan-500 p-6">
+          <div className="grid grid-cols-3  gap-3 lg:col-span-8 bg-white rounded-xl border-[1px] p-6">
             <form
               onSubmit={formik.handleSubmit}
               className="grid grid-cols-3 gap-3 lg:col-span-8">

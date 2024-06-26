@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { useGetPatientByIdQuery } from "../../../redux/features/api/apiSlice";
+import { useGetUserByIdQuery } from "../../../redux/features/api/apiSlice";
 import { setUserLogin } from "../../../redux/slices/usersSlice";
 import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
@@ -11,8 +11,8 @@ const UserLoginManager = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { userId } = useSelector((state) => state.users);
-  const { data: patient, isError, isLoading } = useGetPatientByIdQuery(userId);
+  const { userId } = useSelector((state) => state.users.userLogin);
+  const { data: user, isError, isLoading } = useGetUserByIdQuery(userId);
 
   const handleLogout = () => {
     // User token delete in localstorage
@@ -46,14 +46,14 @@ const UserLoginManager = () => {
       {dropdownOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
           <Link
-            to="/settings"
+            to="/dashboard/admin/settings"
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="flex justify-start items-center px-4 py-2 font-semibold text-sm text-gray-700 hover:bg-gray-100">
             <FaUser className="ml-0.5 mr-2 text-slate-500 w-4 h-4" />
             Profile
           </Link>
           <Link
-            to="/settings"
+            to="/dashboard/admin/settings"
             onClick={() => setDropdownOpen(!dropdownOpen)}
             className="flex justify-start items-center px-4 py-2 font-semibold text-sm text-gray-700 hover:bg-gray-100">
             <IoSettings className="mr-2 text-slate-500 w-5 h-5" />

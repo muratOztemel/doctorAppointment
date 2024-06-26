@@ -18,10 +18,10 @@ export const usersSlice = createSlice({
       state.userLogin = action.payload;
     },
     clearUser: (state) => {
-      state.userId = null;
-      state.username = null;
-      state.token = null;
-      state.userRole = null;
+      state.userLogin.userId = null;
+      state.userLogin.username = null;
+      state.userLogin.token = null;
+      state.userLogin.userRole = null;
     },
   },
 });

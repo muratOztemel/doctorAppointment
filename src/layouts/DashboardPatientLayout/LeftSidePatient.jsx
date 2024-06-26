@@ -1,53 +1,70 @@
-import { NavLink } from "react-router-dom";
-import { IoHome, IoSettingsOutline } from "react-icons/io5";
+import { NavLink, useNavigate } from "react-router-dom";
+import { IoHome, IoLogOut, IoSettingsOutline } from "react-icons/io5";
 import { FaUserInjured } from "react-icons/fa";
 import { FaUserDoctor } from "react-icons/fa6";
-import { LuCalendarSearch } from "react-icons/lu";
 import { AiFillMedicineBox } from "react-icons/ai";
+import { TbClockRecord } from "react-icons/tb";
+import { useDispatch } from "react-redux";
+import { clearUser } from "../../redux/slices/usersSlice";
 
 const LeftSidePatient = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const linkDizi = [
     {
       id: 1,
       name: "Dashboard",
       pageName: "DashboardHome",
-      path: "/dashboardAdmin",
+      path: "/dashboard/patient",
       icon: <IoHome />,
+      end: true,
     },
     {
       id: 2,
-      name: "Profile",
-      pageName: "PatientProfile",
-      path: "/dashboardPatientProfile",
-      icon: <FaUserInjured />,
+      name: "My Appointments",
+      pageName: "myAppointments",
+      path: "/dashboard/patient/appointments",
+      icon: <TbClockRecord />,
     },
     {
       id: 3,
-      name: "Doctors",
+      name: "My Doctors",
       pageName: "DoctorsHome",
-      path: "/doctors",
+      path: "/dashboard/patient/mydoctors",
       icon: <FaUserDoctor />,
     },
     {
       id: 4,
-      name: "Appointments",
-      pageName: "AppointmentsHome",
-      path: "/appointments",
-      icon: <LuCalendarSearch />,
-    },
-    {
-      id: 5,
-      name: "Medicine",
-      pageName: "MedicineHome",
-      path: "/medicine",
+      name: "My Medical Record",
+      pageName: "MyMedicalRecord",
+      path: "/dashboard/patient/medicalRecords",
       icon: <AiFillMedicineBox />,
     },
     {
+      id: 5,
+      name: "My Profile",
+      pageName: "PatientProfile",
+      path: "/dashboard/patient/profile",
+      icon: <FaUserInjured />,
+    },
+    {
       id: 6,
-      name: "Settings",
+      name: "My Settings",
       pageName: "SettingsHome",
-      path: "/settings",
+      path: "/dashboard/patient/settings",
       icon: <IoSettingsOutline />,
+    },
+    {
+      id: 7,
+      name: "Logout",
+      pageName: "Logout",
+      path: "/auth/login",
+      icon: <IoLogOut className="text-red-500 w-6 h-6" />,
+      onClick: () => {
+        localStorage.removeItem("token");
+        dispatch(clearUser());
+        navigate("/auth/login");
+      },
     },
   ];
 
@@ -80,10 +97,11 @@ const LeftSidePatient = () => {
             </div>
           </div>
         </li>
-        {linkDizi.map(({ id, path, icon, name }) => (
+        {linkDizi.map(({ id, path, icon, name, end }) => (
           <li key={id}>
             <NavLink
               to={path}
+              end={end}
               className={({ isActive }) =>
                 `relative flex flex-row items-center h-11 focus:outline-none dark:hover:bg-gray-600 text-white-600 hover:text-white-800 border-l-4 border-transparent hover:border-cyan-500 dark:hover:border-gray-800 pr-6 ${
                   isActive ? "bg-cyan-100 border-cyan-500" : "hover:bg-cyan-50 "
