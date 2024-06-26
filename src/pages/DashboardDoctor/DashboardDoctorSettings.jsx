@@ -103,9 +103,19 @@ const DashboardDoctorSettings = () => {
   });
 
   const passwordFormik = useFormik({
-    initialValues: { password: "" },
+    initialValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
     validationSchema: Yup.object({
-      password: Yup.string().required("Password is required"),
+      currentPassword: Yup.string().required("Current password is required"),
+      newPassword: Yup.string()
+        .min(6, "Password must be at least 6 characters")
+        .required("New password is required"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref("newPassword"), null], "Passwords must match")
+        .required("Confirm password is required"),
     }),
     onSubmit: async (values) => {
       try {
@@ -114,7 +124,7 @@ const DashboardDoctorSettings = () => {
           updatedUser: {
             id: userId,
             email: userData.userName,
-            password: values.password,
+            password: values.newPassword,
             status: true,
           },
         });
@@ -199,33 +209,52 @@ const DashboardDoctorSettings = () => {
                   <input
                     type="text"
                     name="startTime"
+                    onBlur={formik.handleBlur}
                     value={formik.values.startTime}
                     onChange={formik.handleChange}
                     placeholder="Start Time"
                     className={inputClass}
                   />
+                  {formik.touched.startTime && formik.errors.startTime && (
+                    <small className="text-red-600">
+                      {formik.errors.startTime}
+                    </small>
+                  )}
                 </label>
                 <label>
                   End Time:
                   <input
                     type="text"
                     name="endTime"
+                    onBlur={formik.handleBlur}
                     value={formik.values.endTime}
                     onChange={formik.handleChange}
                     placeholder="End Time"
                     className={inputClass}
                   />
+                  {formik.touched.endTime && formik.errors.endTime && (
+                    <small className="text-red-600">
+                      {formik.errors.endTime}
+                    </small>
+                  )}
                 </label>
                 <label>
                   Slot Duration:
                   <input
                     type="text"
                     name="slotDuration"
+                    onBlur={formik.handleBlur}
                     value={formik.values.slotDuration}
                     onChange={formik.handleChange}
                     placeholder="Slot Duration"
                     className={inputClass}
                   />
+                  {formik.touched.slotDuration &&
+                    formik.errors.slotDuration && (
+                      <small className="text-red-600">
+                        {formik.errors.slotDuration}
+                      </small>
+                    )}
                 </label>
               </div>
               <div className="flex gap-4 flex-wrap">
@@ -251,58 +280,107 @@ const DashboardDoctorSettings = () => {
             </form>
           </Card>
 
-          <Card
-            title={"Change Password"}
-            icon={<IoSettingsOutline />}
-            color={"cyan"}
-            className={"mb-6"}>
-            <form
-              onSubmit={passwordFormik.handleSubmit}
-              className="my-6 w-full h-full gap-7 flex flex-col">
-              <label className="w-full">
-                New Password:
-                <input
-                  type="password"
-                  name="password"
-                  value={passwordFormik.values.password}
-                  onChange={passwordFormik.handleChange}
-                  className={inputClass}
-                />
-              </label>
-              <button
-                type="submit"
-                disabled={isLoading || isLoadingUser || isUpdating}
-                className="mt-4 px-4 py-2 bg-green-500 text-white rounded">
-                Change Password
-              </button>
-            </form>
-          </Card>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card
+              title={"Change Password"}
+              icon={<IoSettingsOutline />}
+              color={"cyan"}
+              className={"mb-6"}>
+              <form
+                onSubmit={passwordFormik.handleSubmit}
+                className="my-6 w-full h-full gap-7 flex flex-col">
+                <label className="w-full">
+                  Current Password:
+                  <input
+                    type="password"
+                    name="currentPassword"
+                    onBlur={passwordFormik.handleBlur}
+                    value={passwordFormik.values.currentPassword}
+                    onChange={passwordFormik.handleChange}
+                    className={inputClass}
+                  />
+                  {passwordFormik.touched.currentPassword &&
+                    passwordFormik.errors.currentPassword && (
+                      <small className="text-red-600">
+                        {passwordFormik.errors.currentPassword}
+                      </small>
+                    )}
+                </label>
+                <label className="w-full">
+                  New Password:
+                  <input
+                    type="password"
+                    name="newPassword"
+                    onBlur={passwordFormik.handleBlur}
+                    value={passwordFormik.values.newPassword}
+                    onChange={passwordFormik.handleChange}
+                    className={inputClass}
+                  />
+                  {passwordFormik.touched.newPassword &&
+                    passwordFormik.errors.newPassword && (
+                      <small className="text-red-600">
+                        {passwordFormik.errors.newPassword}
+                      </small>
+                    )}
+                </label>
+                <label className="w-full">
+                  Confirm Password:
+                  <input
+                    type="password"
+                    name="confirmPassword"
+                    onBlur={passwordFormik.handleBlur}
+                    value={passwordFormik.values.confirmPassword}
+                    onChange={passwordFormik.handleChange}
+                    className={inputClass}
+                  />
+                  {passwordFormik.touched.confirmPassword &&
+                    passwordFormik.errors.confirmPassword && (
+                      <small className="text-red-600">
+                        {passwordFormik.errors.confirmPassword}
+                      </small>
+                    )}
+                </label>
+                <button
+                  type="submit"
+                  disabled={isLoading || isLoadingUser || isUpdating}
+                  className="mt-4 px-4 py-2 bg-green-500 text-white rounded">
+                  Change Password
+                </button>
+              </form>
+            </Card>
 
-          <Card
-            title={"Change Email"}
-            icon={<IoSettingsOutline />}
-            color={"cyan"}
-            className={"mb-6"}>
-            <form
-              onSubmit={emailFormik.handleSubmit}
-              className="my-6 w-full h-full gap-7 flex flex-col">
-              <label className="w-full">
-                New Email:
-                <input
-                  type="email"
-                  name="email"
-                  value={emailFormik.values.email}
-                  onChange={emailFormik.handleChange}
-                  className={inputClass}
-                />
-              </label>
-              <button
-                type="submit"
-                className="mt-4 px-4 py-2 bg-green-500 text-white rounded">
-                Change Email
-              </button>
-            </form>
-          </Card>
+            <Card
+              title={"Change Email"}
+              icon={<IoSettingsOutline />}
+              color={"cyan"}
+              className={"mb-6"}>
+              <form
+                onSubmit={emailFormik.handleSubmit}
+                className="my-6 w-full h-full gap-7 flex flex-col">
+                <label className="w-full">
+                  New Email:
+                  <input
+                    type="email"
+                    name="email"
+                    onBlur={emailFormik.handleBlur}
+                    value={emailFormik.values.email}
+                    onChange={emailFormik.handleChange}
+                    className={inputClass}
+                  />
+                  {emailFormik.touched.email && emailFormik.errors.email && (
+                    <small className="text-red-600">
+                      {emailFormik.errors.email}
+                    </small>
+                  )}
+                </label>
+                <button
+                  type="submit"
+                  className="mt-4 px-4 py-2 bg-green-500 text-white rounded">
+                  Change Email
+                </button>
+              </form>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

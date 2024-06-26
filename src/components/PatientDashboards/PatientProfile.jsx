@@ -14,6 +14,7 @@ import BloodType from "../Dasboards/Services/BloodType.jsx";
 import { Link } from "react-router-dom";
 import { countries } from "../Dasboards/Services/Countries.jsx";
 import { toast } from "react-toastify";
+import PatientStickyLink from "./PatientStickyLink.jsx";
 
 const PatientProfile = () => {
   const dispatch = useDispatch();
@@ -205,14 +206,7 @@ const PatientProfile = () => {
             </div>
 
             <div className="flex flex-col gap-3 px-2 xl:px-12 w-full">
-              <Link className="bg-green-500 text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaBoxArchive /> My Profile
-              </Link>
-              <Link
-                to="/dashboard/patient/medicalRecords"
-                className="bg-cyan-50 text-cyan-500 hover:bg-cyan-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-                <FaBoxArchive /> Medical Records
-              </Link>
+              <PatientStickyLink />
             </div>
           </div>
           <div className="col-span-12 lg:col-span-8 bg-white rounded-xl border-[1px] border-cyan-500 p-6">

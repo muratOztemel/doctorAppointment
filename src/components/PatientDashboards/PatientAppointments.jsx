@@ -58,62 +58,88 @@ const PatientAppointments = () => {
   );
 
   return (
-    <>
-      <Card
-        title={"My Appointments"}
-        icon={<TbClockRecord />}
-        color={"cyan"}
-        className={"mb-6"}>
-        <div className="my-6 w-full h-full gap-7 flex flex-col">
-          <div className="flex justify-end">
-            <button
-              onClick={() => setShowPastAppointments(!showPastAppointments)}>
-              {showPastAppointments
-                ? "Show Future Appointments"
-                : "Appointments History"}
-            </button>
-          </div>
-          {!showPastAppointments && (
-            <div className="flex flex-col gap-7">
-              {futureAppointments?.length === 0 ? (
-                <p>No future appointments found.</p>
-              ) : (
-                <>
-                  <p className="flex justify-center items-center text-3xl">
-                    Future Appointments
-                  </p>
-                  {futureAppointments.map((appointment) => (
-                    <AppointmentsList
-                      key={appointment.id}
-                      appointment={appointment}
-                    />
-                  ))}
-                </>
-              )}
-            </div>
-          )}
-          {showPastAppointments && (
-            <div className="flex flex-col gap-7">
-              {pastAppointments?.length === 0 ? (
-                <p>No past appointments found.</p>
-              ) : (
-                <>
-                  <p className="flex justify-center items-center text-3xl">
-                    History of Appointments
-                  </p>
-                  {pastAppointments.map((appointment) => (
-                    <AppointmentsList
-                      key={appointment.id}
-                      appointment={appointment}
-                    />
-                  ))}
-                </>
-              )}
-            </div>
+    <Card
+      title={"My Appointments"}
+      icon={<TbClockRecord />}
+      color={"cyan"}
+      className={"mb-6"}>
+      <div className="my-6 w-full h-full gap-7 flex flex-col">
+        <div className="flex justify-center">
+          <button
+            onClick={() => setShowPastAppointments(!showPastAppointments)}
+            className="px-4 py-2 bg-cyan-500 text-white rounded text-center">
+            {showPastAppointments
+              ? "Show Future Appointments"
+              : "Appointments History"}
+          </button>
+        </div>
+        <div className="flex flex-col gap-7">
+          {showPastAppointments ? (
+            <>
+              <table className="table-auto w-full">
+                <thead className="bg-cyan-50 rounded-md overflow-hidden">
+                  <tr>
+                    <th>Branch</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pastAppointments?.length === 0 ? (
+                    <tr>
+                      <td colSpan="6" className="text-center py-4">
+                        No past appointments found.
+                      </td>
+                    </tr>
+                  ) : (
+                    pastAppointments.map((appointment) => (
+                      <AppointmentsList
+                        key={appointment.id}
+                        appointment={appointment}
+                      />
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <>
+              <table className="table-auto w-full">
+                <thead className="bg-cyan-50 rounded-md overflow-hidden">
+                  <tr>
+                    <th>Branch</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {futureAppointments?.length === 0 ? (
+                    <tr>
+                      <td colSpan="6" className="text-center py-4">
+                        No future appointments found.
+                      </td>
+                    </tr>
+                  ) : (
+                    futureAppointments.map((appointment) => (
+                      <AppointmentsList
+                        key={appointment.id}
+                        appointment={appointment}
+                      />
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </>
           )}
         </div>
-      </Card>
-    </>
+      </div>
+    </Card>
   );
 };
 

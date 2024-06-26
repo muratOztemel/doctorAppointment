@@ -20,6 +20,7 @@ import BloodType from "../Dasboards/Services/BloodType";
 import ModalMedicine from "./ModalMedicine";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
+import PatientStickyLink from "./PatientStickyLink";
 
 const DoctorPatientVisiting = () => {
   const [treatmentId, setTreatmentId] = useState(null);
@@ -254,6 +255,8 @@ const DoctorPatientVisiting = () => {
     );
   };
 
+  const patientName = `${patient?.name} ${patient?.surname}`;
+
   return (
     <>
       <div className="mt-10 flex gap-4 bg-white border border-cyan-500 border-dashed rounded-lg py-3 px-4 text-md w-full">
@@ -310,21 +313,10 @@ const DoctorPatientVisiting = () => {
           </div>
 
           <div className="flex flex-col gap-3 px-2 xl:px-12 w-full">
-            <Link
-              to={`/dashboard/doctor/medicalRecords/${patient.id}/${patient.name}${patient.surname}`}
-              className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-              Medical Records
-            </Link>
-            <Link
-              to={`/dashboard/doctor/patientAppointments/${patient.id}/${patient.name}${patient.surname}`}
-              className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-              Appointments
-            </Link>
-            <Link
-              to={`/dashboard/doctor/patient/${patient.id}/${patient.name}${patient.surname}`}
-              className="bg-green-50 text-green-500 hover:bg-green-500 hover:text-white text-sm gap-4 flex items-center w-full p-4 rounded">
-              Patient information
-            </Link>
+            <PatientStickyLink
+              patientId={patientId}
+              patientName={patientName}
+            />
           </div>
         </div>
         <div className="col-span-12 lg:col-span-8 bg-white rounded-xl border-[1px] border-border p-6">
