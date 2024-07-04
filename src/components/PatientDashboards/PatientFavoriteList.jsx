@@ -9,8 +9,11 @@ import { FaHeart } from "react-icons/fa6";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
+import ConfirmRemoveFavoriteModal from "./ConfirmRemoveFavoriteModal";
 
 const PatientFavoriteList = ({ favorite }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const {
     data: doctorData,
     isLoading: isLoadingDoctorData,
@@ -34,31 +37,37 @@ const PatientFavoriteList = ({ favorite }) => {
 
   const [isRemoving, setIsRemoving] = useState(false);
 
-  const toggleFavorite = async () => {
+  const toggleFavorite = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmRemove = async () => {
     try {
       setIsRemoving(true);
-      setTimeout(async () => {
-        const result = await updateFavorite({
+      const result = await updateFavorite({
+        id: favorite.favoriteId,
+        updatedFavorite: {
           id: favorite.favoriteId,
-          updatedFavorite: {
-            id: favorite.favoriteId,
-            doctorId: favorite.doctorId,
-            status: false,
-          },
-        });
-        toast.success("Doctor removed from favorites.", {
-          position: "bottom-left",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
-      }, 500); // 0.5 saniyelik animasyon süresi
+          doctorId: favorite.doctorId,
+          status: false,
+        },
+      }).unwrap();
+      toast.success("Doctor removed from favorites.", {
+        position: "bottom-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setIsRemoving(false);
+      setIsModalOpen(false);
     } catch (error) {
       toast.error("Failed to update favorites.");
+      setIsRemoving(false);
+      setIsModalOpen(false);
     }
   };
 
@@ -73,50 +82,57 @@ const PatientFavoriteList = ({ favorite }) => {
   const today = format(new Date(), "yyyy-MM-dd");
 
   return (
-    <div className="flex flex-col justify-center items-center text-center 2">
-      <div
-        className={`relative group flex flex-col justify-center items-center text-center ${
-          isRemoving ? "fade-out" : ""
-        }`}>
-        <div className="relative w-36 h-36">
-          <img
-            src={DefaultImage(doctorData?.doctorInfo)}
-            alt={`${doctorData?.name} ${doctorData?.surname}`}
-            className="w-36 h-36 rounded-full object-cover border border-dashed border-cyan-500 p-2 cursor-pointer"
-          />
-          <div
-            onClick={toggleFavorite}
-            className="absolute inset-0 bg-black bg-opacity-0 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer">
-            <span className="text-gray-300 text-lg font-semibold mt-44">
-              remove
-            </span>
+    <>
+      <div className="flex flex-col justify-center items-center text-center">
+        <div
+          className={`relative group flex flex-col justify-center items-center text-center ${
+            isRemoving ? "fade-out" : ""
+          }`}>
+          <div className="relative w-36 h-36">
+            <img
+              src={DefaultImage(doctorData?.doctorInfo)}
+              alt={`${doctorData?.name} ${doctorData?.surname}`}
+              className="w-36 h-36 rounded-full object-cover border border-dashed border-cyan-500 p-2 cursor-pointer"
+            />
+            <div
+              onClick={toggleFavorite}
+              className="absolute inset-0 bg-black bg-opacity-0 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer">
+              <span className="text-gray-300 text-lg font-semibold mt-44">
+                remove
+              </span>
+            </div>
           </div>
+          <FaHeart
+            className="text-red-500 text-3xl -mt-5 z-20 cursor-pointer"
+            onClick={toggleFavorite}
+          />
+          <FaHeart className="w-10 h-10 text-white text-3xl -mt-9 z-10 cursor-pointer" />
+          <div className="text-lg font-semibold mt-2">
+            {doctorData?.title} {doctorData?.name} {doctorData?.surname}
+          </div>
+          <div className="text-gray-500">{branchData?.name}</div>
         </div>
-        <FaHeart
-          className="text-red-500 text-3xl -mt-5 z-20 cursor-pointer"
-          onClick={toggleFavorite}
-        />
-        <FaHeart className="w-10 h-10 text-white text-3xl -mt-9 z-10 cursor-pointer" />
-        <div className="text-lg font-semibold mt-2">
-          {doctorData?.title} {doctorData?.name} {doctorData?.surname}
+        <div className="mt-4 mb-2">
+          <Link
+            to={`/dashboard/patient/getAppointmentDoctor?doctorId=${doctorData?.id}&day=${today}&branchName=${branchData?.name}&doctorName=${doctorData?.name}${doctorData?.surname}`}
+            doctor={doctorData}
+            className="bg-rose-600 text-white p-2 rounded-lg">
+            Get Appointment
+          </Link>
         </div>
-        <div className="text-gray-500">{branchData?.name}</div>
+        <div>
+          <Link
+            to={`/dashboard/patient/doctor/${doctorData?.id}/${doctorData?.name}${doctorData?.surname}`}>
+            View Details
+          </Link>
+        </div>
       </div>
-      <div className="mt-4 mb-2">
-        <Link
-          to={`/dashboard/patient/getAppointmentDoctor?doctorId=${doctorData?.id}&day=${today}&branchName=${branchData?.name}&doctorName=${doctorData?.name}${doctorData?.surname}`}
-          doctor={doctorData}
-          className="bg-rose-600 text-white p-2 rounded-lg">
-          Get Appointment
-        </Link>
-      </div>
-      <div>
-        <Link
-          to={`/dashboard/patient/doctor/${doctorData?.id}/${doctorData?.name}${doctorData?.surname}`}>
-          View Details
-        </Link>
-      </div>
-    </div>
+      <ConfirmRemoveFavoriteModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmRemove}
+      />
+    </>
   );
 };
 
