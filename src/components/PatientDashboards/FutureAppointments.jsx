@@ -27,19 +27,26 @@ const FutureAppointments = () => {
 
   const settings = {
     dots: true,
-    infinite: true,
+    infinite: false, // Set to false to ensure no infinite looping
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
   };
 
+  const uniqueAppointments = futureAppointments.reduce((acc, curr) => {
+    if (!acc.find((appointment) => appointment.id === curr.id)) {
+      acc.push(curr);
+    }
+    return acc;
+  }, []);
+
   return (
     <div className="w-full bg-green-400 mb-6 p-4 text-white rounded">
       <Slider {...settings}>
-        {futureAppointments.length === 0 ? (
+        {uniqueAppointments.length === 0 ? (
           <p>No future appointments found.</p>
         ) : (
-          futureAppointments.map((appointment) => {
+          uniqueAppointments.map((appointment) => {
             const appointmentTime = new Date(appointment.appointmentDate);
             const timeLeft = Math.max(
               (appointmentTime - currentTime) / 1000,

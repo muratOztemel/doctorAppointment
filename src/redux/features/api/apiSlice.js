@@ -729,6 +729,11 @@ export const apiSlice = createApi({
         `PrescriptionMedicines/get-all-by-treatmentid?treatmentId=${id}`,
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
     }),
+    getPrescriptionMedicinesByPrescriptiontId: builder.query({
+      query: (id) =>
+        `PrescriptionMedicines/get-all-by-prescriptionId?prescriptionId=${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
     deletePrescriptionMedicine: builder.mutation({
       query(id) {
         return {
@@ -846,6 +851,7 @@ export const {
   useUpdatePrescriptionMutation,
   useDeletePrescriptionMutation,
   useGetPrescriptionMedicinesByTreatmentIdQuery,
+  useGetPrescriptionMedicinesByPrescriptionIdQuery,
   useDeletePrescriptionMedicineMutation,
   useAddNewPrescriptionMedicineMutation,
 } = apiSlice;

@@ -40,12 +40,22 @@ const ListAppointment = ({ appointment }) => {
 
   // Show loading state if either doctor or branch data is still loading
   if (isLoadingDoctor || isLoadingPatient || isLoadingBranch) {
-    return <p>Loading...</p>;
+    return (
+      <tr>
+        <td colSpan="6">Loading...</td>
+      </tr>
+    );
   }
 
   // Show error state if there's an error loading doctor or branch data
   if (isErrorDoctor || isErrorPatient || isErrorBranch) {
-    return <p>Error loading appointment details. Please try again later.</p>;
+    return (
+      <tr>
+        <td colSpan="6">
+          Error loading appointment details. Please try again later.
+        </td>
+      </tr>
+    );
   }
 
   const appointmentTime = parse(
@@ -103,50 +113,52 @@ const ListAppointment = ({ appointment }) => {
   const useStatus = appointment.status;
 
   return (
-    <tr
-      className={`border-b ${
-        useStatus === 1
-          ? "border-green-100 hover:bg-green-50"
-          : "border-red-100 hover:bg-red-50"
-      }  transition`}>
-      <td className="text-center align-middle">{branch?.name}</td>
-      <td className="text-center flex flex-col justify-center items-center align-middle">
-        <img
-          src={DefaultImage(patient)}
-          alt={`${appointment.patientFullName}`}
-          className="w-20 h-20 rounded-full bg-white object-cover border border-dashed border-cyan-500 p-1 text-center"
-        />
-        {appointment.patientFullName}
-      </td>
-      <td className="text-center align-middle">
-        {format(appointment.appointmentDate, "yyyy-MM-dd")}
-      </td>
-      <td className="text-center align-middle">
-        {format(appointmentTime, "HH:mm")}
-      </td>
-      <td className="text-center align-middle">
-        {getStatus(appointment.status)}
-      </td>
-      {useStatus === 1 || useStatus === 0 ? (
-        <td className="text-center align-middle">
-          <div className="flex justify-center items-center">
-            <button
-              onClick={() => handleDelete(appointment.id)}
-              className="w-32 h-12 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex justify-center items-center px-3 py-2.5 text-center mr-2">
-              <MdCancel className="mr-2" />
-              Cancel
-            </button>
-            <Link
-              to={`/dashboard/doctor/visiting/${appointment.patientId}/${appointment.id}/${appointment.patientFullName}`}
-              className="w-32 h-12 text-white bg-green-300 hover:bg-green-500 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex justify-center items-center px-3 py-2.5 text-center mr-2">
-              <FaStethoscope className="h-12 mr-2" />
-              Visiting
-            </Link>
-          </div>
+    <>
+      <tr
+        className={`border-b ${
+          useStatus === 1
+            ? "border-green-100 hover:bg-green-50"
+            : "border-red-100 hover:bg-red-50"
+        }  transition`}>
+        <td className="text-center align-middle">{branch?.name}</td>
+        <td className="text-center flex flex-col justify-center items-center align-middle">
+          <img
+            src={DefaultImage(patient)}
+            alt={`${appointment.patientFullName}`}
+            className="w-20 h-20 rounded-full bg-white object-cover border border-dashed border-cyan-500 p-1 text-center"
+          />
+          {appointment.patientFullName}
         </td>
-      ) : (
-        ""
-      )}
+        <td className="text-center align-middle">
+          {format(appointment.appointmentDate, "yyyy-MM-dd")}
+        </td>
+        <td className="text-center align-middle">
+          {format(appointmentTime, "HH:mm")}
+        </td>
+        <td className="text-center align-middle">
+          {getStatus(appointment.status)}
+        </td>
+        {useStatus === 1 || useStatus === 0 ? (
+          <td className="text-center align-middle">
+            <div className="flex justify-center items-center">
+              <button
+                onClick={() => handleDelete(appointment.id)}
+                className="w-32 h-12 text-white bg-red-300 hover:bg-red-500 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-base inline-flex justify-center items-center px-3 py-2.5 text-center mr-2">
+                <MdCancel className="mr-2" />
+                Cancel
+              </button>
+              <Link
+                to={`/dashboard/doctor/visiting/${appointment.patientId}/${appointment.id}/${appointment.patientFullName}`}
+                className="w-32 h-12 text-white bg-green-300 hover:bg-green-500 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-base inline-flex justify-center items-center px-3 py-2.5 text-center mr-2">
+                <FaStethoscope className="h-12 mr-2" />
+                Visiting
+              </Link>
+            </div>
+          </td>
+        ) : (
+          <td className="text-center align-middle" colSpan="6"></td>
+        )}
+      </tr>
       {showConfirmModal && (
         <ConfirmDeleteAppointment
           onClose={() => setShowConfirmModal(false)}
@@ -154,7 +166,7 @@ const ListAppointment = ({ appointment }) => {
           message="Are you sure you want to cancel this appointment?"
         />
       )}
-    </tr>
+    </>
   );
 };
 
