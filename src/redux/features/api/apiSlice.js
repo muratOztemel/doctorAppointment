@@ -86,7 +86,8 @@ export const apiSlice = createApi({
         headers: {
           "Content-Type": "application/json",
         },
-        body: { refreshToken },
+        body: JSON.stringify({ refreshToken }),
+        //body: `Bearer ${refreshToken}`,
       }),
     }),
     verifyToken: builder.mutation({
@@ -698,6 +699,11 @@ export const apiSlice = createApi({
       query: (id) => `Prescriptions/${id}`,
       providesTags: (results, error, id) => [{ type: "Post", id: id }],
     }),
+    getPrescriptionsByTreatmentId: builder.query({
+      query: (id) =>
+        `Prescriptions/get-prescription-by-treatment-id?treatmentId=${id}`,
+      providesTags: (results, error, id) => [{ type: "Post", id: id }],
+    }),
     addNewPrescription: builder.mutation({
       query(newPrescription) {
         return {
@@ -847,11 +853,12 @@ export const {
   useDeleteTreatmentMutation,
   useGetPrescriptionsQuery,
   useGetPrescriptionByIdQuery,
+  useGetPrescriptionsByTreatmentIdQuery,
   useAddNewPrescriptionMutation,
   useUpdatePrescriptionMutation,
   useDeletePrescriptionMutation,
   useGetPrescriptionMedicinesByTreatmentIdQuery,
-  useGetPrescriptionMedicinesByPrescriptionIdQuery,
+  useGetPrescriptionMedicinesByPrescriptiontIdQuery,
   useDeletePrescriptionMedicineMutation,
   useAddNewPrescriptionMedicineMutation,
 } = apiSlice;
