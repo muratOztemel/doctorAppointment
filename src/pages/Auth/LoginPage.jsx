@@ -7,12 +7,14 @@ const LoginPage = () => {
         <div
           className="bg-red-500 border border-red-500 text-white px-4 py-3 rounded-t sm:rounded-t-lg relative flex flex-col justify-center items-center"
           role="alert">
-          <strong className="font-bold">Temporary Login Information:</strong>
+          <strong className="font-bold text-3xl">
+            Temporary Login Information:
+          </strong>
           <span className="block sm:inline">
             {" "}
             <strong>Patient: </strong>
             patient1@patient1 <strong>Doctor:</strong> doctor@doctor,
-            <strong> Admin:</strong> admin@admin / Password: 123456
+            <strong> Admin:</strong> admin@admin / Password: please ask!
           </span>
         </div>
         <div className="bg-white shadow sm:rounded-b-lg flex justify-center flex-1">
