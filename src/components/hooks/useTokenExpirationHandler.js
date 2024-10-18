@@ -11,7 +11,9 @@ const useTokenExpirationHandler = () => {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const result = await refreshToken().unwrap();
+        const result = await refreshToken({
+          refreshToken: localStorage.getItem("refreshToken"),
+        }).unwrap();
         console.log("Refresh Token Response:", result);
       } catch (err) {
         console.error("Failed to refresh token:", err);
@@ -33,7 +35,9 @@ const useTokenExpirationHandler = () => {
       if (timeUntilExpiration > 0) {
         const timeout = setTimeout(async () => {
           try {
-            const result = await refreshToken().unwrap();
+            const result = await refreshToken({
+              refreshToken: localStorage.getItem("refreshToken"),
+            }).unwrap();
 
             if (!result) {
               throw new Error("Token refresh failed");

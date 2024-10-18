@@ -12,6 +12,8 @@ const DashboardPatientAppointment = () => {
     isLoading,
   } = useGetTreatmentsQuery(patientId);
 
+  console.log(treatments);
+
   if (isLoading) {
     return <h1>Loading...</h1>;
   }
@@ -22,15 +24,13 @@ const DashboardPatientAppointment = () => {
     <>
       <div className="xl:px-8 px-2 pt-6">
         <TitleCard title={"M Y - M E D I C A L - R E C O R D"} />
-        <div className="w-full my-6 grid xl:grid-cols-8 grid-cols-1 gap-6">
-          <div className="xl:col-span-12 w-full">
-            {/* <PatientAppointments /> */}
-            {treatments.map((treatment) => {
-              return (
-                <PatientTreatments key={treatment.id} treatment={treatment} />
-              );
-            })}
-          </div>
+        <div className="w-full flex flex-col gap-6">
+          {/* <PatientAppointments /> */}
+          {treatments.map((treatment) => {
+            return (
+              <PatientTreatments key={treatment.id} treatment={treatment} />
+            );
+          })}
         </div>
       </div>
     </>

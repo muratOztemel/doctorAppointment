@@ -1,6 +1,7 @@
 import {
   useGetPrescriptionsByTreatmentIdQuery,
-  useGetPrescriptionMedicinesByPrescriptionIdQuery,
+  useGetPrescriptionMedicinesByPrescriptiontIdQuery,
+  useGetMedicineByIdQuery,
 } from "../../redux/features/api/apiSlice";
 import { format } from "date-fns";
 
@@ -21,7 +22,7 @@ const ListTreatments = ({ treatment }) => {
 
   return (
     <div className="p-4">
-      <div className="grid grid-cols-8 gap-4 bg-white p-4 rounded-xl shadow-md mb-4">
+      <div className="flex flex-col gap-4 bg-white p-4 rounded-xl shadow-md mb-4">
         <div className="col-span-8">
           <h3 className="text-lg font-semibold text-gray-700">Complains:</h3>
           <p className="text-gray-600">{treatment.complains}</p>
@@ -56,7 +57,7 @@ const PrescriptionDetails = ({ prescription }) => {
     data: medicines,
     isLoading: isLoadingMedicines,
     isError: isErrorMedicines,
-  } = useGetPrescriptionMedicinesByPrescriptionIdQuery(prescription.id);
+  } = useGetPrescriptionMedicinesByPrescriptiontIdQuery(prescription.id);
 
   if (isLoadingMedicines) {
     return <p>Loading medicines...</p>;
@@ -67,30 +68,48 @@ const PrescriptionDetails = ({ prescription }) => {
   }
 
   return (
-    <div className="p-4 bg-gray-50 rounded-xl shadow-md mb-4">
+    <div className="p-4 bg-cyan-50 rounded-xl shadow-md mb-4">
       <h3 className="text-lg font-semibold text-gray-700">Prescription:</h3>
       <p className="text-gray-600">{prescription.description}</p>
-      <p className="text-gray-600">
-        Created At:{" "}
-        {format(new Date(prescription.createdAt), "yyyy-MM-dd HH:mm")}
-      </p>
       <div className="mt-4">
         <h4 className="text-md font-semibold text-gray-700">Medicines:</h4>
-        <ul className="list-disc list-inside text-gray-600">
+        <div className="flex text-gray-600 gap-4">
           {medicines?.map((medicine) => (
-            <li key={medicine.id}>
-              <p>Medicine ID: {medicine.medicineId}</p>
-              <p>Dosage Quantity: {medicine.dosageQuantity}</p>
-              <p>Quantity: {medicine.quantity}</p>
-              <p>Instruction: {medicine.instruction}</p>
-              <p>Description: {medicine.description}</p>
-              <p>Morning Usage: {medicine.morningUsage ? "Yes" : "No"}</p>
-              <p>Afternoon Usage: {medicine.afternoonUsage ? "Yes" : "No"}</p>
-              <p>Evening Usage: {medicine.eveningUsage ? "Yes" : "No"}</p>
-            </li>
+            <MedicineDetails key={medicine.id} medicine={medicine} />
           ))}
-        </ul>
+        </div>
       </div>
+    </div>
+  );
+};
+
+const MedicineDetails = ({ medicine }) => {
+  const {
+    data: medicineData,
+    isLoading,
+    isError,
+  } = useGetMedicineByIdQuery(medicine.medicineId);
+
+  if (isLoading) {
+    return <p>Loading medicine name...</p>;
+  }
+
+  if (isError) {
+    return <p>Error loading medicine name.</p>;
+  }
+
+  return (
+    <div className="bg-cyan-100 p-2 rounded">
+      <p>
+        Medicine Name: <strong>{medicineData?.name}</strong>
+      </p>
+      <p>Dosage Quantity: {medicine.dosageQuantity}</p>
+      <p>Quantity: {medicine.quantity}</p>
+      <p>Instruction: {medicine.instruction}</p>
+      <p>Description: {medicine.description}</p>
+      <p>Morning Usage: {medicine.morningUsage ? "Yes" : "No"}</p>
+      <p>Afternoon Usage: {medicine.afternoonUsage ? "Yes" : "No"}</p>
+      <p>Evening Usage: {medicine.eveningUsage ? "Yes" : "No"}</p>
     </div>
   );
 };

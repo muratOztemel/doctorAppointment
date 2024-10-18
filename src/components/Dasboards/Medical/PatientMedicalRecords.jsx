@@ -1,49 +1,29 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import {
   useGetPatientByIdQuery,
-  useGetAppointmentsByPatientAndDateQuery,
+  useGetTreatmentsQuery,
+  useGetPrescriptionMedicinesByPrescriptiontIdQuery,
+  useGetMedicineByIdQuery,
 } from "../../../redux/features/api/apiSlice.js";
-import Spinner from "../../UI/Spinner.jsx";
-import { FaBoxArchive, FaRegCalendarDays, FaUser } from "react-icons/fa6";
 import BloodType from "../Services/BloodType.jsx";
-import { Link } from "react-router-dom";
-import { countries } from "../Services/Countries.jsx";
-import { bloodGroups } from "../Services/BloodGroups.jsx";
 import { format } from "date-fns";
 import PatientStickyLink from "../Services/PatientStickyLink.jsx";
 
 const PatientMedicalRecords = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id: patientId } = useParams();
-  const selectedDate = new Date().toISOString().split("T")[0]; // Set the selected date to today
-
-  const {
-    data: appointments,
-    isLoading: isLoadingAppointment,
-    isError: isErrorAppointment,
-  } = useGetAppointmentsByPatientAndDateQuery(
-    { patientId },
-    {
-      skip: !patientId,
-    }
-  );
 
   const {
     data: patient,
-    isError,
-    isLoading,
+    isError: isErrorPatient,
+    isLoading: isLoadingPatient,
   } = useGetPatientByIdQuery(patientId);
 
-  if (isLoading || isLoadingAppointment) return <p>Loading...</p>;
-  if (isError || isErrorAppointment) return <p>Error fetching patient.</p>;
+  if (isLoadingPatient) return <p>Loading...</p>;
+  if (isErrorPatient) return <p>Error fetching patient data.</p>;
 
-  const patientName = `${patient.name}${patient.surname}`;
+  const patientName = `${patient.name} ${patient.surname}`;
 
   return (
     <>
@@ -111,47 +91,88 @@ const PatientMedicalRecords = () => {
             </div>
           </div>
           <div className="col-span-12 lg:col-span-8 bg-white rounded-xl border-[1px] border-border p-6">
-            <div className="flex justify-between items-center gap-4 p-1 mb-2">
-              <h1 className="text-sm font-medium sm:block hidden">
-                Medical Record
-              </h1>
-            </div>
-            <div className="bg-cyan-50 items-start grid grid-cols-12 gap-4 rounded-xl border-[1px] border-cyan-100 p-6">
-              <div className="col-span-12 md:col-span-2">
-                <p className="text-xs text-black font-medium">13, Jan 2021</p>
-              </div>
-              <div className="col-span-12 md:col-span-6 flex flex-col gap-2">
-                <p className="text-xs text-main font-light">
-                  <span className="font-medium">Complaint:</span> Bleeding Gums,
-                  Toothache, bad breath
-                </p>
-                <p className="text-xs text-main font-light">
-                  <span className="font-medium">Diagnosis:</span> Gingivitis,
-                  Caries, Periodontitis
-                </p>
-                <p className="text-xs text-main font-light">
-                  <span className="font-medium">Treatment:</span> Filling,
-                  Post&amp;Core, Implant, Extraction
-                </p>
-                <p className="text-xs text-main font-light">
-                  <span className="font-medium">Prescription:</span>{" "}
-                  Paracetamol, Amoxicillin, Ibuprofen, Asp...
-                </p>
-              </div>
-              <div className="col-span-12 md:col-span-4 flex flex-rows gap-2 ml-28">
-                <button className="flex justify-center items-center text-sm bg-cyan-300 hover:bg-cyan-500 hover:text-amber-500 text-white border-cyan-50 border-opacity-5 hover:border-cyan-500 rounded-md w-2/4 md:w-10 h-10">
-                  <img src="/images/eye.png" alt="detail" className="h-7" />
-                </button>
-                <button className="flex justify-center items-center text-sm bg-red-300 hover:bg-red-500 hover:text-amber-500 text-white border-red-50 border-opacity-5 hover:border-red-500 rounded-md w-2/4 md:w-10 h-10">
-                  <img src="/images/delete.png" alt="detail" className="h-4" />
-                </button>
-              </div>
-            </div>
+            <h1 className="text-sm font-medium sm:block hidden mb-2">
+              Medical Records
+            </h1>
+            <MedicalRecords patientId={patientId} />
           </div>
         </div>
       </div>
     </>
   );
+};
+
+const MedicalRecords = ({ patientId }) => {
+  const {
+    data: treatments,
+    isLoading: isLoadingTreatments,
+    isError: isErrorTreatments,
+  } = useGetTreatmentsQuery();
+
+  if (isLoadingTreatments) return <p>Loading medical records...</p>;
+  if (isErrorTreatments) return <p>Error fetching medical records.</p>;
+
+  return (
+    <>
+      {treatments?.map((treatment) => (
+        <PrescriptionDetails key={treatments.id} prescription={treatment} />
+      ))}
+    </>
+  );
+};
+
+const PrescriptionDetails = ({ treatment }) => {
+  console.log(treatment);
+  const {
+    data: medicines,
+    isLoading: isLoadingMedicines,
+    isError: isErrorMedicines,
+  } = useGetPrescriptionMedicinesByPrescriptiontIdQuery(prescription.id);
+
+  if (isLoadingMedicines) return <p>Loading medicines...</p>;
+  if (isErrorMedicines) return <p>Error loading medicines.</p>;
+
+  return (
+    <div className="bg-cyan-50 items-start grid grid-cols-12 gap-4 rounded-xl border-[1px] border-cyan-100 p-6 mb-4">
+      <div className="col-span-12 md:col-span-6 flex flex-col gap-2">
+        <p className="text-xs text-main font-light">
+          <span className="font-medium">Complaint:</span>{" "}
+          {prescription.complains}
+        </p>
+        <p className="text-xs text-main font-light">
+          <span className="font-medium">Diagnosis:</span>{" "}
+          {prescription.diognasis}
+        </p>
+        <p className="text-xs text-main font-light">
+          <span className="font-medium">Treatment:</span>{" "}
+          {prescription.vitalSigns}
+        </p>
+        <p className="text-xs text-main font-light">
+          <span className="font-medium">Treatment:</span>{" "}
+          {prescription.treatmentDetails}
+        </p>
+        <p className="text-xs text-main font-light">
+          <span className="font-medium">Prescription:</span>
+          {medicines?.map((medicine) => (
+            <MedicineDetails key={medicine.id} medicine={medicine} />
+          ))}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const MedicineDetails = ({ medicine }) => {
+  const {
+    data: medicineData,
+    isLoading,
+    isError,
+  } = useGetMedicineByIdQuery(medicine.medicineId);
+
+  if (isLoading) return <li>Loading medicine name...</li>;
+  if (isError) return <li>Error loading medicine name.</li>;
+
+  return <> {medicineData?.name}, </>;
 };
 
 export default PatientMedicalRecords;
